@@ -1,0 +1,27 @@
+{
+    "name": "psmb/payum-cloudpayments",
+    "type": "project",
+    "description": "The Payum extension. Rapid extensino development",
+    "keywords": ["payment"],
+    "homepage": "https://payum.forma-pro.com",
+    "license": "MIT",
+    "require": {
+        "payum/core": "^1.5"
+    },
+    "require-dev": {
+        "payum/core": "^1.5",
+        "php-http/guzzle6-adapter": "^1.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Psmb\\Cloudpayments": "" }
+    },
+    "target-dir": "Psmb/Cloudpayments",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.5-dev"
+        }
+    }
+}
