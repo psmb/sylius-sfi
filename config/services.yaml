@@ -2,6 +2,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: ru_RU
+    sylius.form.type.product_translation.validation_groups: [app_product]
+    sylius.form.type.product.validation_groups: [app_product]
 
 services:
     # Default configuration for services in *this* file
@@ -27,3 +29,14 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    sylius.form.type.gateway_configuration.cloudpayments:
+        class: App\Form\Type\CloudpaymentsGatewayConfigurationType
+        tags:
+            - { name: sylius.gateway_configuration_type, type: cloudpayments, label: cloudpayments }
+            - { name: form.type }
+    psmb.cloudpayments:
+        class: Payum\Core\GatewayFactory
+        public: true
+        tags:
+            - { name: payum.gateway_factory, factory: Psmb\Cloudpayments\CloudpaymentsGatewayFactory }

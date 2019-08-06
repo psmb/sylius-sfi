@@ -1,0 +1,14 @@
+{
+    "name": "psmb/sfi-theme",
+    "authors": [
+        {
+            "name": "Dmitri Pisarev",
+            "email": "dimaip@gmail.com"
+        }
+    ],
+    "extra": {
+        "sylius-theme": {
+            "title": "Sfi Theme"
+        }
+    }
+}

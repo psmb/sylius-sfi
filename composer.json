@@ -16,11 +16,21 @@
             "name": "Community contributions"
         }
     ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "local/*",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "require": {
         "php": "^7.2",
-        "sylius/sylius": "~1.6.0@dev",
+        "sylius/sylius": "~1.5.0",
         "symfony/dotenv": "^4.2",
-        "symfony/flex": "^1.2"
+        "symfony/flex": "^1.2",
+        "psmb/payum-cloudpayments": "dev-master"
     },
     "require-dev": {
         "behat/behat": "^3.4",

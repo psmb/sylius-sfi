@@ -1,0 +1,12 @@
+Sylius\Component\Product\Model\ProductTranslation:
+    properties:
+        name:
+            - NotBlank:
+                message: sylius.product.name.not_blank
+                groups: [app_product]
+            - Length:
+                min: 2
+                minMessage: sylius.product.name.min_length
+                max: 512
+                maxMessage: sylius.product.name.max_length
+                groups: [app_product]
