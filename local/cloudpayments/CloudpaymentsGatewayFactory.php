@@ -10,6 +10,9 @@ use Psmb\Cloudpayments\Action\RefundAction;
 use Psmb\Cloudpayments\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use Psmb\Cloudpayments\Action\Api\ObtainTokenAction;
+use Psmb\Cloudpayments\Action\Api\Obtain3dsAction;
+use Psmb\Cloudpayments\Action\Api\CreateChargeAction;
 
 class CloudpaymentsGatewayFactory extends GatewayFactory
 {
@@ -28,20 +31,26 @@ class CloudpaymentsGatewayFactory extends GatewayFactory
             'payum.action.notify' => new NotifyAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
+            'payum.action.obtain_token' => new ObtainTokenAction(),
+            'payum.action.obtain_3ds' => new Obtain3dsAction(),
+            'payum.action.create_charge' => new CreateChargeAction()
         ]);
 
         if (false == $config['payum.api']) {
-            $config['payum.default_options'] = array(
-                'sandbox' => true,
-            );
+            $config['payum.default_options'] = [
+                'publishable_key' => '',
+                'secret_key' => ''
+            ];
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = [];
-
+            $config['payum.required_options'] = ['publishable_key', 'secret_key'];
             $config['payum.api'] = function (ArrayObject $config) {
-                $config->validateNotEmpty($config['payum.required_options']);
-
-                return new Api((array) $config, $config['payum.http_client'], $config['httplug.message_factory']);
+                // $config->validateNotEmpty($config['payum.required_options']);
+                return new Keys('pk_82b235c7f6cdc0dd6dec11a664967', '4168ec2e6e019f19e9e1788ebb85c319');
             };
         }
+
+        $config['payum.paths'] = array_replace([
+            'PsmbCloudpayments' => __DIR__ . '/Resources/views',
+        ], $config['payum.paths'] ?: []);
     }
 }

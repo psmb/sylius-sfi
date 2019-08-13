@@ -43,3 +43,23 @@ body.pushable .pusher {
 #searchbarButtons {
     width: fit-content;
 }
+
+.ui.breadcrumb {
+  margin-top: 10px;
+}
+
+.ui.large.menu {
+  border-left: 0 !important;
+  border-right: 0 !important;
+}
+
+@font-face{
+  font-family:"Franklin";
+  src:url("/bundles/_themes/psmb/sfi-theme/syliusshop/FranklinGothic-Book.woff") format("woff");
+  font-weight:400;font-style:normal;
+}
+@font-face{
+  font-family:"Franklin";
+  src:url("/bundles/_themes/psmb/sfi-theme/syliusshop/FranklinGothic-Demi.woff") format("woff");
+  font-weight:700;font-style:normal;
+}

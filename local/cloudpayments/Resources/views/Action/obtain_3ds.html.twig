@@ -1,0 +1,20 @@
+{% extends layout ?: "@PayumCore/layout.html.twig" %}
+
+{% block payum_body %}
+    {{ parent() }}
+
+    <form name="secureForm" action="{{ AcsUrl }}" method="POST">
+        <input type="hidden" name="PaReq" value="{{ PaReq}}">
+        <input type="hidden" name="MD" value="{{ MD }}">
+        <input type="hidden" name="TermUrl" value="{{ TermUrl }}">
+    </form>
+{% endblock %}
+
+{% block payum_javascripts %}
+    {{ parent() }}
+
+    <script>
+        window.onload = submitForm;
+        function submitForm() { secureForm.submit(); }
+    </script>
+{% endblock %}

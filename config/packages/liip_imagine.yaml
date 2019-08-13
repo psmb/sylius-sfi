@@ -4,3 +4,16 @@ liip_imagine:
             web_path:
                 web_root: "%kernel.project_dir%/public"
                 cache_prefix: "media/cache"
+    filter_sets:
+        sylius_shop_product_thumbnail:
+            filters:
+                thumbnail: { size: [260, 260], mode: inset, allow_upscale: true }
+        sylius_shop_product_tiny_thumbnail:
+            filters:
+                thumbnail: { size: [64, 64], mode: inset, allow_upscale: true }
+        sylius_shop_product_small_thumbnail:
+            filters:
+                thumbnail: { size: [150, 150], mode: inset, allow_upscale: true }
+        sylius_shop_product_large_thumbnail:
+            filters:
+                thumbnail: { size: [550, 550], mode: inset, allow_upscale: true }

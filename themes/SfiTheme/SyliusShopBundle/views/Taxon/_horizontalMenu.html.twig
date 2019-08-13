@@ -29,11 +29,9 @@
         <form action="/ru_RU/taxons/category/books" class="ui loadable form" method="get">
             <div class="ui stackable grid" id="searchbar">
                 <div class="column" id="searchbarTextField">
-                    <div class="field"><input id="criteria_search_value" name="criteria[search][value]" type="text"></div>
-                </div>
-                <div class="right aligned column" id="searchbarButtons">
-                    <div class="ui buttons">
-                        <button class="ui primary icon labeled button" type="submit">
+                    <div class="field" style="display: flex">
+                        <input placeholder="поиск" style="height: 43px; border-top: 0; border-bottom: 0;" id="criteria_search_value" name="criteria[search][value]" type="text" />
+                        <button style="margin-right: 0" class="ui icon button" type="submit">
                             <i class="search icon"></i>
                         </button>
                     </div>

@@ -6,6 +6,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
+use Payum\Core\Bridge\Spl\ArrayObject;
 
 class ConvertPaymentAction implements ActionInterface
 {
@@ -23,7 +24,11 @@ class ConvertPaymentAction implements ActionInterface
         /** @var PaymentInterface $payment */
         $payment = $request->getSource();
 
-        throw new \LogicException('Not implemented');
+        $details = ArrayObject::ensureArrayObject($payment->getDetails());
+        $details["amount"] = $payment->getTotalAmount();
+        $details["currency"] = $payment->getCurrencyCode();
+        $details["description"] = $payment->getDescription();
+        $request->setResult((array) $details);
     }
 
     /**

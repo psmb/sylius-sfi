@@ -35,8 +35,8 @@ services:
         tags:
             - { name: sylius.gateway_configuration_type, type: cloudpayments, label: cloudpayments }
             - { name: form.type }
-    psmb.cloudpayments:
-        class: Payum\Core\GatewayFactory
-        public: true
+    psmb.cloudpayments.factory_builder:
+        class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
+        arguments: [Psmb\Cloudpayments\CloudpaymentsGatewayFactory]
         tags:
-            - { name: payum.gateway_factory, factory: Psmb\Cloudpayments\CloudpaymentsGatewayFactory }
+            - { name: payum.gateway_factory_builder, factory: cloudpayments }

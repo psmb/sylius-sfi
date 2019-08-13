@@ -18,8 +18,15 @@ class StatusAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
+        if (!$model['status'] && !$model['cryptogram']) {
+            $request->markNew();
+            return;
+        }
 
-        throw new \LogicException('Not implemented');
+        if (!$model['status'] && $model['cryptogram']) {
+            // $request->markPending();
+            // return;
+        }
     }
 
     /**

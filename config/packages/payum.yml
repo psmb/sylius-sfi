@@ -1,9 +1,4 @@
 payum:
     gateways:
         cloudpayments:
-            factory: Psmb\Cloudpayments\CloudpaymentsGatewayFactory
-            secret:  'required'
-            client_id: 'required'
-            terms_uri: ''
-            checkout_uri: ''
-            sandbox: true
+            factory: cloudpayments

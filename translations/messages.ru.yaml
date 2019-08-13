@@ -1,0 +1,8 @@
+sylius:
+  ui:
+    checkout: 'К оплате'
+    clear_cart: 'Очистить корзину'
+    summary: 'Итого'
+    subtotal: 'Итого'
+    latest_products: 'Новые книги'
+    checking_out_as: 'Оформляем покупку на'

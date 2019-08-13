@@ -1,0 +1,57 @@
+{% extends layout ?: "@PayumCore/layout.html.twig" %}
+
+{% block payum_body %}
+    {{ parent() }}
+
+    <form action="{{ actionUrl|default('') }}" method="POST" id="paymentForm">
+        Номер карты
+        <input type="text" data-cp="cardNumber"><br />
+
+        Месяц
+        <input type="text" data-cp="expDateMonth"><br />
+
+        Год
+        <input type="text" data-cp="expDateYear"><br />
+
+        CVC
+        <input type="text" data-cp="cvv"><br />
+
+        Имя
+        <input type="text" data-cp="name"><br />
+
+        <input id="cryptogram" type="hidden" name="cryptogram">
+
+        <button type="submit" onclick="createCryptogram()">Оплатить 100 р.</button>
+    </form>
+{% endblock %}
+
+{% block payum_javascripts %}
+    {{ parent() }}
+
+    <script src="https://widget.cloudpayments.ru/bundles/checkout"></script>
+
+    <script type="text/javascript">
+        var checkout = new cp.Checkout(
+            "{{ publishable_key }}",
+            document.getElementById("paymentForm")
+        );
+        var createCryptogram = function () {
+            var result = checkout.createCryptogramPacket();
+
+            if (result.success) {
+                // сформирована криптограмма
+                document.getElementById("cryptogram").value = result.packet;
+                console.log(document.getElementById("cryptogram"));
+                // alert(result.packet);
+            }
+            else {
+                // найдены ошибки в введённых данных, объект `result.messages` формата:
+                // { name: "В имени держателя карты слишком много символов", cardNumber: "Неправильный номер карты" }
+                // где `name`, `cardNumber` соответствуют значениям атрибутов `<input ... data-cp="cardNumber">`
+                for (var msgName in result.messages) {
+                    alert(result.messages[msgName]);
+                }
+            }
+        };
+    </script>
+{% endblock %}

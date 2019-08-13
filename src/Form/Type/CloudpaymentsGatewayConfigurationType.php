@@ -20,7 +20,7 @@ final class CloudpaymentsGatewayConfigurationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('public_id', TextType::class, [
+            ->add('publishable_key', TextType::class, [
                 'label' => 'Public ID',
                 'constraints' => [
                     new NotBlank([
@@ -29,8 +29,8 @@ final class CloudpaymentsGatewayConfigurationType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('password', TextType::class, [
-                'label' => 'Password',
+            ->add('secret_key', TextType::class, [
+                'label' => 'Secret Key',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'sylius.gateway_config.paypal.password.not_blank',

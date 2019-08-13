@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a439d06fff3eb1c17b63c1a9ec354eec",
+    "content-hash": "33632128c728d5b9f61e5f634a058d50",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -9312,6 +9312,36 @@
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
             "time": "2019-07-24T14:47:54+00:00"
+        },
+        {
+            "name": "troytft/cloud-payments-client",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Troytft/cloud-payments-client.git",
+                "reference": "5e45ee22ab5936adc3ef079fc1a77a8a0a150017"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Troytft/cloud-payments-client/zipball/5e45ee22ab5936adc3ef079fc1a77a8a0a150017",
+                "reference": "5e45ee22ab5936adc3ef079fc1a77a8a0a150017",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CloudPayments\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Client for CloudPayments.ru",
+            "time": "2018-12-28T12:03:24+00:00"
         },
         {
             "name": "twig/extensions",

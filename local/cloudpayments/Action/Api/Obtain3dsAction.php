@@ -1,0 +1,56 @@
+<?php
+namespace Psmb\Cloudpayments\Action\Api;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Request\GetHttpRequest;
+use Payum\Core\Request\RenderTemplate;
+use Psmb\Cloudpayments\Request\Api\Obtain3ds;
+
+class Obtain3dsAction implements ActionInterface, GatewayAwareInterface
+{
+    use GatewayAwareTrait;
+
+    protected $templateName = '@PsmbCloudpayments/Action/obtain_3ds.html.twig';
+
+    public function execute($request)
+    {
+        /** @var $request Obtain3ds */
+        RequestNotSupportedException::assertSupports($this, $request);
+        $model = ArrayObject::ensureArrayObject($request->getModel());
+        if ($model['PaRes']) {
+            throw new LogicException('The PaRes has already been set.');
+        }
+        $getHttpRequest = new GetHttpRequest();
+        $this->gateway->execute($getHttpRequest);
+        if ($getHttpRequest->method == 'POST' && isset($getHttpRequest->request['PaRes'])) {
+            $model['PaRes'] = $getHttpRequest->request['PaRes'];
+            die($model['PaRes']);
+            return;
+        }
+        $this->gateway->execute($renderTemplate = new RenderTemplate(
+            $this->templateName, [
+                'AcsUrl' => $model['AcsUrl'],
+                'TermUrl' => $request->getToken() ? str_replace('http:', 'https:', $request->getToken()->getTargetUrl()) : null,
+                'MD' => 'pk_82b235c7f6cdc0dd6dec11a664967',
+                'PaReq' => $model['PaReq']
+            ])
+        );
+        throw new HttpResponse($renderTemplate->getResult());
+    }
+
+
+    public function supports($request)
+    {
+        return
+            $request instanceof Obtain3ds &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
+    }
+}

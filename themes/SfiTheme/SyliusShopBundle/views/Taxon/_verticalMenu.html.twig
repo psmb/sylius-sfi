@@ -1,0 +1,13 @@
+{{ sonata_block_render_event('sylius.shop.product.index.before_vertical_menu', {'taxon': taxon}) }}
+
+<div class="ui fluid vertical menu" style="border: 0">
+    {% for child in taxon.parent.children %}
+        {% if child.name == taxon.name %}
+            <div class="header item">{{ taxon.name }}</div>
+        {% else %}
+            <a href="{{ path('sylius_shop_product_index', {'slug': child.slug, '_locale': child.translation.locale}) }}" class="item">{{ child.name }}</a>
+        {% endif %}
+    {% endfor %}
+</div>
+
+{{ sonata_block_render_event('sylius.shop.product.index.after_vertical_menu', {'taxon': taxon}) }}
