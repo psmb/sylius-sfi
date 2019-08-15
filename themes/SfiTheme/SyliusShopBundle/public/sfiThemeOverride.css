@@ -53,6 +53,15 @@ body.pushable .pusher {
   border-right: 0 !important;
 }
 
+.ui.breadcrumb a.section {
+  font-size: 12px;
+  color: #666;
+}
+
+.ui.breadcrumb a.section:hover {
+  color: #00b0f0 !important;
+}
+
 @font-face{
   font-family:"Franklin";
   src:url("/bundles/_themes/psmb/sfi-theme/syliusshop/FranklinGothic-Book.woff") format("woff");

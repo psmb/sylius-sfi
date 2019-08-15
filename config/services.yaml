@@ -40,3 +40,11 @@ services:
         arguments: [Psmb\Cloudpayments\CloudpaymentsGatewayFactory]
         tags:
             - { name: payum.gateway_factory_builder, factory: cloudpayments }
+    app.controller.shop.aboutus:
+        class: App\Controller\Shop\AboutUsController
+        arguments: ['@templating']
+        tags: ['controller.service_arguments']
+    app.controller.shop.policy:
+        class: App\Controller\Shop\PolicyController
+        arguments: ['@templating']
+        tags: ['controller.service_arguments']

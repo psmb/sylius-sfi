@@ -1,0 +1,10 @@
+app_shop_aboutus:
+    path: /aboutus
+    methods: [GET]
+    defaults:
+        _controller: app.controller.shop.aboutus::indexAction
+app_shop_policy:
+    path: /policy
+    methods: [GET]
+    defaults:
+        _controller: app.controller.shop.policy::indexAction

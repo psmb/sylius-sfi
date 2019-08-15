@@ -1,0 +1,17 @@
+<div class="ui breadcrumb">
+    <a href="{{ path('sylius_shop_homepage') }}" class="section">{{ 'sylius.ui.home'|trans }}</a>
+    {% if product.mainTaxon is not null %}
+        {% set taxon = product.mainTaxon %}
+        {% set ancestors = taxon.ancestors|reverse %}
+
+        {% for ancestor in ancestors %}
+            {% if ancestor.isRoot() %}
+            {% else %}
+                <a href="{{ path('sylius_shop_product_index', {'slug': ancestor.slug, '_locale': ancestor.translation.locale}) }}" class="section">{{ ancestor.name }}</a>
+            {% endif %}
+            <div class="divider"> / </div>
+        {% endfor %}
+
+        <a href="{{ path('sylius_shop_product_index', {'slug': taxon.slug, '_locale': taxon.translation.locale}) }}" class="section">{{ taxon.name }}</a>
+    {% endif %}
+</div>

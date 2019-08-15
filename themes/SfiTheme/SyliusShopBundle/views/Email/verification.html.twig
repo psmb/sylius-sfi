@@ -1,0 +1,10 @@
+{% block subject %}
+    Подтвердите ваш адрес
+{% endblock %}
+
+{% block body %}
+    {% set url = channel.hostname is not null ? 'http://' ~ channel.hostname ~ path('sylius_shop_user_verification', { 'token': user.emailVerificationToken}) : url('sylius_shop_user_verification', { 'token': user.emailVerificationToken}) %}
+    {% autoescape %}
+        Чтобы подтвердить ваш адрес, перейдите по ссылке: <a href="{{ url|raw }}">{{ url|raw }}</a>
+    {% endautoescape %}
+{% endblock %}

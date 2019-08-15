@@ -1,7 +1,7 @@
 {{ sonata_block_render_event('sylius.shop.product.index.before_vertical_menu', {'taxon': taxon}) }}
 
 <div class="ui fluid vertical menu" style="border: 0">
-    {% for child in taxon.parent.children %}
+    {% for child in taxon.code == 'books' ? taxon.children : taxon.parent.children %}
         {% if child.name == taxon.name %}
             <div class="header item">{{ taxon.name }}</div>
         {% else %}

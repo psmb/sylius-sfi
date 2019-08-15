@@ -13,21 +13,23 @@
         {{ sonata_block_render_event('sylius.shop.product.show.after_images', {'product': product}) }}
     </div>
     <div class="ten wide column">
+        {% include '@SyliusShop/Product/Show/_header.html.twig' %}
+
+        <p style="font-size: 24px; line-height: 1.2; margin-bottom: 30px;">{{ product.shortDescription }}</p>
+
         {% for taxon in product.taxons %}
             {% if taxon.parent.code == 'authors' %}
-                <a style="font-size: 36px" href="{{ path('sylius_shop_product_index', {'slug': taxon.slug, '_locale': taxon.translation.locale}) }}">
+                <a style="font-size: 21px" href="{{ path('sylius_shop_product_index', {'slug': taxon.slug, '_locale': taxon.translation.locale}) }}">
                     {{ taxon.name }}
                 </a>
             {% endif %}
         {% endfor %}
 
-        {% include '@SyliusShop/Product/Show/_header.html.twig' %}
-
         {{ sonata_block_render_event('sylius.shop.product.show.after_product_header', {'product': product}) }}
 
         {% for taxon in product.taxons %}
             {% if taxon.parent.code == 'publishers' %}
-                <div>
+                <div style="margin-top: 40px">
                     Издательство: <a href="{{ path('sylius_shop_product_index', {'slug': taxon.slug, '_locale': taxon.translation.locale}) }}">
                         {{ taxon.name }}
                     </a>
@@ -51,10 +53,6 @@
         </div>
 
         {{ sonata_block_render_event('sylius.shop.product.show.after_price', {'product': product}) }}
-
-        <div class="ui basic segment">
-            <p>{{ product.shortDescription }}</p>
-        </div>
 
         {{ sonata_block_render_event('sylius.shop.product.show.after_description', {'product': product}) }}
 

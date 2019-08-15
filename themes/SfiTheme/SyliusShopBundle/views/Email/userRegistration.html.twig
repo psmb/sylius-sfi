@@ -1,0 +1,9 @@
+{% block subject %}
+    Регистрация на сайте Книги СФИ
+{% endblock %}
+
+{% block body %}
+    {% autoescape %}
+        {{ user.username }}, добро пожаловать в наш магазин!
+    {% endautoescape %}
+{% endblock %}

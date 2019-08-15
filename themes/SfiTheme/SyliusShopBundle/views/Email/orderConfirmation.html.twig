@@ -1,0 +1,15 @@
+{% block subject %}
+    Ваш заказ оформлен
+{% endblock %}
+
+{% block body %}
+    {% set url = order.channel.hostname is not null ? 'http://' ~ order.channel.hostname ~ path('sylius_shop_order_show', {'tokenValue': order.tokenValue, '_locale': order.localeCode}) : url('sylius_shop_order_show', {'tokenValue': order.tokenValue, '_locale': order.localeCode}) %}
+    {% autoescape %}
+        Благодарим вас за оформление покупку в нашем магазине!
+        <br/><br/>
+        Ваш заказ под номером {{ order.number }} был принят в исполнение.
+        Если вы выбрали самовывоз в качестве метода доставки, то вы можете забрать ваш товар уже сейчас.
+        <br/>
+        Если вы хотите изменить метод оплаты, вы можете перейти по ссылке <a href="{{ url|raw }}">{{ url|raw }}</a>
+    {% endautoescape %}
+{% endblock %}
