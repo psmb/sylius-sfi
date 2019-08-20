@@ -11,7 +11,7 @@
 
 {% if taxon.images.first is not empty %}
 {% set path = taxon.images.first.path|imagine_filter(filter|default('sylius_shop_product_large_thumbnail')) %}
-<img src="{{ path }}" id="main-image" alt="{{ taxon.name }}" />
+<img src="{{ path|replace({'http:': 'https:'}) }}" id="main-image" alt="{{ taxon.name }}" />
 {% endif %}
 
 {{ sonata_block_render_event('sylius.shop.taxon.header.after', {'taxon': taxon}) }}

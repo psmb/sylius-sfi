@@ -6,4 +6,4 @@
     {% set path = '//placehold.it/200x260' %}
 {% endif %}
 
-<img style="max-height: 260px; width: auto; margin: 0 auto" src="{{ path }}" alt="{{ product.name }}" class="ui bordered image" />
+<img style="max-height: 260px; width: auto; margin: 0 auto" src="{{ path|replace({'http:': 'https:'}) }}" alt="{{ product.name }}" class="ui bordered image" />

@@ -18,7 +18,7 @@
 {% endif %}
 
 <a target="_blank" href="/media/image/{{ preview_path }}" class="ui fluid image">
-    <img src="{{ path }}" id="main-image" alt="{{ product.name }}" />
+    <img src="{{ path|replace({'http:': 'https:'}) }}" id="main-image" alt="{{ product.name }}" />
 </a>
 {% if product.images|length > 1 %}
 
