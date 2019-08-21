@@ -12,6 +12,7 @@ use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\RenderTemplate;
 use Psmb\Cloudpayments\Request\Api\Obtain3ds;
+use Psmb\Cloudpayments\Request\Api\CreateCharge;
 
 class Obtain3dsAction implements ActionInterface, GatewayAwareInterface
 {
@@ -27,18 +28,24 @@ class Obtain3dsAction implements ActionInterface, GatewayAwareInterface
         if ($model['PaRes']) {
             throw new LogicException('The PaRes has already been set.');
         }
+        if (!$model['AcsUrl']) {
+            throw new LogicException('AcsUrl has not been set.');
+        }
         $getHttpRequest = new GetHttpRequest();
         $this->gateway->execute($getHttpRequest);
         if ($getHttpRequest->method == 'POST' && isset($getHttpRequest->request['PaRes'])) {
             $model['PaRes'] = $getHttpRequest->request['PaRes'];
-            die($model['PaRes']);
+
+            $createCharge = new CreateCharge($request->getToken());
+            $createCharge->setModel($model);
+            $this->gateway->execute($createCharge);
             return;
         }
         $this->gateway->execute($renderTemplate = new RenderTemplate(
             $this->templateName, [
                 'AcsUrl' => $model['AcsUrl'],
                 'TermUrl' => $request->getToken() ? str_replace('http:', 'https:', $request->getToken()->getTargetUrl()) : null,
-                'MD' => 'pk_82b235c7f6cdc0dd6dec11a664967',
+                'MD' => $model['MD'],
                 'PaReq' => $model['PaReq']
             ])
         );

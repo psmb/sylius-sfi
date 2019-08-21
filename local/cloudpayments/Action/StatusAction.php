@@ -22,10 +22,9 @@ class StatusAction implements ActionInterface
             $request->markNew();
             return;
         }
-
-        if (!$model['status'] && $model['cryptogram']) {
-            // $request->markPending();
-            // return;
+        if ($model['status'] === 'captured') {
+            $request->markCaptured();
+            return;
         }
     }
 

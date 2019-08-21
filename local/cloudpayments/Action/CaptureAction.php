@@ -32,14 +32,17 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
             $this->gateway->execute($obtainToken);
             return;
         }
-        if ($model['AcsUrl']) {
+
+        if ($model['AcsUrl'] && !$model['PaRes']) {
             $obtain3ds = new Obtain3ds($request->getToken());
             $obtain3ds->setModel($model);
             $this->gateway->execute($obtain3ds);
-
             return;
         }
-        $this->gateway->execute(new CreateCharge($model));
+
+        $createCharge = new CreateCharge($request->getToken());
+        $createCharge->setModel($model);
+        $this->gateway->execute($createCharge);
     }
 
     /**

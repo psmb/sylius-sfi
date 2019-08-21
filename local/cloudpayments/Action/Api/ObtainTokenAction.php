@@ -12,6 +12,7 @@ use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\RenderTemplate;
 use Psmb\Cloudpayments\Request\Api\ObtainToken;
+use Psmb\Cloudpayments\Request\Api\CreateCharge;
 
 class ObtainTokenAction implements ActionInterface, GatewayAwareInterface
 {
@@ -31,6 +32,9 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute($getHttpRequest);
         if ($getHttpRequest->method == 'POST' && isset($getHttpRequest->request['cryptogram'])) {
             $model['cryptogram'] = $getHttpRequest->request['cryptogram'];
+            $createCharge = new CreateCharge($request->getToken());
+            $createCharge->setModel($model);
+            $this->gateway->execute($createCharge);
             return;
         }
         $this->gateway->execute($renderTemplate = new RenderTemplate(
