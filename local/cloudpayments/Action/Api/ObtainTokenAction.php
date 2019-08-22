@@ -16,7 +16,24 @@ use Psmb\Cloudpayments\Request\Api\CreateCharge;
 
 class ObtainTokenAction implements ActionInterface, GatewayAwareInterface
 {
+    use ApiAwareTrait {
+        setApi as _setApi;
+    }
+
     use GatewayAwareTrait;
+
+    public function __construct()
+    {
+        $this->apiClass = Keys::class;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setApi($api)
+    {
+        $this->_setApi($api);
+    }
 
     protected $templateName = '@PsmbCloudpayments/Action/obtain_checkout_token.html.twig';
 
@@ -41,7 +58,7 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface
             $this->templateName, [
                 'model' => $model,
                 'actionUrl' => $request->getToken() ? str_replace('http:', 'https:', $request->getToken()->getTargetUrl()) : null,
-                'publishable_key' => 'pk_82b235c7f6cdc0dd6dec11a664967'
+                'publishable_key' => $this->api->getPublishableKey()
             ])
         );
         throw new HttpResponse($renderTemplate->getResult());
