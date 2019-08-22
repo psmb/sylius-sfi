@@ -13,26 +13,16 @@ use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\RenderTemplate;
 use Psmb\Cloudpayments\Request\Api\ObtainToken;
 use Psmb\Cloudpayments\Request\Api\CreateCharge;
+use Psmb\Cloudpayments\Keys;
 
-class ObtainTokenAction implements ActionInterface, GatewayAwareInterface
+class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
-    use ApiAwareTrait {
-        setApi as _setApi;
-    }
-
+    use ApiAwareTrait;
     use GatewayAwareTrait;
 
     public function __construct()
     {
         $this->apiClass = Keys::class;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
-    {
-        $this->_setApi($api);
     }
 
     protected $templateName = '@PsmbCloudpayments/Action/obtain_checkout_token.html.twig';
@@ -57,7 +47,7 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute($renderTemplate = new RenderTemplate(
             $this->templateName, [
                 'model' => $model,
-                'actionUrl' => $request->getToken() ? str_replace('http:', 'https:', $request->getToken()->getTargetUrl()) : null,
+                'actionUrl' => $request->getToken() ? str_replace('http:', 'http:', $request->getToken()->getTargetUrl()) : null,
                 'publishable_key' => $this->api->getPublishableKey()
             ])
         );

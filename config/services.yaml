@@ -4,7 +4,7 @@ parameters:
     locale: ru_RU
     sylius.form.type.product_translation.validation_groups: [app_product]
     sylius.form.type.product.validation_groups: [app_product]
-    router.request_context.scheme: 'https'
+    router.request_context.scheme: "https"
     asset.request_context.secure: true
 
 services:
@@ -23,30 +23,34 @@ services:
     # Makes classes in src/ available to be used as services;
     # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
+        resource: "../src/*"
+        exclude: "../src/{Entity,Migrations,Tests,Kernel.php}"
 
     # Controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
-        resource: '../src/Controller'
-        tags: ['controller.service_arguments']
+        resource: "../src/Controller"
+        tags: ["controller.service_arguments"]
 
-    sylius.form.type.gateway_configuration.cloudpayments:
-        class: App\Form\Type\CloudpaymentsGatewayConfigurationType
+    psmb.cloudpayments.form.type.gateway_configuration:
+        class: Psmb\Cloudpayments\Form\Type\CloudpaymentsGatewayConfigurationType
         tags:
-            - { name: sylius.gateway_configuration_type, type: cloudpayments, label: cloudpayments }
+            - {
+                  name: sylius.gateway_configuration_type,
+                  type: cloudpayments,
+                  label: cloudpayments,
+              }
             - { name: form.type }
-    psmb.cloudpayments.factory_builder:
+    psmb.cloudpayments.gateway_factory:
         class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
         arguments: [Psmb\Cloudpayments\CloudpaymentsGatewayFactory]
         tags:
             - { name: payum.gateway_factory_builder, factory: cloudpayments }
     app.controller.shop.aboutus:
         class: App\Controller\Shop\AboutUsController
-        arguments: ['@templating']
-        tags: ['controller.service_arguments']
+        arguments: ["@templating"]
+        tags: ["controller.service_arguments"]
     app.controller.shop.policy:
         class: App\Controller\Shop\PolicyController
-        arguments: ['@templating']
-        tags: ['controller.service_arguments']
+        arguments: ["@templating"]
+        tags: ["controller.service_arguments"]

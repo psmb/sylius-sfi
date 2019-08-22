@@ -5,23 +5,25 @@
 
     <form action="{{ actionUrl|default('') }}" method="POST" id="paymentForm">
         Номер карты
-        <input type="text" data-cp="cardNumber"><br />
+        <input data-cp="cardNumber" type="text"><br/>
 
         Месяц
-        <input type="text" data-cp="expDateMonth"><br />
+        <input data-cp="expDateMonth" type="text"><br/>
 
         Год
-        <input type="text" data-cp="expDateYear"><br />
+        <input data-cp="expDateYear" type="text"><br/>
 
         CVC
-        <input type="text" data-cp="cvv"><br />
+        <input data-cp="cvv" type="text"><br/>
 
         Имя
-        <input type="text" data-cp="name"><br />
+        <input data-cp="name" type="text"><br/>
 
-        <input id="cryptogram" type="hidden" name="cryptogram">
+        <input id="cryptogram" name="cryptogram" type="hidden">
 
-        <button type="submit" onclick="createCryptogram()">Оплатить 100 р.</button>
+        <button onclick="createCryptogram(event);" type="submit">Оплатить
+            {{ model.amount }}
+            р.</button>
     </form>
 {% endblock %}
 
@@ -31,23 +33,14 @@
     <script src="https://widget.cloudpayments.ru/bundles/checkout"></script>
 
     <script type="text/javascript">
-        var checkout = new cp.Checkout(
-            "{{ publishable_key }}",
-            document.getElementById("paymentForm")
-        );
-        var createCryptogram = function () {
+        var checkout = new cp.Checkout("{{ publishable_key }}", document.getElementById("paymentForm"));
+        var createCryptogram = function (event) {
             var result = checkout.createCryptogramPacket();
 
-            if (result.success) {
-                // сформирована криптограмма
+            if (result.success) { // сформирована криптограмма
                 document.getElementById("cryptogram").value = result.packet;
-                console.log(document.getElementById("cryptogram"));
-                // alert(result.packet);
-            }
-            else {
-                // найдены ошибки в введённых данных, объект `result.messages` формата:
-                // { name: "В имени держателя карты слишком много символов", cardNumber: "Неправильный номер карты" }
-                // где `name`, `cardNumber` соответствуют значениям атрибутов `<input ... data-cp="cardNumber">`
+            } else {
+                event.preventDefault();
                 for (var msgName in result.messages) {
                     alert(result.messages[msgName]);
                 }

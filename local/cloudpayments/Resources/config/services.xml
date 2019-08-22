@@ -1,0 +1,44 @@
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="psmb.cloudpayments.gateway_factory" class="Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder">
+            <argument>Psmb\Cloudpayments\CloudpaymentsGatewayFactory</argument>
+            <tag name="payum.gateway_factory_builder" factory="cloudpayments" />
+        </service>
+        <service id="Psmb\Cloudpayments\Form\Type\CloudpaymentsGatewayConfigurationType">
+            <tag name="psmb.cloudpayments.form.type.gateway_configuration" type="cloudpayments" label="Cloudpayments" />
+            <tag name="form.type" />
+        </service>
+
+        <service id="Psmb\Cloudpayments\Action\CaptureAction" public="true">
+            <tag name="payum.action" factory="cloudpayments" alias="payum.action.capture" />
+        </service>
+        <service id="Psmb\Cloudpayments\Action\AuthorizeAction" public="true">
+            <tag name="payum.action" factory="cloudpayments" alias="payum.action.authorize" />
+        </service>
+        <service id="Psmb\Cloudpayments\Action\RefundAction" public="true">
+            <tag name="payum.action" factory="cloudpayments" alias="payum.action.refund" />
+        </service>
+        <service id="Psmb\Cloudpayments\Action\CancelAction" public="true">
+            <tag name="payum.action" factory="cloudpayments" alias="payum.action.cancel" />
+        </service>
+        <service id="Psmb\Cloudpayments\Action\NotifyAction" public="true">
+            <tag name="payum.action" factory="cloudpayments" alias="payum.action.notify" />
+        </service>
+        <service id="Psmb\Cloudpayments\Action\StatusAction" public="true">
+            <tag name="payum.action" factory="cloudpayments" alias="payum.action.status" />
+        </service>
+        <service id="Psmb\Cloudpayments\Action\ConvertPaymentAction" public="true">
+            <tag name="payum.action" factory="cloudpayments" alias="payum.action.convert_payment" />
+        </service>
+        <service id="Psmb\Cloudpayments\Action\Api\ObtainTokenAction" public="true">
+            <tag name="payum.action" factory="cloudpayments" alias="payum.action.obtain_token" />
+        </service>
+        <service id="Psmb\Cloudpayments\Action\Api\Obtain3dsAction" public="true">
+            <tag name="payum.action" factory="cloudpayments" alias="payum.action.obtain_3ds" />
+        </service>
+        <service id="Psmb\Cloudpayments\Action\Api\CreateChargeAction" public="true">
+            <tag name="payum.action" factory="cloudpayments" alias="payum.action.create_charge" />
+        </service>
+    </services>
+</container>

@@ -12,6 +12,7 @@ use Payum\Core\GatewayAwareTrait;
 use Psmb\Cloudpayments\Keys;
 use Psmb\Cloudpayments\Request\Api\CreateCharge;
 use Psmb\Cloudpayments\Request\Api\Obtain3ds;
+use CloudPayments\Manager;
 
 class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
 {
@@ -20,6 +21,11 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
     }
 
     use GatewayAwareTrait;
+
+    /**
+     * @var Manager
+     */
+    protected $client;
 
     public function __construct()
     {
@@ -32,6 +38,11 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
     public function setApi($api)
     {
         $this->_setApi($api);
+
+        $this->client = new \CloudPayments\Manager(
+            $this->api->getPublishableKey(),
+            $this->api->getSecretKey()
+        );
     }
 
     /**
@@ -49,30 +60,27 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
         if (is_array($model['card'])) {
             throw new LogicException('The token has already been used.');
         }
-        $client = new \CloudPayments\Manager(
-            $this->api->getPublishableKey(),
-            $this->api->getSecretKey()
-        );
+
         $amount = $model['amount'];
         $currency = $model['currency'];
         $cryptogram = $model['cryptogram'];
-        $ipAddress = "212.42.55.10";
-        $cardHolderName = "Dmitri Pisarev";
+        $ipAddress = "0.0.0.0";
+        $cardHolderName = "";
 
         if ($model['PaRes']) {
             if (!$model['MD']) {
                 throw new LogicException('Something went wrong, MD got lost :-(');
             }
-            $transaction = $client->confirm3DS($model['MD'], $model['PaRes']);
+            $transaction = $this->client->confirm3DS($model['MD'], $model['PaRes']);
             if ($transaction->getStatus() === 'completed') {
                 $model['status'] = 'captured';
             } else {
-                die('Transaction rejected');
+                $model['status'] = 'rejected';
             }
             return;
         }
 
-        $transaction = $client->chargeCard($amount, $currency, $ipAddress, $cardHolderName, $cryptogram);
+        $transaction = $this->client->chargeCard($amount, $currency, $ipAddress, $cardHolderName, $cryptogram);
         if ($transaction->getUrl()) {
             $model['AcsUrl'] = $transaction->getUrl();
             $model['MD'] = $transaction->getTransactionId();
@@ -84,7 +92,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
         } else if ($transaction->getStatus() === 'completed') {
             $model['status'] = 'captured';
         } else {
-            die("Something went wrong");
+            $model['status'] = 'rejected';
         }
     }
     /**

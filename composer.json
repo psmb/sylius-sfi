@@ -1,7 +1,15 @@
 {
-    "name": "sylius/sylius-standard",
-    "description": "Starting point for projects powered by Sylius eCommerce.",
-    "keywords": ["symfony", "symfony2", "sylius", "distribution", "ecommerce", "cart", "shopping"],
+    "name": "psmb/sylius-sfi",
+    "description": "Our modest integrarion of Symfone for a small books web shop",
+    "keywords": [
+        "symfony",
+        "symfony2",
+        "sylius",
+        "distribution",
+        "ecommerce",
+        "cart",
+        "shopping"
+    ],
     "type": "project",
     "license": "MIT",
     "homepage": "https://sylius.com",
@@ -66,7 +74,9 @@
         "psr-4": {
             "App\\Tests\\": "tests/"
         },
-        "classmap": ["src/Kernel.php"]
+        "classmap": [
+            "src/Kernel.php"
+        ]
     },
     "scripts": {
         "auto-scripts": {

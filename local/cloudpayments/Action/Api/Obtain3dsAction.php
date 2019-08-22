@@ -44,7 +44,7 @@ class Obtain3dsAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute($renderTemplate = new RenderTemplate(
             $this->templateName, [
                 'AcsUrl' => $model['AcsUrl'],
-                'TermUrl' => $request->getToken() ? str_replace('http:', 'https:', $request->getToken()->getTargetUrl()) : null,
+                'TermUrl' => $request->getToken() ? str_replace('http:', 'http:', $request->getToken()->getTargetUrl()) : null,
                 'MD' => $model['MD'],
                 'PaReq' => $model['PaReq']
             ])
