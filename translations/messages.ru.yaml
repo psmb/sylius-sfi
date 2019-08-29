@@ -1,12 +1,13 @@
 sylius:
-  ui:
-    checkout: 'К оплате'
-    clear_cart: 'Очистить корзину'
-    summary: 'Итого'
-    subtotal: 'Итого'
-    latest_products: 'Новые книги'
-    checking_out_as: 'Оформляем покупку на'
-  form:
-    user:
-      password:
-        confirmation: 'Пароль еще раз'
+    ui:
+        checkout: "К оплате"
+        clear_cart: "Очистить корзину"
+        summary: "Итого"
+        subtotal: "Итого"
+        latest_products: "Новые книги"
+        checking_out_as: "Оформляем покупку на"
+        your_store: "Наш магазин"
+    form:
+        user:
+            password:
+                confirmation: "Пароль еще раз"
