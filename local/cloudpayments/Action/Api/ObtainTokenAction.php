@@ -47,7 +47,7 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->gateway->execute($renderTemplate = new RenderTemplate(
             $this->templateName, [
                 'model' => $model,
-                'actionUrl' => $request->getToken() ? str_replace('https:', 'http:', $request->getToken()->getTargetUrl()) : null,
+                'actionUrl' => $request->getToken() ? str_replace('http:', 'https:', $request->getToken()->getTargetUrl()) : null,
                 'publishable_key' => $this->api->getPublishableKey()
             ])
         );

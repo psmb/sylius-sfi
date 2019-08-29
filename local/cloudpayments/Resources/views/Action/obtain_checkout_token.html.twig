@@ -1,29 +1,207 @@
 {% extends layout ?: "@PayumCore/layout.html.twig" %}
 
+{% block payum_stylesheets %}
+    <title>Оплата при помощи Cloudpayments</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+{% endblock %}
 {% block payum_body %}
+    <style>
+        @font-face {
+            font-family: "Franklin";
+            src: url("/bundles/_themes/psmb/sfi-theme/syliusshop/FranklinGothic-Book.woff") format("woff");
+            font-weight: 400;
+            font-style: normal;
+        }
+        body {
+            padding: 0;
+            margin: 10px;
+            font-size: 13px;
+            font-family: Franklin, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            color: rgba(0, 0, 0, 0.87);
+        }
+        @media(min-width: 350px) {
+            body {
+                font-size: 14px;
+            }
+        }
+        @media(min-width: 365px) {
+            body {
+                font-size: 15px;
+            }
+        }
+        @media(min-width: 400px) {
+            body {
+                font-size: 16px;
+            }
+        }
+        @media(min-width: 420px) {
+            body {
+                font-size: 17px;
+            }
+        }
+        @media(min-width: 450px) {
+            body {
+                margin: 20px;
+                font-size: 18px;
+            }
+        }
+        @media(min-width: 490px) {
+            body {
+                font-size: 19px;
+            }
+        }
+        @media(min-width: 510px) {
+            body {
+                font-size: 20px;
+            }
+        }
+        @media(min-width: 640px) {
+            body {
+                font-size: 23px;
+            }
+        }
+        * {
+            box-sizing: border-box;
+            outline: none;
+        }
+        #cards {
+            width: 23.35em;
+            height: 13em;
+            position: relative;
+            margin: 0;
+        }
+        #front,
+        #back {
+            overflow: hidden;
+            position: absolute;
+            width: 18.85em;
+            height: 11.7em;
+            border-radius: 0.5em;
+        }
+        #front {
+            top: 0;
+            left: 0;
+            background: #ddd;
+            z-index: 100;
+        }
+        #name {
+            width: 100%;
+            margin-bottom: 0.3em;
+        }
+        #number {
+            width: 100%;
+            margin-bottom: 0.3em;
+        }
+        #front-fields {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1em;
+        }
+        #bank-logo {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            width: 12em;
+            height: 2.2em;
+            display: block;
+            position: relative;
+            left: 1em;
+            background-size: contain;
+            background-position: top left;
+            background-repeat: no-repeat;
+        }
+        #brand-logo {
+            position: absolute;
+            bottom: 1em;
+            right: 1em;
+            text-align: right;
+            height: 1.6em;
+        }
+        #back {
+            bottom: 0;
+            right: 0;
+            background: #bbb;
+            padding-top: 1.3em;
+            padding-right: 1em;
+            padding-left: 15em;
+        }
+        #code {
+            width: 100%;
+        }
+        .field {
+            padding: 0.3em 0.5em;
+            border: none;
+            font-family: 'Anonymous Pro', monospace;
+            font-size: 0.9em;
+            text-indent: 0.1em;
+        }
+        .expired {
+            float: left;
+            width: 3em;
+            margin-right: 0.5em;
+            margin-top: 0.3em;
+        }
+        .label {
+            font-size: 0.5em;
+            display: block;
+            margin-top: 0.5em;
+        }
+
+        .submit-button {
+            margin-top: 30px;
+            padding: 0.8em 1.8em;
+            background-color: #ff8e18;
+            color: white;
+            font-size: 1.1em;
+            border: 0;
+            cursor: pointer;
+            width: 100%;
+        }
+        .submit-button:hover {
+            background-color: #ff9c33;
+        }
+        @media(min-width: 420px) {
+            .submit-button {
+                width: auto;
+            }
+        }
+    </style>
     {{ parent() }}
 
+    <div style="padding: 20px 0">
+        <a href="{{ path('sylius_shop_homepage') }}" title="На главную"><img style="width: 200px" src="{{ asset('bundles/syliusshop/SiteLogoRu.svg') }}" alt="Книги СФИ"/></a>
+    </div>
+
+    <h1 style="margin-bottom: 30px">Оплата заказа</h1>
+
     <form action="{{ actionUrl|default('') }}" method="POST" id="paymentForm">
-        Номер карты
-        <input data-cp="cardNumber" type="text"><br/>
+        <div id="cards">
+            <div id="front">
+                <div id="bank-logo"></div>
+                <img src="" alt="" id="brand-logo">
+                <div id="front-fields">
 
-        Месяц
-        <input data-cp="expDateMonth" type="text"><br/>
-
-        Год
-        <input data-cp="expDateYear" type="text"><br/>
-
-        CVC
-        <input data-cp="cvv" type="text"><br/>
-
-        Имя
-        <input data-cp="name" type="text"><br/>
-
-        <input id="cryptogram" name="cryptogram" type="hidden">
-
-        <button onclick="createCryptogram(event);" type="submit">Оплатить
+                    <input required data-cp="cardNumber" class="field" id="number" type="text" placeholder="0000 0000 0000 0000" autocomplete="cc-number">
+                    <input required data-cp="name" class="field" id="name" type="text" placeholder="ИМЯ ДЕРЖАТЕЛЯ" autocomplete="cc-name">
+                    <label class="label">Срок действия</label>
+                    <input required data-cp="expDateMonth" class="field expired" id="mm" type="text" placeholder="ММ" autocomplete="cc-exp-month">
+                    <input required data-cp="expDateYear" class="field expired" id="yy" type="text" placeholder="ГГ" autocomplete="cc-exp-year">
+                    <input id="cryptogram" name="cryptogram" type="hidden">
+                </div>
+            </div>
+            <div id="back">
+                <input required data-cp="cvv" class="field" id="code" type="password" placeholder="CVC" autocomplete="cc-csc">
+            </div>
+        </div>
+        <button class="submit-button" onclick="createCryptogram(event);" type="submit">Оплатить
             {{ model.amount }}
-            р.</button>
+            ₽</button>
+
+        <p style="margin-top: 40px; max-width: 500px; font-size: 11px; color: #bbb;">Оплата осуществляется при помощи платежного сервиса
+            <a href="https://cloudpayments.ru" target="_blank">Cloudpayments</a>. Все банковские данные передаются им напрямую в зашифрованном виде.</p>
+        <a href="https://cloudpayments.ru" target="_blank"><img width="60" src="http://cloudpayments.ru/logo.png" alt="Cloudpayments"/></a>
     </form>
 {% endblock %}
 
@@ -31,8 +209,32 @@
     {{ parent() }}
 
     <script src="https://widget.cloudpayments.ru/bundles/checkout"></script>
+    <script src="https://cdn.jsdelivr.net/gh/serge10d1n/card-info/dist/card-info.core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/serge10d1n/card-info/dist/banks-and-prefixes/ru.min.js"></script>
 
     <script type="text/javascript">
+        var bankLogo = document.getElementById('bank-logo');
+        var brandLogo = document.getElementById('brand-logo');
+        var numberInput = document.getElementById('number');
+        var cardFront = document.getElementById('front');
+        var updateCardPreview = function () {
+            var number = numberInput.value;
+            var cardInfo = new CardInfo(number, {
+                banksLogosPath: 'https://cdn.jsdelivr.net/gh/serge10d1n/card-info/dist/banks-logos/',
+                brandsLogosPath: 'https://cdn.jsdelivr.net/gh/serge10d1n/card-info/dist/brands-logos/'
+            });
+            if (cardInfo.bankLogo) {
+                bankLogo.style.backgroundImage = 'url("' + cardInfo.bankLogo + '")'
+            }
+            front.style.background = cardInfo.backgroundGradient;
+            front.style.color = cardInfo.textColor;
+            if (cardInfo.brandLogo) {
+                brandLogo.setAttribute('src', cardInfo.brandLogo);
+                brandLogo.setAttribute('alt', cardInfo.brandName);
+            }
+        }
+        numberInput.addEventListener('keyup', updateCardPreview);
+
         var checkout = new cp.Checkout("{{ publishable_key }}", document.getElementById("paymentForm"));
         var createCryptogram = function (event) {
             var result = checkout.createCryptogramPacket();
