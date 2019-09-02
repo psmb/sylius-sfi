@@ -66,3 +66,9 @@ gtm:
         route: true
         context: true
         events: true
+
+sylius_product:
+    resources:
+        product:
+            classes:
+                repository: App\Repository\ProductRepository
