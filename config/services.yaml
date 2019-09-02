@@ -54,3 +54,15 @@ services:
         class: App\Controller\Shop\PolicyController
         arguments: ["@templating"]
         tags: ["controller.service_arguments"]
+
+google_tag_manager:
+    enabled: true
+    id: "GTM-KH44GQS"
+    autoAppend: false
+gtm:
+    inject: true
+    features:
+        environment: true
+        route: true
+        context: true
+        events: true

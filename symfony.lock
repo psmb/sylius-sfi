@@ -524,6 +524,9 @@
     "squizlabs/php_codesniffer": {
         "version": "3.3.1"
     },
+    "stefandoorn/sylius-google-tag-manager-enhanced-ecommerce-plugin": {
+        "version": "v0.8.1"
+    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.2",
         "recipe": {
