@@ -2,17 +2,18 @@
 
 {% block content %}
 
-<div class="ui icon info message">
-    <i class="info circle icon"></i>
-    <div class="content">
-        <div class="header">Скоро открытие!</div>
-        <p>Мы рады приветствовать вас на сайте книжного магазина <a href="https://sfi.ru" targe="_blank">Свято-Филаретовского православно-христианского института</a>. Пока сайт работает в тестовом режиме.<br/>
-        В ближайшее время мы сможем предложить вам электронные книги и расширенные возможности доставки.<br/>
-        Сейчас доставка доступна <strong>только по Москве</strong>.</p>
+    <div class="ui icon info message">
+        <i class="info circle icon"></i>
+        <div class="content">
+            <div class="header">Скоро открытие!</div>
+            <p>Мы рады приветствовать вас на сайте книжного магазина
+                <a href="https://sfi.ru" targe="_blank">Свято-Филаретовского православно-христианского института</a>. Пока сайт работает в тестовом режиме.<br/>
+                В ближайшее время мы сможем предложить вам электронные книги и расширенные возможности доставки.<br/>
+                Сейчас доставка доступна
+                <strong>только по Москве</strong>.</p>
+        </div>
     </div>
-</div>
 
-<h2 style="margin-bottom: 24px" class="ui horizontal section header">Новые книги</h2>
-{{ render(url('sylius_shop_partial_product_index_latest', {'count': 12, 'template': '@SyliusShop/Product/_horizontalList.html.twig'})) }}
-<a href="/ru_RU/taxons/category/books" class="ui primary button">Все книги</a>
+    {{ render(url('sylius_shop_partial_product_index_latest', {'count': 12, 'template': '@SyliusShop/Product/_horizontalList.html.twig'})) }}
+    <a href="/ru_RU/taxons/category/books" class="ui primary button">Все книги</a>
 {% endblock %}
