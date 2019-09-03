@@ -15,6 +15,24 @@
                     </td>
                 </tr>
             {% endfor %}
+            {% if product.variants[0].width %}
+                <tr>
+                    <td class="sylius-product-attribute-name">Размеры</td>
+                    <td class="sylius-product-attribute-value">
+                        {{product.variants[0].width}}×{{product.variants[0].height}}×{{product.variants[0].depth}}
+                        мм.
+                    </td>
+                </tr>
+            {% endif %}
+            {% if product.variants[0].weight %}
+                <tr>
+                    <td class="sylius-product-attribute-name">Вес</td>
+                    <td class="sylius-product-attribute-value">
+                        {{product.variants[0].weight}}
+                        г.
+                    </td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 </div>
