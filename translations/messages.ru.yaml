@@ -7,6 +7,7 @@ sylius:
         latest_products: "Новые книги"
         checking_out_as: "Оформляем покупку на"
         your_store: "Наш магазин"
+        details: "Описание"
     form:
         user:
             password:
