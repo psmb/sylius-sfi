@@ -15,14 +15,16 @@ class ProductRepository extends BaseProductRepository
         return $this->createQueryBuilder('o')
             ->addSelect('translation')
             ->innerJoin('o.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->leftJoin('o.attributes', 'attributeValue', 'WITH', 'attributeValue.localeCode = :locale')
+            ->leftJoin('attributeValue.attribute', 'attribute', 'WITH', 'attribute.code = :code')
             ->andWhere(':channel MEMBER OF o.channels')
             ->andWhere('o.enabled = true')
-            ->addOrderBy('o.updatedAt', 'DESC')
+            ->addOrderBy('attributeValue.integer', 'DESC')
             ->setParameter('channel', $channel)
             ->setParameter('locale', $locale)
+            ->setParameter('code', 'publish_date')
             ->setMaxResults($count)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 }
