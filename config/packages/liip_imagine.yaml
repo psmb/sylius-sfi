@@ -7,13 +7,17 @@ liip_imagine:
     filter_sets:
         sylius_shop_product_thumbnail:
             filters:
-                thumbnail: { size: [260, 260], mode: inset, allow_upscale: true }
+                thumbnail:
+                    { size: [520, 520], mode: inset, allow_upscale: true }
         sylius_shop_product_tiny_thumbnail:
             filters:
-                thumbnail: { size: [64, 64], mode: inset, allow_upscale: true }
+                thumbnail:
+                    { size: [128, 128], mode: inset, allow_upscale: true }
         sylius_shop_product_small_thumbnail:
             filters:
-                thumbnail: { size: [150, 150], mode: inset, allow_upscale: true }
+                thumbnail:
+                    { size: [300, 300], mode: inset, allow_upscale: true }
         sylius_shop_product_large_thumbnail:
             filters:
-                thumbnail: { size: [550, 550], mode: inset, allow_upscale: true }
+                thumbnail:
+                    { size: [1100, 1100], mode: inset, allow_upscale: true }
