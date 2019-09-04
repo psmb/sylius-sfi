@@ -55,6 +55,21 @@ services:
         arguments: ["@templating"]
         tags: ["controller.service_arguments"]
 
+    app.form.type.address:
+        class: App\Form\Type\AddressTypeExtension
+        tags:
+            - {
+                  name: form.type_extension,
+                  extended_type: Sylius\Bundle\AddressingBundle\Form\Type\AddressType,
+              }
+    app.form.type.customver_registration:
+        class: App\Form\Type\CustomerRegistrationTypeExtension
+        tags:
+            - {
+                  name: form.type_extension,
+                  extended_type: Sylius\Bundle\CoreBundle\Form\Type\Customer\CustomerRegistrationType,
+              }
+
 google_tag_manager:
     enabled: true
     id: "GTM-KH44GQS"
