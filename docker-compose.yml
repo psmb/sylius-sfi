@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   php:
@@ -9,7 +9,7 @@ services:
         - quay.io/sylius/php:latest
         - quay.io/sylius/nodejs:latest
         - quay.io/sylius/nginx:latest
-    image: quay.io/sylius/php:latest
+    image: dimaip/sylius-sfi-php:latest
     depends_on:
       - mysql
     environment:
@@ -42,27 +42,6 @@ services:
     ports:
       - "3306:3306"
 
-  nodejs:
-    build:
-      context: .
-      target: sylius_nodejs
-      cache_from:
-        - quay.io/sylius/php:latest
-        - quay.io/sylius/nodejs:latest
-        - quay.io/sylius/nginx:latest
-    image: quay.io/sylius/nodejs:latest
-    depends_on:
-      - php
-    environment:
-      - GULP_ENV=dev
-      - PHP_HOST=php
-      - PHP_PORT=9000
-    volumes:
-      - .:/srv/sylius:rw,cached
-      - ./public:/srv/sylius/public:rw,delegated
-    ports:
-      - "35729:35729"
-
   nginx:
     build:
       context: .
@@ -71,10 +50,9 @@ services:
         - quay.io/sylius/php:latest
         - quay.io/sylius/nodejs:latest
         - quay.io/sylius/nginx:latest
-    image: quay.io/sylius/nginx:latest
+    image: dimaip/sylius-sfi-nginx:latest
     depends_on:
       - php
-      - nodejs # to ensure correct build order
     volumes:
       - ./public:/srv/sylius/public:ro
       # if you develop on Linux, you may use a bind-mounted host directory instead
