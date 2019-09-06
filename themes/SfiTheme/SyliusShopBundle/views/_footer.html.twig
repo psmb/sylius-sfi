@@ -4,24 +4,29 @@
             {{ sonata_block_render_event('sylius.shop.layout.before_footer') }}
 
             <div class="three wide column">
-                <h4 class="ui inverted header">{{ 'sylius.ui.your_store'|trans }}</h4>
+                <h4 class="ui inverted header">
+                    <a target="_blank" style="color: white" href="https://sfi.ru" class="item">
+                        © СФИ
+                    </a>
+                </h4>
                 <div class="ui inverted link list">
                     <a href="/aboutus" class="item">{{ 'sylius.ui.about'|trans }}</a>
-                    {# <a href="#" class="item">{{ 'sylius.ui.terms_and_conditions'|trans }}</a> #}
                     <a href="/policy" class="item">{{ 'sylius.ui.privacy_policy'|trans }}</a>
                 </div>
             </div>
             <div class="three wide column">
                 <h4 class="ui inverted header">{{ 'sylius.ui.customer_care'|trans  }}</h4>
                 <div class="ui inverted link list">
-                    <a href="{{ path('sylius_shop_contact_request') }}" class="item">{{ 'sylius.ui.contact_us'|trans  }}</a>
-                    {# <a href="#" class="item">{{ 'sylius.ui.faqs'|trans  }}</a>
-                    <a href="#" class="item">{{ 'sylius.ui.delivery_and_shipping'|trans  }}</a>
-                    <a href="#" class="item">{{ 'sylius.ui.returns_policy'|trans  }}</a> #}
+                    <a target="_blank" href="mailto:books@sfi.ru" class="item">{{ 'sylius.ui.contact_us'|trans  }}</a>
                 </div>
             </div>
             <div class="eight wide column">
-                <h4 class="ui inverted header">&copy; СФИ</h4>
+                <h4 class="ui inverted header">
+                    <a target="_blank" style="color: white" href="https://www.facebook.com/Книги-издательства-Свято-Филаретовского-института-283161725728000/" class="item">
+                        <svg style="margin-right: 8px; width: 18px; fill: #ffffff; vertical-align: top;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 455.73 455.73"><path d="M0 0v455.73h242.704V279.691h-59.33v-71.864h59.33v-60.353c0-43.893 35.582-79.475 79.475-79.475h62.025v64.622h-44.382c-13.947 0-25.254 11.307-25.254 25.254v49.953h68.521l-9.47 71.864h-59.051V455.73H455.73V0H0z"/></svg>
+                        Мы в Facebook
+                    </a>
+                </h4>
             </div>
 
             {{ sonata_block_render_event('sylius.shop.layout.after_footer') }}
