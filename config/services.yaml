@@ -54,6 +54,16 @@ services:
         class: App\Controller\Shop\PolicyController
         arguments: ["@templating"]
         tags: ["controller.service_arguments"]
+    app.payment_methods_resolver:
+        class: App\PaymentMethodsResolver
+        tags:
+            - {
+                  name: "sylius.payment_method_resolver",
+                  type: "default",
+                  label: "Based on Shipment",
+                  priority: 10,
+              }
+        arguments: ["@sylius.repository.payment_method"]
 
     app.form.type.address:
         class: App\Form\Type\AddressTypeExtension

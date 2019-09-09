@@ -8,6 +8,7 @@ sylius:
         checking_out_as: "Оформляем покупку на"
         your_store: "Наш магазин"
         details: "Описание"
+        fill_in_your_billing_and_shipping_addresses: "Заполните ваши данные для отправки книги"
     form:
         user:
             password:
