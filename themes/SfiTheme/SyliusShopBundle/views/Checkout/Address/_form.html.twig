@@ -1,0 +1,31 @@
+<div id="sylius-shipping-address">
+    {% include '@SyliusShop/Checkout/Address/_addressBookSelect.html.twig' %}
+    <h3 class="ui dividing header">{{ 'sylius.ui.shipping_address'|trans }}</h3>
+    {% if form.customer is defined %}
+        {% include '@SyliusShop/Common/Form/_login.html.twig' with {'form': form.customer} %}
+    {% endif %}
+    {% if form.shippingAddress is defined %}
+        {% include '@SyliusShop/Common/Form/_address.html.twig' with {'form': form.shippingAddress, 'order': order} %}
+    {% endif %}
+    {% if form.shippingAddress is defined %}
+        {% include '@SyliusShop/Common/Form/_address.html.twig' with {'form': form.shippingAddress, 'order': order} %}
+    {% endif %}
+    {% if form.postomat is defined %}
+        {{ form_row(form.postomat) }}
+
+        <script type="text/javascript" src="//pickpoint.ru/select/postamat.js"></script>
+        <a href="#" onclick="PickPoint.open(pickPointCallback);return false">Выбрать</a>
+        <script type="text/javascript">
+            function pickPointCallback(result){
+                document.getElementById('sylius_checkout_address_postomat').value = result.id;
+                console.log(result);
+            }
+        </script>
+    {% endif %}
+
+    {{ sonata_block_render_event('sylius.shop.checkout.address.shipping_address_form', {'order': order}) }}
+</div>
+
+<div id="sylius-billing-address">
+    {{ sonata_block_render_event('sylius.shop.checkout.address.billing_address_form', {'order': order}) }}
+</div>

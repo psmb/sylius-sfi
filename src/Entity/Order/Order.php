@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Order;
 
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 use Sylius\Component\Core\Model\Order as BaseOrder;
@@ -14,4 +15,16 @@ use Sylius\Component\Core\Model\Order as BaseOrder;
  */
 class Order extends BaseOrder
 {
+    /** @ORM\Column(type="string", nullable=true) */
+    private $postomat;
+
+    public function getPostomat(): ?string
+    {
+        return $this->postomat;
+    }
+
+    public function setPostomat(string $postomat): void
+    {
+        $this->postomat = $postomat;
+    }
 }

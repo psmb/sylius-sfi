@@ -72,6 +72,15 @@ services:
                   name: form.type_extension,
                   extended_type: Sylius\Bundle\AddressingBundle\Form\Type\AddressType,
               }
+    # app.form.type.checkout_address:
+    #     class: App\Form\Type\CheckoutAddressTypeExtension
+    #     arguments:
+    #         - "@sylius.context.cart"
+    #     tags:
+    #         - {
+    #               name: form.type_extension,
+    #               extended_type: Sylius\Bundle\CoreBundle\Form\Type\Checkout\AddressType,
+    #           }
     app.form.type.customver_registration:
         class: App\Form\Type\CustomerRegistrationTypeExtension
         tags:
@@ -81,6 +90,14 @@ services:
               }
     sylius.money_formatter:
         class: App\Formatter\MoneyFormatter
+    app.shipping_calculator.pickpoint:
+        class: App\Shipping\PickpointShippingCalculator
+        tags:
+            - {
+                  name: sylius.shipping_calculator,
+                  calculator: pickpoint,
+                  label: "PICKPOINT",
+              }
 
 google_tag_manager:
     enabled: true
