@@ -7,20 +7,8 @@
     {% if form.shippingAddress is defined %}
         {% include '@SyliusShop/Common/Form/_address.html.twig' with {'form': form.shippingAddress, 'order': order} %}
     {% endif %}
-    {% if form.shippingAddress is defined %}
-        {% include '@SyliusShop/Common/Form/_address.html.twig' with {'form': form.shippingAddress, 'order': order} %}
-    {% endif %}
     {% if form.postomat is defined %}
         {{ form_row(form.postomat) }}
-
-        <script type="text/javascript" src="//pickpoint.ru/select/postamat.js"></script>
-        <a href="#" onclick="PickPoint.open(pickPointCallback);return false">Выбрать</a>
-        <script type="text/javascript">
-            function pickPointCallback(result){
-                document.getElementById('sylius_checkout_address_postomat').value = result.id;
-                console.log(result);
-            }
-        </script>
     {% endif %}
 
     {{ sonata_block_render_event('sylius.shop.checkout.address.shipping_address_form', {'order': order}) }}
