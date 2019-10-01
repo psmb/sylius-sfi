@@ -19,8 +19,7 @@ final class PickpointShippingCalculator implements CalculatorInterface
     public function __construct()
     {
         $this->cache = new FilesystemAdapter(
-            'pickpoint_auth',
-            3600 * 20
+            'pickpoint_auth'
         );
         $this->client = HttpClient::create();
     }
@@ -28,6 +27,7 @@ final class PickpointShippingCalculator implements CalculatorInterface
     private function getToken()
     {
         return $this->cache->get('pickpoint_token', function (ItemInterface $item) {
+            $item->expiresAfter(3600 * 20);
             $response = $this->client->request('POST', 'https://e-solution.pickpoint.ru/api/login', [
                 // these are demo passwords, no worries
                 'json' => ['Login' => '2LzNqu', 'Password' => 'G5kvdGZjUrV1']
@@ -71,9 +71,9 @@ final class PickpointShippingCalculator implements CalculatorInterface
                 'FromCity' => 'Москва',
                 'FromRegion' => 'Москва',
                 'PTNumber' => $postomat,
-                'Length' => max($heights),
+                'Length' => max($heights) ?? 0,
                 'Depth' => array_sum($depths),
-                'Width' => max($widths)
+                'Width' => max($widths) ?? 0
             ]
         ]);
         $statusCode = $response->getStatusCode();
