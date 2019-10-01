@@ -1,13 +1,21 @@
 <div id="sylius-shipping-address">
-    {% include '@SyliusShop/Checkout/Address/_addressBookSelect.html.twig' %}
-    <h3 class="ui dividing header">{{ 'sylius.ui.shipping_address'|trans }}</h3>
     {% if form.customer is defined %}
         {% include '@SyliusShop/Common/Form/_login.html.twig' with {'form': form.customer} %}
     {% endif %}
     {% if form.shippingAddress is defined %}
+        {% include '@SyliusShop/Checkout/Address/_addressBookSelect.html.twig' %}
+        <h3 class="ui dividing header">{{ 'sylius.ui.shipping_address'|trans }}</h3>
         {% include '@SyliusShop/Common/Form/_address.html.twig' with {'form': form.shippingAddress, 'order': order} %}
     {% endif %}
     {% if form.postomat is defined %}
+        <script type="text/javascript" src="//pickpoint.ru/select/postamat.js"></script>
+        {% if form.customer is not defined %}
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    PickPoint.open(pickPointCallback);
+                });
+            </script>
+        {% endif %}
         {{ form_row(form.postomat) }}
     {% endif %}
 
