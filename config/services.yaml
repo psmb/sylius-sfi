@@ -54,6 +54,10 @@ services:
         class: App\Controller\Shop\PolicyController
         arguments: ["@templating"]
         tags: ["controller.service_arguments"]
+    app.controller.shop.download:
+        class: App\Controller\Shop\DownloadController
+        arguments: ["@service_container"]
+        tags: ["controller.service_arguments"]
     app.payment_methods_resolver:
         class: App\PaymentMethodsResolver
         tags:
