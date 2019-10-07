@@ -1,5 +1,7 @@
 <?php
+
 namespace Psmb\Cloudpayments\Action\Api;
+
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -44,12 +46,15 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
             $this->gateway->execute($createCharge);
             return;
         }
-        $this->gateway->execute($renderTemplate = new RenderTemplate(
-            $this->templateName, [
-                'model' => $model,
-                'actionUrl' => $request->getToken() ? str_replace('http:', 'https:', $request->getToken()->getTargetUrl()) : null,
-                'publishable_key' => $this->api->getPublishableKey()
-            ])
+        $this->gateway->execute(
+            $renderTemplate = new RenderTemplate(
+                $this->templateName,
+                [
+                    'model' => $model,
+                    'actionUrl' => $request->getToken() ? str_replace('http:', 'https:', $request->getToken()->getTargetUrl()) : null,
+                    'publishable_key' => $this->api->getPublishableKey()
+                ]
+            )
         );
         throw new HttpResponse($renderTemplate->getResult());
     }
@@ -59,7 +64,6 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
     {
         return
             $request instanceof ObtainToken &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
+            $request->getModel() instanceof \ArrayAccess;
     }
 }

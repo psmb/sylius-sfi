@@ -1,4 +1,5 @@
 <?php
+
 namespace Psmb\Cloudpayments\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
@@ -80,7 +81,11 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
             return;
         }
 
-        $transaction = $this->client->chargeCard($amount, $currency, $ipAddress, $cardHolderName, $cryptogram);
+        $params = [
+            'JsonData' => $model['jsonData']
+        ];
+
+        $transaction = $this->client->chargeCard($amount, $currency, $ipAddress, $cardHolderName, $cryptogram, $params);
         if ($transaction->getUrl()) {
             $model['AcsUrl'] = $transaction->getUrl();
             $model['MD'] = $transaction->getTransactionId();
@@ -102,7 +107,6 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
     {
         return
             $request instanceof CreateCharge &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
+            $request->getModel() instanceof \ArrayAccess;
     }
 }

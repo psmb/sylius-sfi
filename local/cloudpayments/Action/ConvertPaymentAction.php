@@ -1,10 +1,12 @@
 <?php
+
 namespace Psmb\Cloudpayments\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareTrait;
-use Payum\Core\Model\PaymentInterface;
+use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Bridge\Spl\ArrayObject;
 
@@ -24,10 +26,60 @@ class ConvertPaymentAction implements ActionInterface
         /** @var PaymentInterface $payment */
         $payment = $request->getSource();
 
+        /** @var OrderInterface $order */
+        $order = $payment->getOrder();
+
+        $customer = $order->getCustomer();
+        $email = $customer->getEmail() ?? $customer->getUser()->getEmail();
+
+        $orderItems = $order->getItems()->toArray();
+
+        $items = array_map(function ($item) {
+            return [
+                "label" => $item->getProductName(),
+                "price" => $item->getUnitPrice() / 100,
+                "quantity" => $item->getQuantity(),
+                "amount" => $item->getUnitPrice() * $item->getQuantity() / 100,
+                "vat" => 0,
+                "method" => 4,
+                "object" => 1,
+                "measurementUnit" => "шт"
+            ];
+        }, $orderItems);
+        if ($order->getAdjustmentsTotal() > 0) {
+            $items[] = [
+                "label" => "Доставка",
+                "price" => $order->getAdjustmentsTotal() / 100,
+                "quantity" => 1,
+                "amount" => $order->getAdjustmentsTotal() / 100,
+                "vat" => 0,
+                "method" => 4,
+                "object" => 4,
+                "measurementUnit" => "шт"
+            ];
+        }
+
+        $json = [
+            "cloudPayments" => [
+                "customerReceipt" => [
+                    "Items" => $items,
+                    "calculationPlace" => "books.sfi.ru",
+                    "taxationSystem" => 1,
+                    "email" => $email,
+                    "amounts" => [
+                        "electronic" => $payment->getAmount() / 100,
+                        "advancePayment" => 0,
+                        "credit" => 0,
+                        "provision" => 0
+                    ]
+                ]
+            ]
+        ];
+
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
-        $details["amount"] = $payment->getTotalAmount() / 100;
+        $details["amount"] = $payment->getAmount() / 100;
         $details["currency"] = $payment->getCurrencyCode();
-        $details["description"] = $payment->getDescription();
+        $details["jsonData"] = json_encode($json);
         $request->setResult((array) $details);
     }
 
@@ -39,7 +91,6 @@ class ConvertPaymentAction implements ActionInterface
         return
             $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() == 'array'
-        ;
+            $request->getTo() == 'array';
     }
 }

@@ -1,5 +1,7 @@
 <?php
+
 namespace Psmb\Cloudpayments\Action\Api;
+
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -41,13 +43,16 @@ class Obtain3dsAction implements ActionInterface, GatewayAwareInterface
             $this->gateway->execute($createCharge);
             return;
         }
-        $this->gateway->execute($renderTemplate = new RenderTemplate(
-            $this->templateName, [
-                'AcsUrl' => $model['AcsUrl'],
-                'TermUrl' => $request->getToken() ? str_replace('http:', 'https:', $request->getToken()->getTargetUrl()) : null,
-                'MD' => $model['MD'],
-                'PaReq' => $model['PaReq']
-            ])
+        $this->gateway->execute(
+            $renderTemplate = new RenderTemplate(
+                $this->templateName,
+                [
+                    'AcsUrl' => $model['AcsUrl'],
+                    'TermUrl' => $request->getToken() ? str_replace('http:', 'https:', $request->getToken()->getTargetUrl()) : null,
+                    'MD' => $model['MD'],
+                    'PaReq' => $model['PaReq']
+                ]
+            )
         );
         throw new HttpResponse($renderTemplate->getResult());
     }
@@ -57,7 +62,6 @@ class Obtain3dsAction implements ActionInterface, GatewayAwareInterface
     {
         return
             $request instanceof Obtain3ds &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
+            $request->getModel() instanceof \ArrayAccess;
     }
 }
