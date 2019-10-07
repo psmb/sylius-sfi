@@ -40,7 +40,6 @@ class ConvertPaymentAction implements ActionInterface
                 "price" => $item->getUnitPrice() / 100,
                 "quantity" => $item->getQuantity(),
                 "amount" => $item->getUnitPrice() * $item->getQuantity() / 100,
-                "vat" => 0,
                 "method" => 4,
                 "object" => 1,
                 "measurementUnit" => "шт"
@@ -52,7 +51,6 @@ class ConvertPaymentAction implements ActionInterface
                 "price" => $order->getAdjustmentsTotal() / 100,
                 "quantity" => 1,
                 "amount" => $order->getAdjustmentsTotal() / 100,
-                "vat" => 0,
                 "method" => 4,
                 "object" => 4,
                 "measurementUnit" => "шт"
