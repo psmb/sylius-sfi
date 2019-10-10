@@ -4,22 +4,76 @@ declare(strict_types=1);
 
 namespace App\Controller\Shop;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use App\Entity\Product\ProductImage;
 
-final class DownloadController
+final class DownloadController extends Controller
 {
+    /**
+     * @var \Doctrine\Common\Persistence\ObjectManager
+     */
+    protected $objectManager;
 
     /**
      * @var ContainerInterface
      */
     protected $container;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, \Doctrine\Common\Persistence\ObjectManager $objectManager)
     {
         $this->container = $container;
+        $this->objectManager = $objectManager;
+    }
+
+    private function getPaidOrders($user)
+    {
+        $customer = $user->getCustomer();
+        $orderRepository = $this->container->get('sylius.repository.order');
+        $orders = $orderRepository->findByCustomer($customer);
+        return array_filter($orders, function ($order) {
+            return $order->getPaymentState() === 'paid';
+        });
+    }
+
+    private function getDeliverables($product)
+    {
+        return $product->getImagesByType('pdf')->toArray();
+    }
+
+    private function getProductsWithDeliverables($user)
+    {
+        $orders = $this->getPaidOrders($user);
+        $products = [];
+        foreach ($orders as $order) {
+            $items = $order->getItems()->toArray();
+            foreach ($items as $orderItem) {
+                $product = $orderItem->getVariant()->getProduct();
+                $deliverables = $this->getDeliverables($product);
+                if (count($deliverables) > 0) {
+                    $products[$product->getCode()] = [
+                        "product" => $product,
+                        "deliverables" => $deliverables
+                    ];
+                }
+            }
+        }
+        return $products;
+    }
+
+    public function listAction(Request $request): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirect('/ru_RU/login', 307);
+        }
+
+        $products = $this->getProductsWithDeliverables($user);
+
+        return $this->render('downloadList.html.twig', ['products' => $products]);
     }
 
     public function showAction(Request $request): Response
@@ -27,37 +81,34 @@ final class DownloadController
         $routeParameters = $request->attributes->get('_route_params');
         $code = $routeParameters["code"];
 
-        $customer = $this->container->get('security.token_storage')->getToken()->getUser()->getCustomer();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        if (is_string($user)) {
+            return $this->redirect('/ru_RU/login', 307);
+        }
+        $customer = $user->getCustomer();
         $orderRepository = $this->container->get('sylius.repository.order');
         $orders = $orderRepository->findByCustomer($customer);
 
-        $isBought = false;
+        $document = $this->objectManager->getRepository(ProductImage::class)->findOneById($code);
+
+        $product = $document->getOwner();
         foreach ($orders as $order) {
             if ($order->getPaymentState() === 'paid') {
                 $items = $order->getItems()->toArray();
                 foreach ($items as $orderItem) {
                     if ($code === $orderItem->getVariant()->getProduct()->getCode()) {
-                        $isBought = true;
+                        $product = $orderItem->getVariant()->getProduct();
                         break 2;
                     }
                 }
             }
         }
 
-        if (!$isBought) {
-            throw new \Error('This item doesn\'t belong to you!');
+        if (!$product) {
+            return new Response('Вы не оплатили этот файл', 402, array('Content-Type' => 'text/html'));
         }
 
-        $productRepository = $this->container->get('sylius.repository.product');
-        $product = $productRepository->findOneByCode($code);
-        $pdfs = array_filter($product->getImages()->toArray(), function ($item) {
-            if ($item->getType() === 'pdf') {
-                return true;
-            }
-            return false;
-        });
-        $pdf = reset($pdfs);
         $projectDir = $this->container->getParameter('kernel.project_dir');
-        return new BinaryFileResponse($projectDir . '/public/media/image/' . $pdf->getPath());
+        return new BinaryFileResponse($projectDir . '/public/media/image/' . $document->getPath());
     }
 }

@@ -31,9 +31,10 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Webmozart\Assert\Assert;
 
-final class Kernel extends BaseKernel
+final class Kernel extends BaseKernel implements CompilerPassInterface
 {
     use MicroKernelTrait;
 
@@ -111,5 +112,13 @@ final class Kernel extends BaseKernel
     private function isTestEnvironment(): bool
     {
         return 0 === strpos($this->getEnvironment(), 'test');
+    }
+
+    public function process(ContainerBuilder $container)
+    {
+        $container->getDefinition('sylius.listener.checkout_redirect')->addTag('kernel.event_listener', [
+            'event' => 'sylius.order.post_login',
+            'method' => 'handleCheckoutRedirect',
+        ]);
     }
 }

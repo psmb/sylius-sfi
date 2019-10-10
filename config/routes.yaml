@@ -8,6 +8,11 @@ app_shop_policy:
     methods: [GET]
     defaults:
         _controller: app.controller.shop.policy::indexAction
+app_shop_download_list:
+    path: /download
+    methods: [GET]
+    defaults:
+        _controller: app.controller.shop.download::listAction
 app_shop_download:
     path: /download/{code}
     methods: [GET]

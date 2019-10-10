@@ -3,8 +3,27 @@ sylius_shop_checkout_start:
     methods: [GET]
     defaults:
         _controller: FrameworkBundle:Redirect:redirect
-        route: sylius_shop_checkout_address
-
+        route: sylius_shop_checkout_login
+sylius_shop_checkout_login:
+    path: /login
+    methods: [GET, PUT]
+    defaults:
+        _controller: sylius.controller.order:updateAction
+        _sylius:
+            event: login
+            flash: false
+            template: "@SyliusShop/Checkout/login.html.twig"
+            form:
+                type: App\Form\Type\LoginType
+                options:
+                    customer: expr:service('sylius.context.customer').getCustomer()
+            repository:
+                method: findCartForAddressing
+                arguments:
+                    - "expr:service('sylius.context.cart').getCart().getId()"
+            state_machine:
+                graph: sylius_order_checkout
+                transition: login
 sylius_shop_checkout_address:
     path: /address
     methods: [GET, PUT]
@@ -15,7 +34,7 @@ sylius_shop_checkout_address:
             flash: false
             template: "@SyliusShop/Checkout/address.html.twig"
             form:
-                type: Sylius\Bundle\CoreBundle\Form\Type\Checkout\AddressType
+                type: App\Form\Type\CheckoutAddressType
                 options:
                     customer: expr:service('sylius.context.customer').getCustomer()
             repository:

@@ -58,6 +58,14 @@ services:
         class: App\Controller\Shop\DownloadController
         arguments: ["@service_container"]
         tags: ["controller.service_arguments"]
+    app.listener.admin.menu_builder:
+        class: App\MenuListener
+        tags:
+            - {
+                  name: kernel.event_listener,
+                  event: sylius.menu.shop.account,
+                  method: addMenuItems,
+              }
     app.payment_methods_resolver:
         class: App\PaymentMethodsResolver
         tags:
@@ -69,23 +77,35 @@ services:
               }
         arguments: ["@sylius.repository.payment_method"]
 
-    app.form.type.address:
-        class: App\Form\Type\AddressTypeExtension
+    app.form.type.customer_guest:
+        class: App\Form\Type\CustomerGuestTypeExtension
         tags:
             - {
                   name: form.type_extension,
-                  extended_type: Sylius\Bundle\AddressingBundle\Form\Type\AddressType,
+                  extended_type: Sylius\Bundle\CoreBundle\Form\Type\Customer\CustomerGuestType,
               }
-    # app.form.type.checkout_address:
-    #     class: App\Form\Type\CheckoutAddressTypeExtension
-    #     arguments:
-    #         - "@sylius.context.cart"
-    #     tags:
-    #         - {
-    #               name: form.type_extension,
-    #               extended_type: Sylius\Bundle\CoreBundle\Form\Type\Checkout\AddressType,
-    #           }
-    app.form.type.customver_registration:
+
+    app.form.type.product_image:
+        class: App\Form\Type\ProductImageTypeExtension
+        tags:
+            - {
+                  name: form.type_extension,
+                  extended_type: Sylius\Bundle\CoreBundle\Form\Type\Product\ProductImageType,
+              }
+
+    app.form.type.login:
+        class: App\Form\Type\LoginType
+        arguments: [App\Entity\Order\Order, []]
+        tags:
+            - { name: "form.type" }
+
+    app.form.type.checkout_address:
+        class: App\Form\Type\CheckoutAddressType
+        arguments: [App\Entity\Order\Order, [], "@sylius.context.cart"]
+        tags:
+            - { name: "form.type" }
+
+    app.form.type.customer_registration:
         class: App\Form\Type\CustomerRegistrationTypeExtension
         tags:
             - {
@@ -102,6 +122,20 @@ services:
                   calculator: pickpoint,
                   label: "PICKPOINT",
               }
+    sylius.factory.customer_after_checkout:
+        class: App\CustomerAfterCheckoutFactory
+        arguments: ["@sylius.factory.customer"]
+        public: true
+
+    sylius.state_resolver.order_checkout:
+        class: App\CheckoutStateResolver
+        arguments:
+            [
+                "@sm.factory",
+                "@sylius.checker.order_payment_method_selection_requirement",
+                "@sylius.checker.order_shipping_method_selection_requirement",
+            ]
+        public: true
 
 google_tag_manager:
     enabled: true

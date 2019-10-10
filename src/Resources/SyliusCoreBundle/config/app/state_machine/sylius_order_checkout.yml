@@ -6,20 +6,35 @@ winzou_state_machine:
         state_machine_class: "%sylius.state_machine.class%"
         states:
             cart: ~
+            loggedin: ~
             shipping_selected: ~
             shipping_skipped: ~
             payment_skipped: ~
             payment_selected: ~
             addressed: ~
+            address_skipped: ~
             completed: ~
         transitions:
+            login:
+                from:
+                    [
+                        cart,
+                        loggedin,
+                        addressed,
+                        address_skipped,
+                        shipping_selected,
+                        shipping_skipped,
+                        payment_selected,
+                        payment_skipped,
+                    ]
+                to: loggedin
             skip_shipping:
-                from: [cart]
+                from: [loggedin]
                 to: shipping_skipped
             select_shipping:
                 from:
                     [
-                        cart,
+                        loggedin,
                         addressed,
                         shipping_selected,
                         shipping_skipped,
@@ -49,16 +64,21 @@ winzou_state_machine:
                         payment_skipped,
                     ]
                 to: addressed
+            skip_address:
+                from: [payment_selected, payment_skipped]
+                to: address_skipped
             complete:
-                from: [addressed]
+                from: [addressed, address_skipped]
                 to: completed
         callbacks:
             after:
                 sylius_process_cart:
                     on:
                         [
+                            "login",
                             "select_shipping",
                             "address",
+                            "skip_address",
                             "select_payment",
                             "skip_shipping",
                             "skip_payment",
@@ -73,8 +93,13 @@ winzou_state_machine:
                     on: ["complete"]
                     do: ["object", "completeCheckout"]
                     args: ["object"]
+                sylius_skip_address:
+                    on: ["select_payment"]
+                    do: ["@sylius.state_resolver.order_checkout", "resolve"]
+                    args: ["object"]
+                    priority: 1
                 sylius_skip_shipping:
-                    on: ["address"]
+                    on: ["login"]
                     do: ["@sylius.state_resolver.order_checkout", "resolve"]
                     args: ["object"]
                     priority: 1
