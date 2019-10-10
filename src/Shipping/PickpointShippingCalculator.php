@@ -86,7 +86,10 @@ final class PickpointShippingCalculator implements CalculatorInterface
             throw new \Exception($content["Error"]);
         }
 
-        return \intval($content["Services"][0]["Tariff"] + $content["Services"][0]["NDS"]) * 100;
+        $pickpointPrice = $content["Services"][0]["Tariff"] + $content["Services"][0]["NDS"];
+        $priceAdjustedForTax = $pickpointPrice * (1 + 7 / 100);
+
+        return \intval($priceAdjustedForTax) * 100;
     }
 
     /**
