@@ -53,7 +53,7 @@ final class PickpointShippingCalculator implements CalculatorInterface
     {
         $postomat = $subject->getOrder()->getPostomat();
         if (!$postomat) {
-            return 20000;
+            return 35000;
         }
 
         $items = $subject->getShippables()->toArray();
@@ -77,11 +77,12 @@ final class PickpointShippingCalculator implements CalculatorInterface
                 'SessionId' => $this->getToken(),
                 'IKN' => $ikn,
                 'FromCity' => 'Москва',
-                'FromRegion' => 'Москва',
+                'FromRegion' => 'Московская обл.',
                 'PTNumber' => $postomat,
                 'Length' => max($heights) ?? 0,
                 'Depth' => array_sum($depths),
-                'Width' => max($widths) ?? 0
+                'Width' => max($widths) ?? 0,
+                'GettingType' => '103'
             ]
         ]);
         $statusCode = $response->getStatusCode();
