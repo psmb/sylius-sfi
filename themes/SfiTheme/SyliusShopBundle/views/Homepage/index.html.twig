@@ -1,6 +1,8 @@
 {% extends '@SyliusShop/layout.html.twig' %}
 
 {% block content %}
-    {{ render(url('sylius_shop_partial_product_index_latest', {'count': 12, 'template': '@SyliusShop/Product/_horizontalList.html.twig'})) }}
-    <a href="/ru_RU/taxons/category/books" class="ui primary button">Все книги</a>
+    <div style="margin-top: 30px">
+        {{ render(url('sylius_shop_partial_product_index_latest', {'count': 12, 'template': '@SyliusShop/Product/_horizontalList.html.twig'})) }}
+        <a href="/ru_RU/taxons/category/books" class="ui primary button">Все книги</a>
+    </div>
 {% endblock %}
