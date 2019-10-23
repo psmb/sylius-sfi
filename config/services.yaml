@@ -53,6 +53,10 @@ services:
         class: App\Controller\Shop\AboutUsController
         arguments: ["@templating"]
         tags: ["controller.service_arguments"]
+    app.controller.shop.shipinfo:
+        class: App\Controller\Shop\ShipInfoController
+        arguments: ["@templating"]
+        tags: ["controller.service_arguments"]
     app.controller.shop.policy:
         class: App\Controller\Shop\PolicyController
         arguments: ["@templating"]
