@@ -6,6 +6,9 @@ parameters:
     sylius.form.type.product.validation_groups: [app_product]
     router.request_context.scheme: "https"
     asset.request_context.secure: true
+    psmb.pickpoint_login: '%env(PICKPOINT_LOGIN)%'
+    psmb.pickpoint_password: '%env(PICKPOINT_PASSWORD)%'
+    psmb.pickpoint_ikn: '%env(PICKPOINT_IKN)%'
 
 services:
     # Default configuration for services in *this* file
@@ -48,6 +51,10 @@ services:
             - { name: payum.gateway_factory_builder, factory: cloudpayments }
     app.controller.shop.aboutus:
         class: App\Controller\Shop\AboutUsController
+        arguments: ["@templating"]
+        tags: ["controller.service_arguments"]
+    app.controller.shop.shipinfo:
+        class: App\Controller\Shop\ShipInfoController
         arguments: ["@templating"]
         tags: ["controller.service_arguments"]
     app.controller.shop.policy:

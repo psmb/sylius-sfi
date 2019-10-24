@@ -9,6 +9,7 @@ use Sylius\Component\Shipping\Model\ShipmentInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 final class PickpointShippingCalculator implements CalculatorInterface
 {
@@ -16,8 +17,11 @@ final class PickpointShippingCalculator implements CalculatorInterface
 
     private $client = null;
 
-    public function __construct()
+    private $params;
+
+    public function __construct(ContainerBagInterface $params)
     {
+        $this->params = $params;
         $this->cache = new FilesystemAdapter(
             'pickpoint_auth'
         );
@@ -26,11 +30,13 @@ final class PickpointShippingCalculator implements CalculatorInterface
 
     private function getToken()
     {
-        return $this->cache->get('pickpoint_token', function (ItemInterface $item) {
+        $login = $this->params->get('psmb.pickpoint_login');
+        $password = $this->params->get('psmb.pickpoint_password');
+        return $this->cache->get('pickpoint_token', function (ItemInterface $item) use ($login, $password) {
             $item->expiresAfter(3600 * 20);
             $response = $this->client->request('POST', 'https://e-solution.pickpoint.ru/api/login', [
                 // these are demo passwords, no worries
-                'json' => ['Login' => '2LzNqu', 'Password' => 'G5kvdGZjUrV1']
+                'json' => ['Login' => $login, 'Password' => $password]
             ]);
             $statusCode = $response->getStatusCode();
             if ($statusCode > 400) {
@@ -47,7 +53,7 @@ final class PickpointShippingCalculator implements CalculatorInterface
     {
         $postomat = $subject->getOrder()->getPostomat();
         if (!$postomat) {
-            return 20000;
+            return 35000;
         }
 
         $items = $subject->getShippables()->toArray();
@@ -64,16 +70,19 @@ final class PickpointShippingCalculator implements CalculatorInterface
             throw new \Exception("Суммарный вес доставки не должен привышать 15кг");
         }
 
+        $ikn = $this->params->get('psmb.pickpoint_ikn');
+
         $response = $this->client->request('POST', 'https://e-solution.pickpoint.ru/api/calctariff', [
             'json' => [
                 'SessionId' => $this->getToken(),
-                'IKN' => '9990003041',
+                'IKN' => $ikn,
                 'FromCity' => 'Москва',
-                'FromRegion' => 'Москва',
+                'FromRegion' => 'Московская обл.',
                 'PTNumber' => $postomat,
                 'Length' => max($heights) ?? 0,
                 'Depth' => array_sum($depths),
-                'Width' => max($widths) ?? 0
+                'Width' => max($widths) ?? 0,
+                'GettingType' => '103'
             ]
         ]);
         $statusCode = $response->getStatusCode();
@@ -86,7 +95,10 @@ final class PickpointShippingCalculator implements CalculatorInterface
             throw new \Exception($content["Error"]);
         }
 
-        return \intval($content["Services"][0]["Tariff"] + $content["Services"][0]["NDS"]) * 100;
+        $pickpointPrice = $content["Services"][0]["Tariff"] + $content["Services"][0]["NDS"];
+        $priceAdjustedForTax = $pickpointPrice * (1 + 7 / 100);
+
+        return \intval($priceAdjustedForTax) * 100;
     }
 
     /**

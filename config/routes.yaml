@@ -3,6 +3,11 @@ app_shop_aboutus:
     methods: [GET]
     defaults:
         _controller: app.controller.shop.aboutus::indexAction
+app_shop_shipinfo:
+    path: /shipinfo
+    methods: [GET]
+    defaults:
+        _controller: app.controller.shop.shipinfo::indexAction
 app_shop_policy:
     path: /policy
     methods: [GET]
