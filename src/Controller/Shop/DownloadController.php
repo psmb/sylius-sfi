@@ -79,7 +79,29 @@ final class DownloadController extends Controller
     public function showAction(Request $request): Response
     {
         $routeParameters = $request->attributes->get('_route_params');
-        $code = $routeParameters["code"];
+        $productCode = $routeParameters["code"];
+
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirect('/ru_RU/login', 307);
+        }
+
+        $productRepository = $this->container->get('sylius.repository.product');
+
+        $product = $productRepository->findOneByCode($productCode);
+
+        $deliverables = $this->getDeliverables($product);
+
+        return $this->render('downloadShow.html.twig', [
+            'product' => $product,
+            'deliverables' => $deliverables
+        ]);
+    }
+
+    public function downloadAction(Request $request): Response
+    {
+        $routeParameters = $request->attributes->get('_route_params');
+        $documentId = $routeParameters["code"];
 
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         if (is_string($user)) {
@@ -89,22 +111,25 @@ final class DownloadController extends Controller
         $orderRepository = $this->container->get('sylius.repository.order');
         $orders = $orderRepository->findByCustomer($customer);
 
-        $document = $this->objectManager->getRepository(ProductImage::class)->findOneById($code);
+        $document = $this->objectManager->getRepository(ProductImage::class)->findOneById($documentId);
 
         $product = $document->getOwner();
+        $productCode = $product->getCode();
+
+        $isFound = false;
         foreach ($orders as $order) {
             if ($order->getPaymentState() === 'paid') {
                 $items = $order->getItems()->toArray();
                 foreach ($items as $orderItem) {
-                    if ($code === $orderItem->getVariant()->getProduct()->getCode()) {
-                        $product = $orderItem->getVariant()->getProduct();
+                    if ($productCode === $orderItem->getVariant()->getProduct()->getCode()) {
+                        $isFound = true;
                         break 2;
                     }
                 }
             }
         }
 
-        if (!$product) {
+        if (!$isFound) {
             return new Response('Вы не оплатили этот файл', 402, array('Content-Type' => 'text/html'));
         }
 

@@ -4,19 +4,23 @@
 
 {% block subcontent %}
     <h1 class="ui header" style="margin-bottom: 40px">Приобретенные электронные товары</h1>
-    <div class="ui four column doubling stackable grid container">
-        {% for p in products %}
-            {% set product = p.product %}
-            <div class="column ui card">
-                <h3 class="ui header">
-                    {{product.name}}
-                </h3>
-                {% for downloadable in p.deliverables %}
-                    <a target="_blank" href="/download/{{downloadable.id}}" class="ui tiny primary button">
-                        <i class="download icon"></i>
-                        {{downloadable.title}}</a>
-                {% endfor %}
-            </div>
-        {% endfor %}
+    <div style="margin: -14px">
+        <div class="ui three column doubling stackable grid container">
+            {% for p in products %}
+                {% set product = p.product %}
+                <div class="column">
+                    <div class="ui card" style="padding: 20px">
+                        <h3 class="ui header">
+                            {{product.name}}
+                        </h3>
+                        {% for downloadable in p.deliverables %}
+                            <a target="_blank" href="/download/{{downloadable.id}}" class="ui tiny primary button" style="margin-bottom: 10px">
+                                <i class="download icon"></i>
+                                {{downloadable.title}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
