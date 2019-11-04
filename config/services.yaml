@@ -106,6 +106,12 @@ services:
         tags:
             - { name: "form.type" }
 
+    app.form.type.register:
+        class: App\Form\Type\RegisterType
+        arguments: [App\Entity\Order\Order, []]
+        tags:
+            - { name: "form.type" }
+
     app.form.type.checkout_address:
         class: App\Form\Type\CheckoutAddressType
         arguments: [App\Entity\Order\Order, [], "@sylius.context.cart"]

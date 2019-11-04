@@ -1,0 +1,38 @@
+{% extends '@SyliusShop/Checkout/layout.html.twig' %}
+
+{% form_theme form '@SyliusShop/Form/theme.html.twig' %}
+
+{% block content %}
+    {% include '@SyliusShop/Checkout/_steps.html.twig' with {'active': 'register'} %}
+
+    <div class="ui stackable grid">
+        <div class="eleven wide column">
+            <div class="ui segment">
+
+                {{ form_start(form, {'action': path('sylius_shop_checkout_register'), 'attr': {'class': 'ui loadable form', 'novalidate': 'novalidate'}}) }}
+                    {{ form_errors(form) }}
+                    <input type="hidden" name="_method" value="PUT" />
+
+                    <div id="sylius-register">
+                        {% if form.customer is defined %}
+                            {% include '@SyliusShop/Register/_form.html.twig' with {'form': form.customer} %}
+                        {% endif %}
+                    </div>
+
+                    <div class="ui hidden divider"></div>
+
+                    {% include '@SyliusShop/Checkout/Register/_navigation.html.twig' %}
+
+                    {{ form_row(form._token) }}
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+        <div class="five wide column">
+
+            {% include '@SyliusShop/Checkout/_summary.html.twig' with {'order': order} %}
+
+            {% include '@SyliusShop/Checkout/_support.html.twig' %}
+
+        </div>
+    </div>
+{% endblock %}

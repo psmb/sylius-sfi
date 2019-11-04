@@ -120,5 +120,9 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
             'event' => 'sylius.order.post_login',
             'method' => 'handleCheckoutRedirect',
         ]);
+        $container->getDefinition('sylius.listener.checkout_redirect')->addTag('kernel.event_listener', [
+            'event' => 'sylius.order.post_register',
+            'method' => 'handleCheckoutRedirect',
+        ]);
     }
 }

@@ -5,6 +5,8 @@ sylius_shop:
             empty_order:
                 route: sylius_shop_cart_summary
             loggedin:
+                route: sylius_shop_checkout_register
+            registered:
                 route: sylius_shop_checkout_select_shipping
             cart:
                 route: sylius_shop_checkout_login
