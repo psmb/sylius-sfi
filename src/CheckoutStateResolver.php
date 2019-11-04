@@ -38,6 +38,12 @@ final class CheckoutStateResolver implements StateResolverInterface
     public function resolve(OrderInterface $order): void
     {
         $stateMachine = $this->stateMachineFactory->get($order, OrderCheckoutTransitions::GRAPH);
+
+        $user = $order->getUser();
+        if ($user && $stateMachine->can('skip_registration')) {
+            $stateMachine->apply('skip_registration');
+        }
+
         if (
             !$this->orderShippingMethodSelectionRequirementChecker->isShippingMethodSelectionRequired($order)
             && $stateMachine->can(OrderCheckoutTransitions::TRANSITION_SKIP_SHIPPING)

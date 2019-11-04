@@ -8,6 +8,7 @@ winzou_state_machine:
             cart: ~
             loggedin: ~
             registered: ~
+            registration_skipped: ~
             shipping_selected: ~
             shipping_skipped: ~
             payment_skipped: ~
@@ -22,6 +23,7 @@ winzou_state_machine:
                         cart,
                         loggedin,
                         registered,
+                        registration_skipped,
                         addressed,
                         address_skipped,
                         shipping_selected,
@@ -30,11 +32,15 @@ winzou_state_machine:
                         payment_skipped,
                     ]
                 to: loggedin
+            skip_registration:
+                from: [loggedin]
+                to: registration_skipped
             register:
                 from:
                     [
                         loggedin,
                         registered,
+                        registration_skipped,
                         addressed,
                         address_skipped,
                         shipping_selected,
@@ -44,13 +50,15 @@ winzou_state_machine:
                     ]
                 to: registered
             skip_shipping:
-                from: [registered]
+                from: [registered, registration_skipped]
                 to: shipping_skipped
             select_shipping:
                 from:
                     [
                         loggedin,
                         addressed,
+                        registered,
+                        registration_skipped,
                         shipping_selected,
                         shipping_skipped,
                         payment_selected,
@@ -92,6 +100,7 @@ winzou_state_machine:
                         [
                             "login",
                             "register",
+                            "skip_registration",
                             "select_shipping",
                             "address",
                             "skip_address",
@@ -121,6 +130,11 @@ winzou_state_machine:
                     priority: 1
                 sylius_skip_payment:
                     on: ["select_shipping"]
+                    do: ["@sylius.state_resolver.order_checkout", "resolve"]
+                    args: ["object"]
+                    priority: 1
+                sylius_skip_registration:
+                    on: ["login"]
                     do: ["@sylius.state_resolver.order_checkout", "resolve"]
                     args: ["object"]
                     priority: 1

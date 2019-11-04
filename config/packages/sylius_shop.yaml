@@ -8,6 +8,8 @@ sylius_shop:
                 route: sylius_shop_checkout_register
             registered:
                 route: sylius_shop_checkout_select_shipping
+            registration_skipped:
+                route: sylius_shop_checkout_select_shipping
             cart:
                 route: sylius_shop_checkout_login
             shipping_selected:

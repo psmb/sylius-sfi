@@ -15,7 +15,21 @@
 
                     <div id="sylius-register">
                         {% if form.customer is defined %}
-                            {% include '@SyliusShop/Register/_form.html.twig' with {'form': form.customer} %}
+                            <h4 class="ui dividing header">{{ 'sylius.ui.account_credentials'|trans }}</h4>
+                            Вы еще не зарегистрированы в нашем магазине. Придумайте пожалуйста пароль, и мы создадим для вас учетную запись.
+                            <br/>
+                            <br/>
+                            <div style="visibility: hidden; height: 0">
+                                {# these fields are pre-populated from data on previous step #}
+                                {{ form_row(form.customer.firstName) }}
+                                {{ form_row(form.customer.lastName) }}
+                                {{ form_row(form.customer.email) }}
+                                {{ form_row(form.customer.phoneNumber) }}
+                                {{ form_row(form.customer.subscribedToNewsletter) }}
+                            </div>
+
+                            {{ form_row(form.customer.user.plainPassword.first) }}
+                            {{ form_row(form.customer.user.plainPassword.second) }}
                         {% endif %}
                     </div>
 

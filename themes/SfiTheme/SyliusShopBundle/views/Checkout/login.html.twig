@@ -16,6 +16,13 @@
                     <div id="sylius-shipping-login">
                         {% if form.customer is defined %}
                             {% include '@SyliusShop/Common/Form/_login.html.twig' with {'form': form.customer} %}
+                            {% else %}
+Оформляем покупку на адрес {{ order.customer.email }}...
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('next-step').click()
+})
+</script>
                         {% endif %}
                     </div>
 
