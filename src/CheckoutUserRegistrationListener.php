@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Sylius package.
- *
- * (c) Paweł Jędrzejewski
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 declare(strict_types=1);
 
 namespace App;
@@ -78,6 +69,18 @@ final class CheckoutUserRegistrationListener
 
             return;
         }
+        $this->sendVerificationEmail($user);
+    }
+
+    private function sendVerificationEmail(ShopUserInterface $user): void
+    {
+        $token = $this->tokenGenerator->generate();
+        $user->setEmailVerificationToken($token);
+
+        $this->userManager->persist($user);
+        $this->userManager->flush();
+
+        $this->eventDispatcher->dispatch(UserEvents::REQUEST_VERIFICATION_TOKEN, new GenericEvent($user));
     }
 
     private function enableAndLogin(ShopUserInterface $user): void
