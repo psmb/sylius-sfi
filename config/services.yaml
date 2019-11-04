@@ -6,9 +6,9 @@ parameters:
     sylius.form.type.product.validation_groups: [app_product]
     router.request_context.scheme: "https"
     asset.request_context.secure: true
-    psmb.pickpoint_login: '%env(PICKPOINT_LOGIN)%'
-    psmb.pickpoint_password: '%env(PICKPOINT_PASSWORD)%'
-    psmb.pickpoint_ikn: '%env(PICKPOINT_IKN)%'
+    psmb.pickpoint_login: "%env(PICKPOINT_LOGIN)%"
+    psmb.pickpoint_password: "%env(PICKPOINT_PASSWORD)%"
+    psmb.pickpoint_ikn: "%env(PICKPOINT_IKN)%"
 
 services:
     # Default configuration for services in *this* file
@@ -149,6 +149,24 @@ services:
                 "@sylius.checker.order_shipping_method_selection_requirement",
             ]
         public: true
+
+    app.listener.checkout_user_registration:
+        class: App\CheckoutUserRegistrationListener
+        arguments:
+            [
+                "@sylius.manager.shop_user",
+                "@sylius.shop_user.token_generator.email_verification",
+                "@event_dispatcher",
+                "@sylius.context.channel",
+                "@sylius.security.user_login",
+                "shop",
+            ]
+        tags:
+            - {
+                  name: kernel.event_listener,
+                  event: sylius.order.post_register,
+                  method: handleUserVerification,
+              }
 
 google_tag_manager:
     enabled: true
