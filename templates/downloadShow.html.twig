@@ -7,7 +7,7 @@
         {{product.name}}
     </h1>
     {% for downloadable in deliverables %}
-        <a target="_blank" href="/download/{{downloadable.id}}" class="ui tiny primary button" style="margin-bottom: 10px">
+        <a title="Скачать" target="_blank" href="/download/{{downloadable.id}}" class="ui tiny primary button" style="margin-bottom: 10px">
             <i class="download icon"></i>
             {{downloadable.title}}</a>
     {% endfor %}

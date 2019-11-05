@@ -98,6 +98,41 @@ final class DownloadController extends Controller
         ]);
     }
 
+    public function showOrderAction(Request $request): Response
+    {
+        $routeParameters = $request->attributes->get('_route_params');
+        $token = $routeParameters["token"];
+
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirect('/ru_RU/login', 307);
+        }
+
+        $orderRepository = $this->container->get('sylius.repository.order');
+        $order = $orderRepository->findOneByTokenValue($token);
+        $items = $order->getItems()->toArray();
+
+        if ($user != $order->getUser()) {
+            throw new \Exception('Этот заказ оказ оформлен на другого пользователя!');
+        }
+
+        $deliverablesByProduct = array_filter(array_map(function ($orderItem) {
+            $product = $orderItem->getVariant()->getProduct();
+            $deliverables = $this->getDeliverables($product);
+            if (count($deliverables) > 0) {
+                return [
+                    'product' => $product,
+                    'deliverables' => $deliverables
+                ];
+            }
+            return null;
+        }, $items));
+        return $this->render('downloadOrderShow.html.twig', [
+            'order' => $order,
+            'deliverablesByProduct' => count($deliverablesByProduct) > 0 ? $deliverablesByProduct : null
+        ]);
+    }
+
     public function downloadAction(Request $request): Response
     {
         $routeParameters = $request->attributes->get('_route_params');

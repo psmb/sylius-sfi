@@ -13,3 +13,8 @@ sylius:
         user:
             password:
                 confirmation: "Пароль еще раз"
+    menu:
+        shop:
+            account:
+                dashboard: "Моя учетная запись"
+                header: ""
