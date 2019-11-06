@@ -41,7 +41,7 @@ final class DownloadController extends Controller
 
     private function getDeliverables($product)
     {
-        return $product->getImagesByType('pdf')->toArray();
+        return $product->getImagesByType('paid')->toArray();
     }
 
     private function getProductsWithDeliverables($user)
