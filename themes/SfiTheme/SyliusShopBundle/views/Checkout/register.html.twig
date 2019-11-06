@@ -1,0 +1,52 @@
+{% extends '@SyliusShop/Checkout/layout.html.twig' %}
+
+{% form_theme form '@SyliusShop/Form/theme.html.twig' %}
+
+{% block content %}
+    {% include '@SyliusShop/Checkout/_steps.html.twig' with {'active': 'register'} %}
+
+    <div class="ui stackable grid">
+        <div class="eleven wide column">
+            <div class="ui segment">
+
+                {{ form_start(form, {'action': path('sylius_shop_checkout_register'), 'attr': {'class': 'ui loadable form', 'novalidate': 'novalidate'}}) }}
+                    {{ form_errors(form) }}
+                    <input type="hidden" name="_method" value="PUT" />
+
+                    <div id="sylius-register">
+                        {% if form.customer is defined %}
+                            <h4 class="ui dividing header">{{ 'sylius.ui.account_credentials'|trans }}</h4>
+                            Вы еще не зарегистрированы в нашем магазине. Придумайте пожалуйста пароль, и мы создадим для вас учетную запись.
+                            <br/>
+                            <br/>
+                            <div style="visibility: hidden; height: 0">
+                                {# these fields are pre-populated from data on previous step #}
+                                {{ form_row(form.customer.firstName) }}
+                                {{ form_row(form.customer.lastName) }}
+                                {{ form_row(form.customer.email) }}
+                                {{ form_row(form.customer.phoneNumber) }}
+                                {{ form_row(form.customer.subscribedToNewsletter) }}
+                            </div>
+
+                            {{ form_row(form.customer.user.plainPassword.first) }}
+                            {{ form_row(form.customer.user.plainPassword.second) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="ui hidden divider"></div>
+
+                    {% include '@SyliusShop/Checkout/Register/_navigation.html.twig' %}
+
+                    {{ form_row(form._token) }}
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+        <div class="five wide column">
+
+            {% include '@SyliusShop/Checkout/_summary.html.twig' with {'order': order} %}
+
+            {% include '@SyliusShop/Checkout/_support.html.twig' %}
+
+        </div>
+    </div>
+{% endblock %}

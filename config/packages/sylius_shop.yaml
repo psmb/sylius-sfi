@@ -4,8 +4,14 @@ sylius_shop:
         route_map:
             empty_order:
                 route: sylius_shop_cart_summary
-            cart:
+            loggedin:
+                route: sylius_shop_checkout_register
+            registered:
                 route: sylius_shop_checkout_select_shipping
+            registration_skipped:
+                route: sylius_shop_checkout_select_shipping
+            cart:
+                route: sylius_shop_checkout_login
             shipping_selected:
                 route: sylius_shop_checkout_select_payment
             shipping_skipped:
@@ -15,4 +21,6 @@ sylius_shop:
             payment_skipped:
                 route: sylius_shop_checkout_address
             addressed:
+                route: sylius_shop_checkout_complete
+            address_skipped:
                 route: sylius_shop_checkout_complete

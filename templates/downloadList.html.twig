@@ -1,0 +1,29 @@
+{% extends '@SyliusShop/Account/layout.html.twig' %}
+
+{% block breadcrumb %}{% endblock %}
+
+{% block subcontent %}
+    <h1 class="ui dividing header">
+        Мои электронные товары
+        <div class="sub header">Электронные товары, ранее приобретенные вами</div>
+    </h1>
+    <div style="margin: -14px; margin-top: 40px">
+        <div class="ui three column doubling stackable grid container">
+            {% for p in products %}
+                {% set product = p.product %}
+                <div class="column">
+                    <div class="ui card" style="padding: 20px">
+                        <h3 class="ui header">
+                            {{product.name}}
+                        </h3>
+                        {% for downloadable in p.deliverables %}
+                            <a title="Скачать" target="_blank" href="/download/{{downloadable.id}}" class="ui tiny primary button" style="margin-bottom: 10px">
+                                <i class="download icon"></i>
+                                {{downloadable.title}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

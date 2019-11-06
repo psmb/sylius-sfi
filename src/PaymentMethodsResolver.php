@@ -26,13 +26,14 @@ final class PaymentMethodsResolver implements PaymentMethodsResolverInterface
         $allPaymentMethods = $this->paymentMethodRepository->findBy(['enabled' => true]);
 
         $firstShipmentMethod = $payment->getOrder()->getShipments()->get(0);
-        if (!$firstShipmentMethod) {
-            throw new \Exception("No shipment method selected");
-        }
-        $shipmentMethodCode = $firstShipmentMethod->getMethod()->getCode();
+        $shipmentMethodCode = $firstShipmentMethod ? $firstShipmentMethod->getMethod()->getCode() : "NO_SHIPMENT";
 
         return array_filter($allPaymentMethods, function ($paymentMethod) use ($shipmentMethodCode) {
             $paymentMethodCode = $paymentMethod->getCode();
+            // We only support online payments for NO_SHIPMENT shipment type
+            if ($paymentMethodCode !== "cloudpayments" && $shipmentMethodCode === "NO_SHIPMENT") {
+                return false;
+            }
             // We only support online payments for PICKPOINT shipment type
             if ($paymentMethodCode !== "cloudpayments" && $shipmentMethodCode === "PICKPOINT") {
                 return false;

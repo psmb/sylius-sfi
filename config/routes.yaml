@@ -13,8 +13,23 @@ app_shop_policy:
     methods: [GET]
     defaults:
         _controller: app.controller.shop.policy::indexAction
+app_shop_download_list:
+    path: /download
+    methods: [GET]
+    defaults:
+        _controller: app.controller.shop.download::listAction
+app_shop_download_show:
+    path: /downloadables/{code}
+    methods: [GET]
+    defaults:
+        _controller: app.controller.shop.download::showAction
+app_shop_download_order_show:
+    path: /order-downloadables/{token}
+    methods: [GET]
+    defaults:
+        _controller: app.controller.shop.download::showOrderAction
 app_shop_download:
     path: /download/{code}
     methods: [GET]
     defaults:
-        _controller: app.controller.shop.download::showAction
+        _controller: app.controller.shop.download::downloadAction

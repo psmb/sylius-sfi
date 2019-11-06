@@ -8,6 +8,13 @@
             {{ 'sylius.ui.sign_in'|trans }}
         </a>
     </div>
+
+    {{ form_row(form.phoneNumber) }}
+    <div class="two fields">
+        {{ form_row(form.firstName) }}
+        {{ form_row(form.lastName) }}
+    </div>
+
     <div class="ui red fluid top pointing basic label hidden sylius-validation-error" id="sylius-api-validation-error">
     </div>
 </div>
