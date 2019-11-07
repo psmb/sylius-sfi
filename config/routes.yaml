@@ -28,3 +28,18 @@ app_shop_download:
     methods: [GET]
     defaults:
         _controller: app.controller.shop.download::downloadAction
+
+app_taxon_title:
+    path: /by-slug/{slug}
+    methods: [GET]
+    defaults:
+        _controller: sylius.controller.taxon:showAction
+        _sylius:
+            template: $template
+            repository:
+                method: findOneBySlug
+                arguments:
+                    - $slug
+                    - "expr:service('sylius.context.locale').getLocaleCode()"
+    requirements:
+        slug: .+

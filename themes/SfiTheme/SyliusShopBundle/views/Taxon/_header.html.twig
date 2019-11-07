@@ -1,7 +1,5 @@
 {% include '@SyliusShop/Taxon/_breadcrumb.html.twig' %}
 
-
-
 {{ sonata_block_render_event('sylius.shop.taxon.header.before', {'taxon': taxon}) }}
 
 <h1 class="ui monster section dividing header">
@@ -10,8 +8,8 @@
 </h1>
 
 {% if taxon.images.first is not empty %}
-{% set path = taxon.images.first.path|imagine_filter(filter|default('sylius_shop_product_large_thumbnail')) %}
-<img src="{{ path|replace({'http:': 'https:'}) }}" id="main-image" alt="{{ taxon.name }}" />
+    {% set path = taxon.images.first.path|imagine_filter(filter|default('sylius_shop_product_large_thumbnail')) %}
+    <img src="{{ path|replace({'http:': 'https:'}) }}" id="main-image" alt="{{ taxon.name }}"/>
 {% endif %}
 
 {{ sonata_block_render_event('sylius.shop.taxon.header.after', {'taxon': taxon}) }}
