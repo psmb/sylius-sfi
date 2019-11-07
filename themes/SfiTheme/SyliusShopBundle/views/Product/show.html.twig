@@ -11,7 +11,7 @@
         {% set original_path = source_path|imagine_filter('sylius_shop_product_original') %}
         {% set path = source_path|imagine_filter(filter|default('sylius_shop_product_large_thumbnail')) %}
     {% endif %}
-    <meta property="og:image" content="{{ path }}"/>
+    <meta property="og:image" content="{{ path|replace({'http:': 'https:'}) }}"/>
 {% endblock %}
 
 {% block content %}
