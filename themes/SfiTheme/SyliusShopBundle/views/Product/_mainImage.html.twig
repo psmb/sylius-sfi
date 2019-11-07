@@ -11,9 +11,9 @@
 
 <div style="display: inline-block; width: auto; margin: 0 auto; position: relative">
     {% if product.variants|length > 1 %}
-        <a class="ui teal right corner label" title="Есть электронный вариант">
+        <span class="ui teal right corner label" title="Есть электронный вариант">
             <i class="download icon"></i>
-        </a>
+        </span>
     {% endif %}
     <img style="max-height: 260px" src="{{ path|replace({'http:': 'http:'}) }}" alt="{{ product.name }}" class="ui bordered image"/>
 </div>
