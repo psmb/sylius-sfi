@@ -9,4 +9,11 @@
     {% set path = '//placehold.it/200x260' %}
 {% endif %}
 
-<img style="max-height: 260px; width: auto; margin: 0 auto" src="{{ path|replace({'http:': 'https:'}) }}" alt="{{ product.name }}" class="ui bordered image"/>
+<div style="display: inline-block">
+    {% if product.variants|length > 1 %}
+        <a class="ui teal right corner label" title="Есть электронный вариант">
+            <i class="download icon"></i>
+        </a>
+    {% endif %}
+    <img style="max-height: 260px; width: auto; margin: 0 auto" src="{{ path|replace({'http:': 'http:'}) }}" alt="{{ product.name }}" class="ui bordered image"/>
+</div>
