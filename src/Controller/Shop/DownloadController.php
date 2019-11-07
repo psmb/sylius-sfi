@@ -39,29 +39,29 @@ final class DownloadController extends Controller
         });
     }
 
-    private function getDeliverables($product)
+    private function getDeliverables($variant)
     {
-        return $product->getImagesByType('paid')->toArray();
+        return $variant->getImagesByType('paid')->toArray();
     }
 
-    private function getProductsWithDeliverables($user)
+    private function getProductVariantsWithDeliverables($user)
     {
         $orders = $this->getPaidOrders($user);
-        $products = [];
+        $variants = [];
         foreach ($orders as $order) {
             $items = $order->getItems()->toArray();
             foreach ($items as $orderItem) {
-                $product = $orderItem->getVariant()->getProduct();
-                $deliverables = $this->getDeliverables($product);
+                $variant = $orderItem->getVariant();
+                $deliverables = $this->getDeliverables($variant);
                 if (count($deliverables) > 0) {
-                    $products[$product->getCode()] = [
-                        "product" => $product,
+                    $variants[$variant->getCode()] = [
+                        "productVariant" => $variant,
                         "deliverables" => $deliverables
                     ];
                 }
             }
         }
-        return $products;
+        return $variants;
     }
 
     public function listAction(Request $request): Response
@@ -71,31 +71,9 @@ final class DownloadController extends Controller
             return $this->redirect('/ru_RU/login', 307);
         }
 
-        $products = $this->getProductsWithDeliverables($user);
+        $productVariants = $this->getProductVariantsWithDeliverables($user);
 
-        return $this->render('downloadList.html.twig', ['products' => $products]);
-    }
-
-    public function showAction(Request $request): Response
-    {
-        $routeParameters = $request->attributes->get('_route_params');
-        $productCode = $routeParameters["code"];
-
-        $user = $this->getUser();
-        if (!$user) {
-            return $this->redirect('/ru_RU/login', 307);
-        }
-
-        $productRepository = $this->container->get('sylius.repository.product');
-
-        $product = $productRepository->findOneByCode($productCode);
-
-        $deliverables = $this->getDeliverables($product);
-
-        return $this->render('downloadShow.html.twig', [
-            'product' => $product,
-            'deliverables' => $deliverables
-        ]);
+        return $this->render('downloadList.html.twig', ['productVariants' => $productVariants]);
     }
 
     public function showOrderAction(Request $request): Response
@@ -111,17 +89,16 @@ final class DownloadController extends Controller
         $orderRepository = $this->container->get('sylius.repository.order');
         $order = $orderRepository->findOneByTokenValue($token);
         $items = $order->getItems()->toArray();
-
         if ($user != $order->getUser()) {
             throw new \Exception('Этот заказ оказ оформлен на другого пользователя!');
         }
 
         $deliverablesByProduct = array_filter(array_map(function ($orderItem) {
-            $product = $orderItem->getVariant()->getProduct();
-            $deliverables = $this->getDeliverables($product);
+            $productVariant = $orderItem->getVariant();
+            $deliverables = $this->getDeliverables($productVariant);
             if (count($deliverables) > 0) {
                 return [
-                    'product' => $product,
+                    'productVariant' => $productVariant,
                     'deliverables' => $deliverables
                 ];
             }
@@ -148,15 +125,16 @@ final class DownloadController extends Controller
 
         $document = $this->objectManager->getRepository(ProductImage::class)->findOneById($documentId);
 
-        $product = $document->getOwner();
-        $productCode = $product->getCode();
+        $variantCodes = array_map(function ($variant) {
+            return $variant->getCode();
+        }, $document->getProductVariants()->toArray());
 
         $isFound = false;
         foreach ($orders as $order) {
             if ($order->getPaymentState() === 'paid') {
                 $items = $order->getItems()->toArray();
                 foreach ($items as $orderItem) {
-                    if ($productCode === $orderItem->getVariant()->getProduct()->getCode()) {
+                    if (in_array($orderItem->getVariant()->getCode(), $variantCodes)) {
                         $isFound = true;
                         break 2;
                     }

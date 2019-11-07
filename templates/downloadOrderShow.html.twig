@@ -18,7 +18,8 @@
                         <div class="column">
                             <div class="ui card" style="padding: 20px">
                                 <h3 class="ui header">
-                                    {{deliverablesForProduct.product.name}}
+                                    {{deliverablesForProduct.productVariant.product.name}}
+                                    <div class="sub header">{{deliverablesForProduct.productVariant.name}}</div>
                                 </h3>
                                 {% for downloadable in deliverablesForProduct.deliverables %}
                                     <a title="Скачать" target="_blank" href="/download/{{downloadable.id}}" class="ui tiny primary button" style="margin-bottom: 10px">

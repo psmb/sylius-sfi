@@ -18,11 +18,6 @@ app_shop_download_list:
     methods: [GET]
     defaults:
         _controller: app.controller.shop.download::listAction
-app_shop_download_show:
-    path: /downloadables/{code}
-    methods: [GET]
-    defaults:
-        _controller: app.controller.shop.download::showAction
 app_shop_download_order_show:
     path: /order-downloadables/{token}
     methods: [GET]
