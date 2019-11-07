@@ -3,7 +3,7 @@
 {{ sonata_block_render_event('sylius.shop.product.index.before_box', {'product': product}) }}
 
 <div class="ui fluid card" style="border: 0; box-shadow: none;">
-    <a href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': product.translation.locale}) }}" class="image">
+    <a style="background: white; text-align: center" href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': product.translation.locale}) }}" class="image">
         {% include '@SyliusShop/Product/_mainImage.html.twig' with {'product': product} %}
     </a>
     <div class="content" style="border: 0">
