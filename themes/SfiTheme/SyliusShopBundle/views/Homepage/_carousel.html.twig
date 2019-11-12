@@ -1,0 +1,123 @@
+<style>
+.tns-outer{padding:0 !important}.tns-outer [hidden]{display:none !important}.tns-outer [aria-controls],.tns-outer [data-action]{cursor:pointer}.tns-slider{-webkit-transition:all 0s;-moz-transition:all 0s;transition:all 0s}.tns-slider>.tns-item{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}.tns-horizontal.tns-subpixel{white-space:nowrap}.tns-horizontal.tns-subpixel>.tns-item{display:inline-block;vertical-align:top;white-space:normal}.tns-horizontal.tns-no-subpixel:after{content:'';display:table;clear:both}.tns-horizontal.tns-no-subpixel>.tns-item{float:left}.tns-horizontal.tns-carousel.tns-no-subpixel>.tns-item{margin-right:-100%}.tns-no-calc{position:relative;left:0}.tns-gallery{position:relative;left:0;min-height:1px}.tns-gallery>.tns-item{position:absolute;left:-100%;-webkit-transition:transform 0s, opacity 0s;-moz-transition:transform 0s, opacity 0s;transition:transform 0s, opacity 0s}.tns-gallery>.tns-slide-active{position:relative;left:auto !important}.tns-gallery>.tns-moving{-webkit-transition:all 0.25s;-moz-transition:all 0.25s;transition:all 0.25s}.tns-autowidth{display:inline-block}.tns-lazy-img{-webkit-transition:opacity 0.6s;-moz-transition:opacity 0.6s;transition:opacity 0.6s;opacity:0.6}.tns-lazy-img.tns-complete{opacity:1}.tns-ah{-webkit-transition:height 0s;-moz-transition:height 0s;transition:height 0s}.tns-ovh{overflow:hidden}.tns-visually-hidden{position:absolute;left:-10000em}.tns-transparent{opacity:0;visibility:hidden}.tns-fadeIn{opacity:1;filter:alpha(opacity=100);z-index:0}.tns-normal,.tns-fadeOut{opacity:0;filter:alpha(opacity=0);z-index:-1}.tns-vpfix{white-space:nowrap}.tns-vpfix>div,.tns-vpfix>li{display:inline-block}.tns-t-subp2{margin:0 auto;width:310px;position:relative;height:10px;overflow:hidden}.tns-t-ct{width:2333.3333333%;width:-webkit-calc(100% * 70 / 3);width:-moz-calc(100% * 70 / 3);width:calc(100% * 70 / 3);position:absolute;right:0}.tns-t-ct:after{content:'';display:table;clear:both}.tns-t-ct>div{width:1.4285714%;width:-webkit-calc(100% / 70);width:-moz-calc(100% / 70);width:calc(100% / 70);height:10px;float:left}
+</style>
+<style>
+.tns-nav {
+    display: flex;
+    justify-content: center;
+    margin: 8px;
+    position: absolute;
+    top: -26px;
+    z-index: 1;
+    left: 0;
+    right: 0;
+}
+.tns-nav button {
+    cursor: pointer;
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    margin: 0 5px;
+    border-radius: 50%;
+    background: #ddd;
+    border: 0;
+}
+.tns-nav-active {
+    background: #999 !important;
+}
+.carousel-prev, .carousel-next {
+    cursor: pointer;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.carousel-prev {
+    left: 3px;
+}
+.carousel-next {
+    right: 3px;
+}
+.carousel-prev:focus, .carousel-next:focus, .tns-nav button {
+    outline: 0;
+}
+.carouselItem-inner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    max-width: 600px;
+    margin: 24px 36px 24px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.carouselItem-title {
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    margin: 0;
+    font-family: Franklin,sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    color: #fff;
+    line-height: 1;
+    text-shadow: 0 2px 2px rgba(0,0,0,.75);
+    margin-bottom: 12px;
+}
+@media (min-width: 520px) {
+    .carouselItem-title {
+        font-size: 3rem;
+    }
+}
+.carouselItem-subTitle {
+    font-family: SchoolBook,Georgia,serif;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    font-size: 1.5rem;
+    color: #fff;
+    line-height: 1.2;
+    text-shadow: 0 2px 2px rgba(0,0,0,.75);
+    margin-top: 6px;
+    display: none;
+}
+@media (min-width: 350px) {
+    .carouselItem-subTitle {
+        display: block;
+    }
+}
+
+</style>
+
+<div style="margin-top: 30px">
+    <div style="position: relative">
+        <div class="carousel-prev">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 501.5 501.5"><g><path fill="#00b0f0" d="M302.67 90.877l55.77 55.508L254.575 250.75 358.44 355.116l-55.77 55.506L143.56 250.75z"></path></g></svg>
+        </div>
+        <div class="carousel-next">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 501.5 501.5"><g><path fill="#00b0f0" d="M199.33 410.622l-55.77-55.508L247.425 250.75 143.56 146.384l55.77-55.507L358.44 250.75z"></path></g></svg>
+        </div>
+        <div class="carousel">
+            {% include '@SyliusShop/Homepage/_carouselItem.html.twig' with {slug: 'time', title: 'Сборник статей священника Георгия Кочеткова', subTitle: 'Какие перемены нужны Православной церкви, если она хочет иметь будущее'} %}
+            {% include '@SyliusShop/Homepage/_carouselItem.html.twig' with {slug: 'cerkovnie-bratstva', title: 'Уникальные документы и свидетельства', subTitle: 'История православных братств от первого лица'} %}
+            {# {% include '@SyliusShop/Homepage/_carouselItem.html.twig' with {slug: 'gonimi', title: 'Исследование жизни Ташкентской епархии с 1943 по 1961', subTitle: 'Архивные материалы и воспоминания участников церковной жизни тех лет'} %} #}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
+<script>
+tns({
+    container: '.carousel',
+    items: 1,
+    mouseDrag: true,
+
+    prevButton: '.carousel-prev',
+    nextButton: '.carousel-next'
+});
+</script>
