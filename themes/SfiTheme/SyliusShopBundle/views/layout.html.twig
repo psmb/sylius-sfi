@@ -29,13 +29,6 @@
         <div class="pusher">
             <div class="container mobile-nav__content">
                 {% block top %}
-                    <a href="#" class="mobile-nav__toggle js-mobile-nav__toggle"><span></span><span></span><span></span></a>
-                    <script>
-                    document.querySelector('.js-mobile-nav__toggle').addEventListener('click', function (e) {
-                        e.preventDefault();
-                        document.body.classList.toggle('mobile-nav-is-open');
-                    })
-                    </script>
                     <div id="menu" class="ui large sticky inverted stackable menu hide-for-small-only">
                         {{ sonata_block_render_event('sylius.shop.layout.before_currency_switcher') }}
 
@@ -48,6 +41,13 @@
 
                         {{ sonata_block_render_event('sylius.shop.layout.after_security_widget') }}
                     </div>
+                    <a href="#" class="mobile-nav__toggle js-mobile-nav__toggle"><span></span><span></span><span></span></a>
+                    <script>
+                    document.querySelector('.js-mobile-nav__toggle').addEventListener('click', function (e) {
+                        e.preventDefault();
+                        document.body.classList.toggle('mobile-nav-is-open');
+                    })
+                    </script>
                 {% endblock %}
 
                 <div class="ui container">
