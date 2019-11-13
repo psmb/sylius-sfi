@@ -81,3 +81,63 @@ body.pushable .pusher {
 .ui.fluid.image img {
     border: 1px solid rgba(34, 36, 38, 0.15) !important;
 }
+
+@media (min-width: 768px) {
+    .hide-for-medium-up {
+        display: none !important;
+    }
+}
+@media (max-width: 767px) {
+    .hide-for-small-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: 768px) {
+	.mobile-nav__menu, .mobile-nav__toggle {
+		display: none !important;
+	}
+}
+.mobile-nav__menu {
+	background-color: white;
+	position: fixed;
+	top: 0;
+	right: -240px;
+	width: 240px;
+	height: 100%;
+	overflow: auto;
+	box-shadow: #ccc -2px 0 2px;
+	transition: ease-in-out 0.3s;
+}
+.mobile-nav__content{
+	transition: ease-in-out 0.3s;
+}
+.mobile-nav-is-open .mobile-nav__content{
+	position: relative;
+	transform: translateX(-240px);
+}
+.mobile-nav-is-open .mobile-nav__menu{
+	transform: translateX(-240px);
+}
+
+.mobile-nav__toggle{
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 12px;
+	z-index: 1;
+	transition: 0.4s linear transform;
+}
+.mobile-nav__toggle span {
+    display: block;
+    width: 24px;
+    height: 4px;
+    background-color: #00b0f0;
+    border-radius: 3px;
+    margin: 4px 0;
+}
+
+
+.mobile-nav-is-open .mobile-nav__toggle {
+	transform: rotate(90deg);
+}
