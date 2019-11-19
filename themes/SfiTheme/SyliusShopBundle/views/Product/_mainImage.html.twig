@@ -1,19 +1,19 @@
 {% if product.product is defined %}
-    {% set product = product.product %}
+	{% set product = product.product %}
 {% endif %}
 {% if product.imagesByType('main') is not empty %}
-    {% set path = product.imagesByType('main').first.path|imagine_filter(filter|default('sylius_shop_product_thumbnail')) %}
+	{% set path = product.imagesByType('main').first.path|imagine_filter(filter|default('sylius_shop_product_thumbnail')) %}
 {% elseif product.images.first %}
-    {% set path = product.images.first.path|imagine_filter(filter|default('sylius_shop_product_thumbnail')) %}
+	{% set path = product.images.first.path|imagine_filter(filter|default('sylius_shop_product_thumbnail')) %}
 {% else %}
-    {% set path = '//placehold.it/200x260' %}
+	{% set path = '//placehold.it/200x260' %}
 {% endif %}
 
 <div style="display: inline-block; position: relative">
-    {% if product.variants|length > 1 %}
-        <span class="ui teal right corner label" title="Есть электронный вариант">
-            <i class="download icon"></i>
-        </span>
-    {% endif %}
-    <img style="max-height: 260px" src="{{ path|replace({'http:': 'https:'}) }}" alt="{{ product.name }}" class="ui bordered image"/>
+	{% if product.variants|filter(v => '_' in v.code)|length > 0 %}
+		<span class="ui teal right corner label" title="Есть электронный вариант">
+			<i class="download icon"></i>
+		</span>
+	{% endif %}
+	<img style="max-height: 260px" src="{{ path|replace({'http:': 'https:'}) }}" alt="{{ product.name }}" class="ui bordered image"/>
 </div>
