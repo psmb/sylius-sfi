@@ -150,6 +150,14 @@ services:
             ]
         public: true
 
+    sylius.product_variant_resolver.default:
+        class: App\ProductVariantResolver
+        tags:
+            - {
+                  name: sylius.product_variant_resolver.default,
+                  type: "default",
+              }
+
     app.listener.checkout_user_registration:
         class: App\CheckoutUserRegistrationListener
         arguments:
