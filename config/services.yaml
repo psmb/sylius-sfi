@@ -99,6 +99,13 @@ services:
                   name: form.type_extension,
                   extended_type: Sylius\Bundle\CoreBundle\Form\Type\Product\ProductImageType,
               }
+    app.form.type.product_variant:
+        class: App\Form\Type\ProductVariantTypeExtension
+        tags:
+            - {
+                  name: form.type_extension,
+                  extended_type: Sylius\Bundle\CoreBundle\Form\Type\Product\ProductVariantType,
+              }
 
     app.form.type.login:
         class: App\Form\Type\LoginType
@@ -153,10 +160,7 @@ services:
     sylius.product_variant_resolver.default:
         class: App\ProductVariantResolver
         tags:
-            - {
-                  name: sylius.product_variant_resolver.default,
-                  type: "default",
-              }
+            - { name: sylius.product_variant_resolver.default, type: "default" }
 
     app.listener.checkout_user_registration:
         class: App\CheckoutUserRegistrationListener
