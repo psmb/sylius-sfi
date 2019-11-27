@@ -3,26 +3,34 @@
 {{ sonata_block_render_event('sylius.shop.product.index.before_box', {'product': product}) }}
 
 <div class="ui fluid card" style="border: 0; box-shadow: none;">
-    <a style="background: white; text-align: center" href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': product.translation.locale}) }}" class="image">
-        {% include '@SyliusShop/Product/_mainImage.html.twig' with {'product': product} %}
-    </a>
-    <div class="content" style="border: 0">
-        <a href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': product.translation.locale}) }}">
-            {% for taxon in product.taxons %}
-                <div style="margin-bottom: 10px; font-size: 18px; color: initial !important">
-                    {% if taxon.parent.code == 'authors' %}
-                        {{ taxon.name }}
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </a>
-        <a class="header sylius-product-name" href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': product.translation.locale}) }}">
-            {{ product.name }}
-        </a>
-        {% if not product.variants.empty() %}
-            <div class="sylius-product-price" style="margin-top: 5px">{{ money.calculatePrice(product|sylius_resolve_variant) }}</div>
-        {% endif %}
-    </div>
+	<a style="background: white; text-align: center" href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': product.translation.locale}) }}" class="image">
+		{% include '@SyliusShop/Product/_mainImage.html.twig' with {'product': product} %}
+	</a>
+	<div class="content" style="border: 0">
+		<a href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': product.translation.locale}) }}">
+			{% for taxon in product.taxons %}
+				<div style="margin-bottom: 10px; font-size: 18px; color: initial !important">
+					{% if taxon.parent.code == 'authors' %}
+						{{ taxon.name }}
+					{% endif %}
+				</div>
+			{% endfor %}
+		</a>
+		<a class="header sylius-product-name" href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': product.translation.locale}) }}">
+			{{ product.name }}
+		</a>
+		{% if not product.variants.empty() %}
+			<div class="sylius-product-price" style="margin-top: 5px">
+				{% if product.variants[0].channelPricings["default"].originalPrice > 0 %}
+					<div class="discount">{{ product.variants[0].channelPricings["default"].originalPrice / 100 }}
+						₽</div>
+				{% endif %}
+				<div class="{{ product.variants[0].channelPricings["default"].originalPrice > 0 ? 'discount-newprice' : ''}}">
+					{{ money.calculatePrice(product|sylius_resolve_variant) }}
+				</div>
+			</div>
+		{% endif %}
+	</div>
 </div>
 
 {{ sonata_block_render_event('sylius.shop.product.index.after_box', {'product': product}) }}
