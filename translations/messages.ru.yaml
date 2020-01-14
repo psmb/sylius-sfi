@@ -1,6 +1,6 @@
 sylius:
     ui:
-        checkout: "К оплате"
+        checkout: "Оформить"
         clear_cart: "Очистить корзину"
         summary: "Итого"
         subtotal: "Итого"
