@@ -4,6 +4,7 @@ parameters:
     locale: ru_RU
     sylius.form.type.product_translation.validation_groups: [app_product]
     sylius.form.type.product.validation_groups: [app_product]
+    sylius.form.type.customer_registration.validation_groups: [sylius, sylius_user_registration]
     router.request_context.scheme: "https"
     asset.request_context.secure: true
     psmb.pickpoint_login: "%env(PICKPOINT_LOGIN)%"
