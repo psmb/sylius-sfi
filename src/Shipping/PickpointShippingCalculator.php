@@ -82,7 +82,7 @@ final class PickpointShippingCalculator implements CalculatorInterface
                 'Length' => max($heights) ?? 0,
                 'Depth' => array_sum($depths),
                 'Width' => max($widths) ?? 0,
-                'GettingType' => '103'
+                'GettingType' => '101'
             ]
         ]);
         $statusCode = $response->getStatusCode();
