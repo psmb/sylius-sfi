@@ -163,6 +163,7 @@ body.pushable .pusher {
 }
 
 .mobile-nav__menu .ui.menu .dropdown.item .menu {
+    overflow: hidden;
     width: 240px !important;
     min-width: 240px !important;
 }
