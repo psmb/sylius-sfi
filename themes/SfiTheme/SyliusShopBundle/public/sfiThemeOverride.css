@@ -161,3 +161,8 @@ body.pushable .pusher {
 .discount-newprice {
     color: #ff8e18 !important;
 }
+
+.mobile-nav__menu .ui.menu .dropdown.item .menu {
+    width: 240px !important;
+    min-width: 240px !important;
+}
