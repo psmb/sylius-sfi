@@ -2,10 +2,12 @@
 
 <div class="ui fluid vertical menu" style="border: 0">
     {% for child in (taxon.code == 'books' ? taxon.children : taxon.parent.children)|sortarrow((a, b) => a.name > b.name) %}
-        {% if child.name == taxon.name %}
-            <div class="header item">{{ taxon.name }}</div>
-        {% else %}
-            <a href="{{ path('sylius_shop_product_index', {'slug': child.slug, '_locale': child.translation.locale}) }}" class="item">{{ child.name }}</a>
+        {% if child.name ends with '1' is false %}
+            {% if child.name == taxon.name %}
+                <div class="header item">{{ taxon.name }}</div>
+            {% else %}
+                <a href="{{ path('sylius_shop_product_index', {'slug': child.slug, '_locale': child.translation.locale}) }}" class="item">{{ child.name }}</a>
+            {% endif %}
         {% endif %}
     {% endfor %}
 </div>
