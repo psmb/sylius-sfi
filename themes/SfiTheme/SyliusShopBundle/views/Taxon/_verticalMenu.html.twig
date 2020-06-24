@@ -2,7 +2,7 @@
 
 <div class="ui fluid vertical menu" style="border: 0">
     {% for child in (taxon.code == 'books' ? taxon.children : taxon.parent.children)|sortarrow((a, b) => a.name > b.name) %}
-        {% if not (child.name ends with '1') %}
+        {% if not (child.slug ends with '1') %}
             {% if child.name == taxon.name %}
                 <div class="header item">{{ taxon.name }}</div>
             {% else %}
