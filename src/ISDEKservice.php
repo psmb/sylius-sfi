@@ -492,10 +492,10 @@ class ISDEKservice
     $arHe = array(
       'date' => $date
     );
-    if (CDEK_KEY && CDEK_KEY) {
+    if (CDEK_ACCOUNT && CDEK_KEY) {
       $arHe = array(
         'date'    => $date,
-        'account' => CDEK_KEY,
+        'account' => CDEK_ACCOUNT,
         'secure'  => md5($date . "&" . CDEK_KEY)
       );
     }
