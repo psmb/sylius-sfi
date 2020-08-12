@@ -55,10 +55,20 @@ final class CheckoutAddressType extends AbstractResourceType
                     'constraints' => [new Valid()],
                 ]);
         }
+        if ($this->shipmentMethodCode === 'CDEK') {
+            $builder->add('postomat', HiddenType::class, [
+                'required' => true,
+                'label' => 'Выберите постомат',
+            ]);
+            $builder->add('cityToId', HiddenType::class, [
+                'required' => true,
+                'label' => 'cityToId',
+            ]);
+        }
         if ($this->shipmentMethodCode === 'PICKPOINT') {
             $builder->add('postomat', HiddenType::class, [
                 'required' => true,
-                'label' => 'Выбирите постомат',
+                'label' => 'Выберите постомат',
             ]);
         }
 

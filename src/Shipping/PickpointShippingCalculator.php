@@ -35,7 +35,6 @@ final class PickpointShippingCalculator implements CalculatorInterface
         return $this->cache->get('pickpoint_token', function (ItemInterface $item) use ($login, $password) {
             $item->expiresAfter(3600 * 20);
             $response = $this->client->request('POST', 'https://e-solution.pickpoint.ru/api/login', [
-                // these are demo passwords, no worries
                 'json' => ['Login' => $login, 'Password' => $password]
             ]);
             $statusCode = $response->getStatusCode();

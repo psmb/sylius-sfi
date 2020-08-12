@@ -28,6 +28,16 @@ app_shop_download:
     methods: [GET]
     defaults:
         _controller: app.controller.shop.download::downloadAction
+app_shop_cdek_service:
+    path: /cdek/service
+    methods: [GET]
+    defaults:
+        _controller: app.controller.shop.cdek::serviceAction
+app_shop_cdek_template:
+    path: /cdek/template
+    methods: [GET]
+    defaults:
+        _controller: app.controller.shop.cdek::templateAction
 
 app_taxon_title:
     path: /by-slug/{slug}

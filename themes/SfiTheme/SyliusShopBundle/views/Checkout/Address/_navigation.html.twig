@@ -1,26 +1,19 @@
 <div class="ui two column grid">
-    <div class="column">
-        <a href="{{ path('sylius_shop_checkout_select_payment') }}" class="ui large icon labeled button">
-            <i class="arrow left icon"></i>
-            Изменить способ оплаты</a>
-    </div>
-    <div class="right aligned column">
-        {% if form.postomat is defined %}
-
-            <button onclick="PickPoint.open(pickPointCallback);return false" class="ui large primary icon labeled button">
-                <i class="arrow right icon"></i>Выбрать постомат</button>
-            <script type="text/javascript">
-                function pickPointCallback(result) {
-                    document.getElementById('sylius_checkout_address_postomat').value = result.id;
-                    document.querySelector('form[name="sylius_checkout_address"]').submit()
-                    console.log(result);
-                }
-            </script>
-        {% else %}
-            <button type="submit" id="next-step" class="ui large primary icon labeled button">
-                <i class="arrow right icon"></i>
-                {{ 'sylius.ui.next'|trans }}</button>
-        {% endif %}
-
-    </div>
+	<div class="column">
+		<a href="{{ path('sylius_shop_checkout_select_payment') }}" class="ui large icon labeled button">
+			<i class="arrow left icon"></i>
+			Изменить способ оплаты</a>
+	</div>
+	<div class="right aligned column">
+		{% if (order.shipments|first).method.code == "PICKPOINT" %}
+			<button onclick="PickPoint.open(pickPointCallback);return false" class="ui large primary icon labeled button">
+				<i class="arrow right icon"></i>Выбрать постомат</button>
+			<script type="text/javascript">
+				function pickPointCallback(result) {
+document.getElementById('sylius_checkout_address_postomat').value = result.id;
+document.querySelector('form[name="sylius_checkout_address"]').submit()
+}
+			</script>
+		{% endif %}
+	</div>
 </div>
