@@ -25,7 +25,7 @@ final class CdekShippingCalculator implements CalculatorInterface
         $postomat = $subject->getOrder()->getPostomat();
         $cityToId = $subject->getOrder()->getCityToId();
         if (!$postomat || !$cityToId) {
-            return 30500;
+            return 26500;
         }
 
         $items = $subject->getShippables()->toArray();
