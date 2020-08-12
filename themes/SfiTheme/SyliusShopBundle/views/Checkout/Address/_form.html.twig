@@ -22,12 +22,12 @@ detailAddress: true,
 region: true,
 apiKey: 'd4ba1e75-60ca-4d37-81b7-7665618810b6',
 onChooseAddress: function (params) {
-document.getElementById('sylius_checkout_address_postomat').value = 'courier_' + params.address;
+document.getElementById('sylius_checkout_address_postomat').value = 'cdek_courier_' + params.address;
 document.getElementById('sylius_checkout_address_cityToId').value = params.city;
 document.querySelector('form[name="sylius_checkout_address"]').submit();
 },
 onChoose: function (params) {
-document.getElementById('sylius_checkout_address_postomat').value = params.id;
+document.getElementById('sylius_checkout_address_postomat').value = 'cdek_pickup_' + params.id;
 document.getElementById('sylius_checkout_address_cityToId').value = params.city;
 document.querySelector('form[name="sylius_checkout_address"]').submit();
 }

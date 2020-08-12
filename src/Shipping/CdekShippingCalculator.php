@@ -43,7 +43,7 @@ final class CdekShippingCalculator implements CalculatorInterface
         }
         $shipmentDescription = [
             'shipment' => [
-                'type' => strpos($postomat, 'courier_') === 0 ? 'courier' : 'pickup',
+                'type' => strpos($postomat, 'cdek_courier_') === 0 ? 'courier' : 'pickup',
                 'cityToId' => \intval($cityToId),
                 'cityFromId' => 44,
                 'timestamp' => time(),

@@ -58,7 +58,7 @@ final class CheckoutAddressType extends AbstractResourceType
         if ($this->shipmentMethodCode === 'CDEK') {
             $builder->add('postomat', HiddenType::class, [
                 'required' => true,
-                'label' => 'Выберите постомат',
+                'label' => 'Выберите постамат',
             ]);
             $builder->add('cityToId', HiddenType::class, [
                 'required' => true,
@@ -68,7 +68,7 @@ final class CheckoutAddressType extends AbstractResourceType
         if ($this->shipmentMethodCode === 'PICKPOINT') {
             $builder->add('postomat', HiddenType::class, [
                 'required' => true,
-                'label' => 'Выберите постомат',
+                'label' => 'Выберите постамат',
             ]);
         }
 
