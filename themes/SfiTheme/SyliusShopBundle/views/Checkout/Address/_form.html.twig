@@ -8,7 +8,11 @@
 		<script type="text/javascript" src="/bundles/_themes/psmb/sfi-theme/syliusshop/cdek/widget.js" id="ISDEKscript"></script>
 		<div id="forpvz" style="height:600px;"></div>
 		<script>
-			var widjet = new ISDEKWidjet({
+			var width = {{ max(order.items|map(p => "#{p.variant.width}")) }}
+var height = {{ max(order.items|map(p => "#{p.variant.height}")) }}
+var depth = {{ order.items|map(p => "#{p.variant.depth}")|reduce((carry, v) => carry + v) }}
+var weight = {{ order.items|map(p => "#{p.variant.weight}")|reduce((carry, v) => carry + v) }}
+var widjet = new ISDEKWidjet({
 cityFrom: 'Москва',
 link: 'forpvz',
 path: 'https://widget.cdek.ru/widget/scripts/',
@@ -21,6 +25,14 @@ hidedelt: false,
 detailAddress: true,
 region: true,
 apiKey: 'd4ba1e75-60ca-4d37-81b7-7665618810b6',
+goods: [
+{
+length: Math.ceil(depth),
+width: Math.ceil(width),
+height: Math.ceil(height),
+weight: Math.ceil(weight / 1000)
+}
+],
 onChooseAddress: function (params) {
 document.getElementById('sylius_checkout_address_postomat').value = 'cdek_courier_' + params.address;
 document.getElementById('sylius_checkout_address_cityToId').value = params.city;
