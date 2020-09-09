@@ -14,6 +14,8 @@ use Psmb\Cloudpayments\Keys;
 use Psmb\Cloudpayments\Request\Api\CreateCharge;
 use Psmb\Cloudpayments\Request\Api\Obtain3ds;
 use CloudPayments\Manager;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
 {
@@ -28,8 +30,14 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
      */
     protected $client;
 
-    public function __construct()
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    public function __construct(RequestStack $requestStack)
     {
+        $this->requestStack = $requestStack;
         $this->apiClass = Keys::class;
     }
 
@@ -44,6 +52,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
             $this->api->getPublishableKey(),
             $this->api->getSecretKey()
         );
+        $this->client->setLocale('ru');
     }
 
     /**
@@ -72,12 +81,25 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
             if (!$model['MD']) {
                 throw new LogicException('Something went wrong, MD got lost :-(');
             }
-            $transaction = $this->client->confirm3DS($model['MD'], $model['PaRes']);
-            if ($transaction->getStatus() === 'completed') {
-                $model['status'] = 'captured';
-            } else {
+            try {
+                $transaction = $this->client->confirm3DS($model['MD'], $model['PaRes']);
+                if ($transaction->getStatus() === 'completed') {
+                    $model['status'] = 'captured';
+                } else {
+                    $model['status'] = 'rejected';
+                }
+            } catch (\Exception $e) {
                 $model['status'] = 'rejected';
+
+                if ($e instanceof \CloudPayments\Exception\PaymentException) {
+                    /** @var FlashBagInterface $flashBag */
+                    $flashBag = $this->requestStack->getCurrentRequest()->getSession()->getBag('flashes');
+                    $flashBag->add('error', $e->getCardHolderMessage() . " Попробуйте повторить платеж заново внимательно вводя все детали");
+                } else {
+                    throw $e;
+                }
             }
+
             return;
         }
 
@@ -85,19 +107,31 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
             'JsonData' => $model['jsonData']
         ];
 
-        $transaction = $this->client->chargeCard($amount, $currency, $ipAddress, $cardHolderName, $cryptogram, $params);
-        if ($transaction->getUrl()) {
-            $model['AcsUrl'] = $transaction->getUrl();
-            $model['MD'] = $transaction->getTransactionId();
-            $model['PaReq'] = $transaction->getToken();
+        try {
+            $transaction = $this->client->chargeCard($amount, $currency, $ipAddress, $cardHolderName, $cryptogram, $params);
+            if ($transaction->getUrl()) {
+                $model['AcsUrl'] = $transaction->getUrl();
+                $model['MD'] = $transaction->getTransactionId();
+                $model['PaReq'] = $transaction->getToken();
 
-            $obtain3ds = new Obtain3ds($request->getToken());
-            $obtain3ds->setModel($model);
-            $this->gateway->execute($obtain3ds);
-        } else if ($transaction->getStatus() === 'completed') {
-            $model['status'] = 'captured';
-        } else {
+                $obtain3ds = new Obtain3ds($request->getToken());
+                $obtain3ds->setModel($model);
+                $this->gateway->execute($obtain3ds);
+            } else if ($transaction->getStatus() === 'completed') {
+                $model['status'] = 'captured';
+            } else {
+                $model['status'] = 'rejected';
+            }
+        } catch (\Exception $e) {
             $model['status'] = 'rejected';
+
+            if ($e instanceof \CloudPayments\Exception\PaymentException) {
+                /** @var FlashBagInterface $flashBag */
+                $flashBag = $this->requestStack->getCurrentRequest()->getSession()->getBag('flashes');
+                $flashBag->add('error', $e->getCardHolderMessage());
+            } else {
+                throw $e;
+            }
         }
     }
     /**
