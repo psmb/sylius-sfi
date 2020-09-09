@@ -92,9 +92,10 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
                 $model['status'] = 'rejected';
 
                 if ($e instanceof \CloudPayments\Exception\PaymentException) {
+                    $message = $e->getCardHolderMessage() . " Код ошибки: " . $e->getReasonCode();
                     /** @var FlashBagInterface $flashBag */
                     $flashBag = $this->requestStack->getCurrentRequest()->getSession()->getBag('flashes');
-                    $flashBag->add('error', $e->getCardHolderMessage() . " Попробуйте повторить платеж заново внимательно вводя все детали");
+                    $flashBag->add('error', $message);
                 } else {
                     throw $e;
                 }
@@ -126,9 +127,10 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
             $model['status'] = 'rejected';
 
             if ($e instanceof \CloudPayments\Exception\PaymentException) {
+                $message = $e->getCardHolderMessage() . " Код ошибки: " . $e->getReasonCode();
                 /** @var FlashBagInterface $flashBag */
                 $flashBag = $this->requestStack->getCurrentRequest()->getSession()->getBag('flashes');
-                $flashBag->add('error', $e->getCardHolderMessage());
+                $flashBag->add('error', $message);
             } else {
                 throw $e;
             }
