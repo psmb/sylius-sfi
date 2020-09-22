@@ -37,9 +37,9 @@ class ConvertPaymentAction implements ActionInterface
         $items = array_map(function ($item) {
             return [
                 "label" => $item->getProductName(),
-                "price" => $item->getUnitPrice() / 100,
+                "price" => ($item->getTotal() / $item->getQuantity()) / 100,
                 "quantity" => $item->getQuantity(),
-                "amount" => $item->getUnitPrice() * $item->getQuantity() / 100,
+                "amount" => $item->getTotal() / 100,
                 "method" => 4,
                 "object" => 1,
                 "measurementUnit" => "шт"
