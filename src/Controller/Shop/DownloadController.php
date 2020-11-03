@@ -7,7 +7,6 @@ namespace App\Controller\Shop;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use App\Entity\Product\ProductImage;
 
@@ -147,6 +146,6 @@ final class DownloadController extends Controller
         }
 
         $projectDir = $this->container->getParameter('kernel.project_dir');
-        return new BinaryFileResponse($projectDir . '/public/media/image/' . $document->getPath());
+        return $this->file($projectDir . '/public/media/image/' . $document->getPath());
     }
 }
