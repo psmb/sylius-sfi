@@ -54,6 +54,8 @@ final class PickpointShippingCalculator implements CalculatorInterface
         if (!$postomat) {
             return 35000;
         }
+        $postomat = str_replace('cdek_courier_', '', $postomat);
+        $postomat = str_replace('cdek_pickup_', '', $postomat);
 
         $items = $subject->getShippables()->toArray();
         $widths = array_map(function ($item) {
