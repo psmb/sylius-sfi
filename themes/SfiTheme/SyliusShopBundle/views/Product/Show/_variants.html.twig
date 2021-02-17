@@ -30,7 +30,7 @@
 				</td>
 				<td class="sylius-product-variant-price">{{ money.calculatePrice(variant) }}</td>
 				<td class="right aligned">
-					{{ form_widget(form.cartItem.variant[key], {'label': false}) }}
+					{{ form_widget(form.cartItem.variant[key], {'label': false, 'checked': false}) }}
 				</td>
 			</tr>
 		{% endfor %}
