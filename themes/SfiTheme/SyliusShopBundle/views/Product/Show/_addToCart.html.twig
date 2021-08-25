@@ -29,11 +29,7 @@
 				<tr>
 					<td>
 						{{product.variants[0].name}}
-						<span style="margin-left: 10px">
-							{% for format in product.variants[0].imagesByType('paid') %}
-								<span class="ui mini label">{{ format.title }}</span>
-							{% endfor %}
-						</span>
+						{% include('variantLabels.html.twig') %}
 					</td>
 					<td class="sylius-product-variant-price">{{money.calculatePrice(product.variants[0]) }}</td>
 					<td class="right aligned">

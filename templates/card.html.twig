@@ -1,0 +1,39 @@
+{% set hasAudio = false %}
+{% set product = p.productVariant.product %}
+<div class="column" id="product-{{product.id}}">
+    <div class="ui card" style="padding: 20px">
+        <h3 class="ui header">
+            {{product.name}}
+            <div class="sub header">{{p.productVariant.name}}</div>
+        </h3>
+
+        {% for downloadable in p.deliverables %}
+            {% if downloadable.fileType == 'mp3' %}
+                {% set hasAudio = true %}
+            {% endif %}
+            <a title="Скачать" target="_blank" {% if downloadable.fileType == 'mp3' %} data-audio style="display:none;" {% endif %} " href="/download/{{downloadable.id}}" class="ui tiny primary button" style="margin-bottom: 10px">
+                <i class="download icon"></i>
+                {{downloadable.title}}</a>
+        {% endfor %}
+
+        {% if hasAudio %}
+            <link rel="stylesheet" type="text/css" href="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css">
+            <script src="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.js"></script>
+            <div class="aplayer"></div>
+            <script>
+                (function() {
+                    const audio = Array.from(document.querySelectorAll('#product-{{product.id}} [data-audio]')).map(i => ({
+                        name: i.textContent,
+                        artist: ' ',
+                        url: i.getAttribute('href')
+                    }))
+                    const ap = new APlayer({
+                        container: document.querySelector('#product-{{product.id}} .aplayer'),
+                        audio,
+                        theme: '#00b0f0'
+                    });
+                })()
+            </script>
+        {% endif %}
+    </div>
+</div>

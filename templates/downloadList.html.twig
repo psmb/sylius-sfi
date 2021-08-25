@@ -12,24 +12,13 @@
             <br/>Посмотрите, например, на наши
             <a href="/ru_RU/taxons/category/ebooks">электронные книги</a>, там много интересного!</p>
     {% endif %}
+
     <div style="margin: -14px; margin-top: 40px">
         <div class="ui three column doubling stackable grid container">
             {% for p in productVariants %}
-                {% set product = p.productVariant.product %}
-                <div class="column">
-                    <div class="ui card" style="padding: 20px">
-                        <h3 class="ui header">
-                            {{product.name}}
-                            <div class="sub header">{{p.productVariant.name}}</div>
-                        </h3>
-                        {% for downloadable in p.deliverables %}
-                            <a title="Скачать" target="_blank" href="/download/{{downloadable.id}}" class="ui tiny primary button" style="margin-bottom: 10px">
-                                <i class="download icon"></i>
-                                {{downloadable.title}}</a>
-                        {% endfor %}
-                    </div>
-                </div>
+                {% include('card.html.twig') %}
             {% endfor %}
         </div>
     </div>
+
 {% endblock %}

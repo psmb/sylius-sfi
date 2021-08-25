@@ -13,11 +13,7 @@
 			<tr>
 				<td>
 					{{ variant.name }}
-					<span style="margin-left: 10px">
-						{% for format in variant.imagesByType('paid') %}
-							<span class="ui mini label">{{ format.title }}</span>
-						{% endfor %}
-					</span>
+					{% include('variantLabels.html.twig') %}
 					{% if product.hasOptions() %}
 						<div class="ui horizontal divided list">
 							{% for optionValue in variant.optionValues %}

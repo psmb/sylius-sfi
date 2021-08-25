@@ -16,6 +16,19 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductImage extends BaseProductImage
 {
     /** @ORM\Column(type="string", nullable=true) */
+    private $fileType;
+
+    public function getFileType(): ?string
+    {
+        return $this->fileType;
+    }
+
+    public function setFileType(string $fileType): void
+    {
+        $this->fileType = $fileType;
+    }
+
+    /** @ORM\Column(type="string", nullable=true) */
     private $title;
 
     public function getTitle(): ?string

@@ -1,0 +1,9 @@
+<span style="margin-left: 10px">
+  {% set existingTypes = {} %}
+  {% for format in variant.imagesByType('paid') %}
+    {% if not existingTypes[format.fileType]|default %}
+      {% set existingTypes = existingTypes|merge({(format.fileType): true}) %}
+      <span class="ui mini label">{{ format.fileType }}</span>
+    {% endif %}
+  {% endfor %}
+</span>
