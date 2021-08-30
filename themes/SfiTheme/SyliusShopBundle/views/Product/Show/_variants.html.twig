@@ -10,25 +10,27 @@
 	</thead>
 	<tbody>
 		{% for key, variant in product.variants %}
-			<tr>
-				<td>
-					{{ variant.name }}
-					{% include('variantLabels.html.twig') %}
-					{% if product.hasOptions() %}
-						<div class="ui horizontal divided list">
-							{% for optionValue in variant.optionValues %}
-								<div class="item">
-									{{ optionValue.value }}
-								</div>
-							{% endfor %}
-						</div>
-					{% endif %}
-				</td>
-				<td class="sylius-product-variant-price">{{ money.calculatePrice(variant) }}</td>
-				<td class="right aligned">
-					{{ form_widget(form.cartItem.variant[key], {'label': false, 'checked': false}) }}
-				</td>
-			</tr>
+			{% if not variant.tracked or variant.onHand > 0 %}
+				<tr>
+					<td>
+						{{ variant.name }}
+						{% include('variantLabels.html.twig') %}
+						{% if product.hasOptions() %}
+							<div class="ui horizontal divided list">
+								{% for optionValue in variant.optionValues %}
+									<div class="item">
+										{{ optionValue.value }}
+									</div>
+								{% endfor %}
+							</div>
+						{% endif %}
+					</td>
+					<td class="sylius-product-variant-price">{{ money.calculatePrice(variant) }}</td>
+					<td class="right aligned">
+						{{ form_widget(form.cartItem.variant[key], {'label': false, 'checked': false}) }}
+					</td>
+				</tr>
+			{% endif %}
 		{% endfor %}
 	</tbody>
 </table>
