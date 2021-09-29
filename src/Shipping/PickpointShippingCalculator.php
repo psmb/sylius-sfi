@@ -83,7 +83,7 @@ final class PickpointShippingCalculator implements CalculatorInterface
                 'Length' => max($heights) ?? 0,
                 'Depth' => array_sum($depths),
                 'Width' => max($widths) ?? 0,
-                'Weight' => $subject->getShippingWeight(),
+                'Weight' => $subject->getShippingWeight() / 1000,
                 'GettingType' => '101'
             ]
         ]);
