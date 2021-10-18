@@ -1,4 +1,8 @@
+{% if link %}
+<a href="{{link}}">
+{% else %}
 <a href="/ru_RU/products/{{slug}}">
+{% endif %}
 	<style>
 		#book-{{slug}}{
 			background-image: url('{{ asset('bundles/syliusshop/carousel/' ~ slug ~ '-small.jpg') }}');
