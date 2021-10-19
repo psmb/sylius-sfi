@@ -40,4 +40,17 @@ class ProductImage extends BaseProductImage
     {
         $this->title = $title;
     }
+
+    /** @ORM\Column(type="string", nullable=true) */
+    private $youtubeId;
+
+    public function getYoutubeId(): ?string
+    {
+        return $this->youtubeId;
+    }
+
+    public function setYoutubeId(string $youtubeId): void
+    {
+        $this->youtubeId = $youtubeId;
+    }
 }

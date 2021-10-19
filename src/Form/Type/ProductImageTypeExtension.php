@@ -31,6 +31,11 @@ final class ProductImageTypeExtension extends AbstractTypeExtension
                 'label' => 'Подпись',
                 'required' => false,
             ]);
+        $builder
+            ->add('youtubeId', TextType::class, [
+                'label' => 'Идентификтор YouTube Видео (вида "JhzaogGQNFU")',
+                'required' => false,
+            ]);
     }
     public static function getExtendedTypes(): iterable
     {

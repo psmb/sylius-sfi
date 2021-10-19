@@ -1,19 +1,42 @@
 {% set hasAudio = false %}
 {% set product = p.productVariant.product %}
+
+{% if product.imagesByType('main') is not empty %}
+    {% set source_path = product.imagesByType('main').first.path %}
+    {% set original_path = source_path|imagine_filter('sylius_shop_product_original') %}
+    {% set path = source_path|imagine_filter(filter|default('sylius_shop_product_large_thumbnail')) %}
+{% elseif product.images.first %}
+    {% set source_path = product.images.first.path %}
+    {% set original_path = source_path|imagine_filter('sylius_shop_product_original') %}
+    {% set path = source_path|imagine_filter(filter|default('sylius_shop_product_large_thumbnail')) %}
+{% else %}
+    {% set original_path = '//placehold.it/400x300' %}
+    {% set path = original_path %}
+{% endif %}
+
+{{ dump(p) }}
 <div class="column" id="product-{{product.id}}">
-    <div class="ui card" style="padding: 20px">
+    <div class="ui card" style="padding: 20px; width: 100%;">
         <h3 class="ui header">
             {{product.name}}
             <div class="sub header">{{p.productVariant.name}}</div>
         </h3>
 
         {% for downloadable in p.deliverables %}
-            {% if downloadable.fileType == 'mp3' %}
-                {% set hasAudio = true %}
+            {% if downloadable.fileType == 'видео' %}
+                <h4>{{downloadable.title}}</h4>
+
+                <!-- https://maxl.us/hide-related --><style>.hytPlayerWrap{position:relative}.hytPlayerWrap.ended::after{content:"";position:absolute;top:0;left:0;bottom:0;right:0;cursor:pointer;background-color:black;background-repeat:no-repeat;background-position:center;background-size:64px 64px;background-image:url(data:image/svg+xml;utf8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgNTEwIDUxMCI+PHBhdGggZD0iTTI1NSAxMDJWMEwxMjcuNSAxMjcuNSAyNTUgMjU1VjE1M2M4NC4xNSAwIDE1MyA2OC44NSAxNTMgMTUzcy02OC44NSAxNTMtMTUzIDE1My0xNTMtNjguODUtMTUzLTE1M0g1MWMwIDExMi4yIDkxLjggMjA0IDIwNCAyMDRzMjA0LTkxLjggMjA0LTIwNC05MS44LTIwNC0yMDQtMjA0eiIgZmlsbD0iI0ZGRiIvPjwvc3ZnPg==)}.hytPlayerWrap.paused::after{content:"";position:absolute;top:70px;left:0;bottom:50px;right:0;cursor:pointer;background-color:black;background-repeat:no-repeat;background-position:center;background-size:40px 40px;background-image:url(data:image/svg+xml;utf8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSIxNzA2LjY2NyIgaGVpZ2h0PSIxNzA2LjY2NyIgdmlld0JveD0iMCAwIDEyODAgMTI4MCI+PHBhdGggZD0iTTE1Ny42MzUgMi45ODRMMTI2MC45NzkgNjQwIDE1Ny42MzUgMTI3Ny4wMTZ6IiBmaWxsPSIjZmZmIi8+PC9zdmc+)}</style><div class="hytPlayerWrapOuter"><div class="hytPlayerWrap"> <iframe width="100%" height="200" src="https://www.youtube.com/embed/{{downloadable.youtubeId}}?rel=0&enablejsapi=1" frameborder="0" allowfullscreen></iframe></div></div> <script>"use strict";document.addEventListener('DOMContentLoaded',function(){if(window.hideYTActivated)return;if(typeof YT==='undefined'){let tag=document.createElement('script');tag.src="https://www.youtube.com/iframe_api";let firstScriptTag=document.getElementsByTagName('script')[0];firstScriptTag.parentNode.insertBefore(tag,firstScriptTag);} let onYouTubeIframeAPIReadyCallbacks=[];for(let playerWrap of document.querySelectorAll(".hytPlayerWrap")){let playerFrame=playerWrap.querySelector("iframe");let onPlayerStateChange=function(event){if(event.data==YT.PlayerState.ENDED){playerWrap.classList.add("ended");}else if(event.data==YT.PlayerState.PAUSED){playerWrap.classList.add("paused");}else if(event.data==YT.PlayerState.PLAYING){playerWrap.classList.remove("ended");playerWrap.classList.remove("paused");}};let player;onYouTubeIframeAPIReadyCallbacks.push(function(){player=new YT.Player(playerFrame,{events:{'onStateChange':onPlayerStateChange}});});playerWrap.addEventListener("click",function(){let playerState=player.getPlayerState();if(playerState==YT.PlayerState.ENDED){player.seekTo(0);}else if(playerState==YT.PlayerState.PAUSED){player.playVideo();}});} window.onYouTubeIframeAPIReady=function(){for(let callback of onYouTubeIframeAPIReadyCallbacks){callback();}};window.hideYTActivated=true;});</script>
+                <br/>
+            {% else %}
+                {% if downloadable.fileType == 'mp3' %}
+                    {% set hasAudio = true %}
+                {% endif %}
+                <a title="Скачать" target="_blank" {% if downloadable.fileType == 'mp3' %} data-audio style="display:none;" {% endif %} " href="/download/{{downloadable.id}}" class="ui tiny primary button" style="margin-bottom: 10px">
+                    <i class="download icon"></i>
+                    {{downloadable.title}}</a>
             {% endif %}
-            <a title="Скачать" target="_blank" {% if downloadable.fileType == 'mp3' %} data-audio style="display:none;" {% endif %} " href="/download/{{downloadable.id}}" class="ui tiny primary button" style="margin-bottom: 10px">
-                <i class="download icon"></i>
-                {{downloadable.title}}</a>
+            
         {% endfor %}
 
         {% if hasAudio %}
@@ -25,7 +48,8 @@
                     const audio = Array.from(document.querySelectorAll('#product-{{product.id}} [data-audio]')).map(i => ({
                         name: i.textContent,
                         artist: ' ',
-                        url: i.getAttribute('href')
+                        url: i.getAttribute('href'),
+                        cover: '{{path}}'
                     }))
                     const ap = new APlayer({
                         container: document.querySelector('#product-{{product.id}} .aplayer'),
