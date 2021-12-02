@@ -94,6 +94,9 @@ final class PickpointShippingCalculator implements CalculatorInterface
         $content = $response->toArray();
 
         if ($content["ErrorCode"] !== 0) {
+            if ($content["Error"] === 'Нет действительной сессии с таким номером.') {
+                $this->cache->deleteItem('pickpoint_token');
+            }
             throw new \Exception($content["Error"]);
         }
 
