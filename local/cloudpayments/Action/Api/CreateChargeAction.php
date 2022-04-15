@@ -74,7 +74,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
         $amount = $model['amount'];
         $currency = $model['currency'];
         $cryptogram = $model['cryptogram'];
-        $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'] || "0.0.0.0";
+        $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'] ?: "0.0.0.0";
         $cardHolderName = "";
 
         if ($model['PaRes']) {
