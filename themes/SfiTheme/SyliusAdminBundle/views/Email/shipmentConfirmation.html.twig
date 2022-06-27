@@ -4,8 +4,6 @@
 
 {% block body %}
     {% autoescape %}
-        Ваш заказ {{ order.number }} был отправлен.
-        <br/>
-        Вы можете уточнить статус доставки при помощи данного трекингового кода: "{{ shipment.tracking }}".
+        Ваш заказ {{ order.number }} был доставлен.
     {% endautoescape %}
 {% endblock %}
