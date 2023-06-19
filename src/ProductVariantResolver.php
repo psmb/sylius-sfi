@@ -19,6 +19,6 @@ final class ProductVariantResolver implements ProductVariantResolverInterface
             return null;
         }
 
-        return $subject->getVariants()->last();
+        return $subject->getVariants()->first();
     }
 }
