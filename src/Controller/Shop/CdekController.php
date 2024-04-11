@@ -13,6 +13,10 @@ use App\ISDEKservice;
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
+
+define('CDEK_ACCOUNT', \getenv('CDEK_ACCOUNT'));
+define('CDEK_KEY', \getenv('CDEK_KEY'));
+
 final class CdekController extends Controller
 {
     /**
@@ -33,8 +37,12 @@ final class CdekController extends Controller
 
     public function serviceAction(Request $request): Response
     {
-        $action = $_REQUEST['isdek_action'];
-        return new Response(json_encode(ISDEKservice::$action($_REQUEST)));
+
+        $service = new ISDEKservice(
+            CDEK_ACCOUNT,
+            CDEK_KEY
+        );
+        $service->process($_GET, file_get_contents('php://input'));
     }
     public function templateAction(Request $request): Response
     {
