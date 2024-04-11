@@ -12,11 +12,6 @@
 var height = {{ max(order.items|map(p => "#{p.variant.height}")) }}
 var depth = {{ order.items|map(p => "#{p.variant.depth}")|reduce((carry, v) => carry + v) }}
 var weight = {{ order.items|map(p => "#{p.variant.weight}")|reduce((carry, v) => carry + v) }}
-var widjet = new window.CDEKWidget({ from: 'Москва', root: 'cdek-map', apiKey: 'd4ba1e75-60ca-4d37-81b7-7665618810b6', servicePath: '/cdek/service', defaultLocation: 'Москва' onChoose: function (params) {
-document.getElementById('sylius_checkout_address_postomat').value = 'cdek_pickup_' + params.id;
-document.getElementById('sylius_checkout_address_cityToId').value = params.city;
-document.querySelector('form[name="sylius_checkout_address"]').submit();
-} });
 var widjet = new CDEKWidget({
 	from: {
 		country_code: 'RU',
