@@ -6,43 +6,51 @@
 	{% endif %}
 	{% if (order.shipments|first).method.code == "CDEK" %}
 		<script type="text/javascript" src="/bundles/_themes/psmb/sfi-theme/syliusshop/cdek/widget.js" id="ISDEKscript"></script>
-		<div id="forpvz" style="height:600px;"></div>
+		<div id="cdek-map" style="height:600px;"></div>
 		<script>
 			var width = {{ max(order.items|map(p => "#{p.variant.width}")) }}
 var height = {{ max(order.items|map(p => "#{p.variant.height}")) }}
 var depth = {{ order.items|map(p => "#{p.variant.depth}")|reduce((carry, v) => carry + v) }}
 var weight = {{ order.items|map(p => "#{p.variant.weight}")|reduce((carry, v) => carry + v) }}
-var widjet = new ISDEKWidjet({
-cityFrom: 'Москва',
-link: 'forpvz',
-path: 'https://widget.cdek.ru/widget/scripts/',
-servicepath: '/cdek/service',
-templatepath: '/cdek/template',
-choose: true,
-hidedress: true,
-hidecash: true,
-hidedelt: false,
-detailAddress: true,
-region: true,
-apiKey: 'd4ba1e75-60ca-4d37-81b7-7665618810b6',
-goods: [
-{
-length: depth,
-width: width,
-height: height,
-weight: weight / 1000
-}
-],
-onChooseAddress: function (params) {
-document.getElementById('sylius_checkout_address_postomat').value = 'cdek_courier_' + params.address;
-document.getElementById('sylius_checkout_address_cityToId').value = params.city;
-document.querySelector('form[name="sylius_checkout_address"]').submit();
-},
-onChoose: function (params) {
+var widjet = new window.CDEKWidget({ from: 'Москва', root: 'cdek-map', apiKey: 'd4ba1e75-60ca-4d37-81b7-7665618810b6', servicePath: '/cdek/service', defaultLocation: 'Москва' onChoose: function (params) {
 document.getElementById('sylius_checkout_address_postomat').value = 'cdek_pickup_' + params.id;
 document.getElementById('sylius_checkout_address_cityToId').value = params.city;
 document.querySelector('form[name="sylius_checkout_address"]').submit();
-}
+} });
+var widjet = new CDEKWidget({
+	from: {
+		country_code: 'RU',
+		city: 'Москва',
+		postal_code: 105066,
+		address: 'ул. Спартаковская, д. 10/2',
+	},
+	root: 'cdek-map',
+	{# path: 'https://widget.cdek.ru/widget/scripts/', #}
+	servicePath: '/cdek/service',
+	canChoose: true,
+	hideFilters: {
+		have_cashless: true,
+		have_cash: true,
+		is_dressing_room: true,
+		type: true,
+	},
+	lang: 'rus',
+	currency: 'RUB',
+	apiKey: 'd4ba1e75-60ca-4d37-81b7-7665618810b6',
+	goods: [
+		{
+			length: depth,
+			width: width,
+			height: height,
+			weight: weight / 1000
+		}
+	],
+	onChoose: function (params) {
+		console.log(params)
+		document.getElementById('sylius_checkout_address_postomat').value = 'cdek_pickup_' + params.id;
+		document.getElementById('sylius_checkout_address_cityToId').value = params.city;
+		document.querySelector('form[name="sylius_checkout_address"]').submit();
+	}
 });
 		</script>
 		{{ form_row(form.postomat) }}
