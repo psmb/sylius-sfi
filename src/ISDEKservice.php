@@ -196,7 +196,7 @@ class ISDEKservice
     ), true);
     $result = json_decode($token['result'], true);
     if (!isset($result['access_token'])) {
-      throw new RuntimeException('Server not authorized to CDEK API');
+      throw new \RuntimeException('Server not authorized to CDEK API');
     }
 
     $this->authToken = $result['access_token'];
@@ -243,7 +243,7 @@ class ISDEKservice
     $result = substr($response, $headerSize);
     $addedHeaders = $this->getHeaderValue($headers);
     if ($result === false) {
-      throw new RuntimeException(curl_error($ch), curl_errno($ch));
+      throw new \RuntimeException(curl_error($ch), curl_errno($ch));
     }
 
     return array('result' => $result, 'addedHeaders' => $addedHeaders);
