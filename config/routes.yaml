@@ -30,7 +30,7 @@ app_shop_download:
         _controller: app.controller.shop.download::downloadAction
 app_shop_cdek_service:
     path: /cdek/service
-    methods: [GET]
+    methods: [POST]
     defaults:
         _controller: app.controller.shop.cdek::serviceAction
 app_shop_cdek_template:
