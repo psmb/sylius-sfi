@@ -41,14 +41,11 @@ var widjet = new CDEKWidget({
 		}
 	],
 	canChoose: true,
-	onCalculate: function (...params) {
-		console.log(params, 'onCalculate')
-	},
-	onChoose: function (...params) {
-		console.log(params, 'onChoose')
-		document.getElementById('sylius_checkout_address_postomat').value = 'cdek_pickup_' + params.id;
-		document.getElementById('sylius_checkout_address_cityToId').value = params.city;
-		// document.querySelector('form[name="sylius_checkout_address"]').submit();
+	onChoose: function (type, delivery, address) {
+		console.log(type, delivery, address, 'onChoose')
+		document.getElementById('sylius_checkout_address_postomat').value = type === 'office' ? 'cdek_pickup_' + address.code : 'cdek_courier_' + address.address;
+		document.getElementById('sylius_checkout_address_cityToId').value = address.city_code;
+		document.querySelector('form[name="sylius_checkout_address"]').submit();
 	}
 });
 		</script>
