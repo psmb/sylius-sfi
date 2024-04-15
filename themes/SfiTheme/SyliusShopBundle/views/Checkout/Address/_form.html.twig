@@ -40,8 +40,15 @@ var widjet = new CDEKWidget({
 			weight: weight / 1000
 		}
 	],
-	onChoose: function (params) {
-		console.log(params)
+	canChoose: true,
+	onCalculate: function (...params) {
+		console.log(params, 'onCalculate')
+		{# document.getElementById('sylius_checkout_address_postomat').value = 'cdek_pickup_' + params.id;
+		document.getElementById('sylius_checkout_address_cityToId').value = params.city;
+		document.querySelector('form[name="sylius_checkout_address"]').submit(); #}
+	},
+	onChoose: function (...params) {
+		console.log(params, 'onChoose')
 		document.getElementById('sylius_checkout_address_postomat').value = 'cdek_pickup_' + params.id;
 		document.getElementById('sylius_checkout_address_cityToId').value = params.city;
 		document.querySelector('form[name="sylius_checkout_address"]').submit();
