@@ -5,6 +5,7 @@
 		{% include '@SyliusShop/Common/Form/_address.html.twig' with {'form': form.shippingAddress, 'order': order} %}
 	{% endif %}
 	{% if (order.shipments|first).method.code == "CDEK" %}
+		<script src="https://api-maps.yandex.ru/2.1/?apikey=d4ba1e75-60ca-4d37-81b7-7665618810b6&lang=ru_RU" type="text/javascript"></script>
 		<script type="text/javascript" src="/bundles/_themes/psmb/sfi-theme/syliusshop/cdek/widget.js" id="ISDEKscript"></script>
 		<div id="cdek-map" style="height:600px;"></div>
 		<script>
