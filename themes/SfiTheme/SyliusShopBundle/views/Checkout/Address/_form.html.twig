@@ -34,9 +34,9 @@ var widjet = new CDEKWidget({
 	apiKey: 'd4ba1e75-60ca-4d37-81b7-7665618810b6',
 	goods: [
 		{
-			length: depth,
-			width: width,
-			height: height,
+			length: Math.ceil(depth),
+			width: Math.ceil(width),
+			height: Math.ceil(height),
 			weight: weight / 1000
 		}
 	],
