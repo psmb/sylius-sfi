@@ -5,7 +5,6 @@
 		{% include '@SyliusShop/Common/Form/_address.html.twig' with {'form': form.shippingAddress, 'order': order} %}
 	{% endif %}
 	{% if (order.shipments|first).method.code == "CDEK" %}
-		<script src="https://api-maps.yandex.ru/2.1/?apikey=d4ba1e75-60ca-4d37-81b7-7665618810b6&lang=ru_RU" type="text/javascript"></script>
 		<script type="text/javascript" src="/bundles/_themes/psmb/sfi-theme/syliusshop/cdek/widget.js" id="ISDEKscript"></script>
 		<div id="cdek-map" style="height:600px;"></div>
 		<script>
@@ -21,7 +20,6 @@ var widjet = new CDEKWidget({
 		address: 'ул. Спартаковская, д. 10/2',
 	},
 	root: 'cdek-map',
-	{# path: 'https://widget.cdek.ru/widget/scripts/', #}
 	servicePath: '/cdek/service',
 	canChoose: true,
 	hideFilters: {
@@ -30,7 +28,7 @@ var widjet = new CDEKWidget({
 		is_dressing_room: true,
 		type: true,
 	},
-	defaultLocation: [55.0415, 82.9346],
+	defaultLocation: 'Москва',
 	lang: 'rus',
 	currency: 'RUB',
 	apiKey: 'd4ba1e75-60ca-4d37-81b7-7665618810b6',
