@@ -42,6 +42,7 @@ var widjet = new CDEKWidget({
 	],
 	canChoose: true,
 	onChoose: function (type, delivery, address) {
+		console.debug(type, delivery, address);
 		const deliveryInfo = {
 			type,
 			tariffCode: delivery.tariff_code,
