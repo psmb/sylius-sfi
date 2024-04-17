@@ -31,7 +31,7 @@ final class CdekShippingCalculator implements CalculatorInterface
         $delivery = json_decode($postomat, true);
         if (isset($delivery['price'])) {
             $adjustedPrice = $delivery['price'] * (1 + 4 / 100);
-            return $adjustedPrice;
+            return \intval($adjustedPrice) * 100;
         }
         throw new \Exception("Something went wrong calculating shipment: " . json_encode($delivery));
     }
