@@ -29,8 +29,8 @@ final class CdekShippingCalculator implements CalculatorInterface
         }
 
         $delivery = json_decode($postomat, true);
-        if (isset($delivery['delivery']['delivery_sum'])) {
-            return $delivery['delivery']['delivery_sum'];
+        if (isset($delivery['price'])) {
+            return $delivery['price'];
         }
         throw new \Exception("Something went wrong calculating shipment: " . json_encode($delivery));
     }
