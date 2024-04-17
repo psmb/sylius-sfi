@@ -47,7 +47,7 @@ var widjet = new CDEKWidget({
 			type,
 			tariffCode: delivery.tariff_code,
 			price: delivery.delivery_sum,
-			address: address.address,
+			address: address.address || address.formatted,
 			postomatCode: address.code,
 		}
 		document.getElementById('sylius_checkout_address_postomat').value = JSON.stringify(deliveryInfo);
