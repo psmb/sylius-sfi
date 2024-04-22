@@ -40,6 +40,10 @@ var widjet = new CDEKWidget({
 			weight: weight / 1000
 		}
 	],
+	tariffs: {
+		office: [7,8,138,139,231,232,293,295,509,366,184,187,497,2261,2266,2262],
+		door: [7,8,138,139,231,232,293,295,509,366,184,187,497,2261,2266,2262],
+	},
 	canChoose: true,
 	onChoose: function (type, delivery, address) {
 		console.debug(type, delivery, address);
