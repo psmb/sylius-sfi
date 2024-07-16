@@ -65,17 +65,15 @@ final class CdekController extends Controller
             $responseContent = $this->cache->get($cacheKey, function (ItemInterface $item) use ($service) {
                 $this->logger->info("Cache miss for key: " . $item->getKey());
                 $item->expiresAfter(604800); // Cache for 1 week (7 days * 24 hours * 60 minutes * 60 seconds)
-                ob_start();
-                $service->process($_GET, file_get_contents('php://input'));
-                return ob_get_clean();
+                return $service->process($_GET, file_get_contents('php://input'));
             });
 
             $this->logger->info("Returning response from cache or fresh content for key: $cacheKey");
             return new Response($responseContent, 200, ['Content-Type' => 'application/json']);
         }
 
-        $service->process($_GET, file_get_contents('php://input'));
-        return new Response('', 200, ['Content-Type' => 'application/json']);
+        $responseContent = $service->process($_GET, file_get_contents('php://input'));
+        return new Response($responseContent, 200, ['Content-Type' => 'application/json']);
     }
 
     public function templateAction(Request $request): Response

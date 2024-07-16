@@ -46,9 +46,9 @@ class ISDEKservice
 
     switch ($this->requestData['action']) {
       case 'offices':
-        $this->sendResponse($this->getOffices());
+        return $this->getOffices();
       case 'calculate':
-        $this->sendResponse($this->calculate());
+        return $this->calculate();
       default:
         $this->sendValidationError('Unknown action');
     }
@@ -255,20 +255,6 @@ class ISDEKservice
     return array_filter($headerLines, static function ($line) {
       return !empty($line) && stripos($line, 'X-') !== false;
     });
-  }
-
-  private function sendResponse($data)
-  {
-    $this->http_response_code(200);
-    header('Content-Type: application/json');
-    header('X-Service-Version: 3.9.7');
-    if (!empty($data['addedHeaders'])) {
-      foreach ($data['addedHeaders'] as $header) {
-        header($header);
-      }
-    }
-    echo $data['result'];
-    exit();
   }
 
   protected function getOffices()
