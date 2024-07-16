@@ -57,6 +57,7 @@ final class CdekController extends Controller
             CDEK_KEY
         );
 
+        $this->logger->info("Service: " . $_GET['action']);
         if (isset($_GET['action']) && $_GET['action'] === 'offices') {
             $cacheKey = 'get_offices_' . md5(json_encode($_GET));
             $this->logger->info("Checking cache for key: $cacheKey");
