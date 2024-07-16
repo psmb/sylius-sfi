@@ -39,7 +39,8 @@ final class CdekController extends Controller
     {
         $this->container = $container;
         $this->objectManager = $objectManager;
-        $this->cache = new FilesystemAdapter();
+        $cacheDirectory = $this->getParameter('kernel.cache_dir') . '/cdek';
+        $this->cache = new FilesystemAdapter('', 0, $cacheDirectory);
     }
 
     public function serviceAction(Request $request): Response
