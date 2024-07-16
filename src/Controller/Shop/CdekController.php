@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use App\ISDEKservice;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
+use Psr\Log\LoggerInterface;
 
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
@@ -35,12 +36,18 @@ final class CdekController extends Controller
      */
     private $cache;
 
-    public function __construct(ContainerInterface $container, \Doctrine\Common\Persistence\ObjectManager $objectManager)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(ContainerInterface $container, \Doctrine\Common\Persistence\ObjectManager $objectManager, LoggerInterface $logger)
     {
         $this->container = $container;
         $this->objectManager = $objectManager;
-        $cacheDirectory = $this->getParameter('kernel.cache_dir') . '/cdek';
+        $cacheDirectory = $this->getParameter('kernel.cache_dir') . '/custom_cache_directory';
         $this->cache = new FilesystemAdapter('', 0, $cacheDirectory);
+        $this->logger = $logger;
     }
 
     public function serviceAction(Request $request): Response
@@ -52,13 +59,17 @@ final class CdekController extends Controller
 
         if (isset($_GET['action']) && $_GET['action'] === 'offices') {
             $cacheKey = 'get_offices_' . md5(json_encode($_GET));
+            $this->logger->info("Checking cache for key: $cacheKey");
+
             $responseContent = $this->cache->get($cacheKey, function (ItemInterface $item) use ($service) {
+                $this->logger->info("Cache miss for key: " . $item->getKey());
                 $item->expiresAfter(604800); // Cache for 1 week (7 days * 24 hours * 60 minutes * 60 seconds)
                 ob_start();
                 $service->process($_GET, file_get_contents('php://input'));
                 return ob_get_clean();
             });
 
+            $this->logger->info("Returning response from cache or fresh content for key: $cacheKey");
             return new Response($responseContent, 200, ['Content-Type' => 'application/json']);
         }
 
