@@ -45,7 +45,7 @@ final class CdekController extends Controller
     {
         $this->container = $container;
         $this->objectManager = $objectManager;
-        $cacheDirectory = $this->getParameter('kernel.cache_dir') . '/custom_cache_directory';
+        $cacheDirectory = $this->getParameter('kernel.cache_dir') . '/cdek';
         $this->cache = new FilesystemAdapter('', 0, $cacheDirectory);
         $this->logger = $logger;
     }
@@ -64,7 +64,7 @@ final class CdekController extends Controller
 
             $responseContent = $this->cache->get($cacheKey, function (ItemInterface $item) use ($service) {
                 $this->logger->info("Cache miss for key: " . $item->getKey());
-                $item->expiresAfter(604800); // Cache for 1 week (7 days * 24 hours * 60 minutes * 60 seconds)
+                $item->expiresAfter(4 * 604800);
                 return $service->process($_GET, file_get_contents('php://input'));
             });
 
