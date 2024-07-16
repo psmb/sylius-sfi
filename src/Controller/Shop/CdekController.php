@@ -69,11 +69,11 @@ final class CdekController extends Controller
             });
 
             $this->logger->info("Returning response from cache or fresh content for key: $cacheKey");
-            return new Response($responseContent, 200, ['Content-Type' => 'application/json']);
+            return new Response($responseContent['result'], 200, ['Content-Type' => 'application/json']);
         }
 
         $responseContent = $service->process($_GET, file_get_contents('php://input'));
-        return new Response($responseContent, 200, ['Content-Type' => 'application/json']);
+        return new Response($responseContent['result'], 200, ['Content-Type' => 'application/json']);
     }
 
     public function templateAction(Request $request): Response
