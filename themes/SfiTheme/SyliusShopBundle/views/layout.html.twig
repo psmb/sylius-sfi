@@ -110,5 +110,9 @@
 
         {% include '@SyliusUi/Modal/_confirmation.html.twig' %}
         {{ sonata_block_render_event('sylius.shop.layout.after_body') }}
+
+        <script type="text/javascript">
+        $('.ui.sticky').sticky({setSize: false})
+        </script>
     </body>
 </html>
