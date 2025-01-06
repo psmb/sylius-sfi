@@ -29,7 +29,7 @@
         <div class="pusher">
             <div class="container mobile-nav__content">
                 {% block top %}
-                    <div id="menu" class="ui large sticky inverted stackable menu hide-for-small-only">
+                    <div id="menu" class="ui large inverted stackable menu hide-for-small-only">
                         {{ sonata_block_render_event('sylius.shop.layout.before_currency_switcher') }}
 
                         {{ render(controller('sylius.controller.shop.currency_switch:renderAction')) }}
@@ -78,7 +78,7 @@
                 {% endblock %}
             </div>
             <div class="mobile-nav__menu hide-for-medium-up">
-                <div id="menu" class="ui large sticky inverted stackable menu" style="margin-bottom: -14px">
+                <div id="menu" class="ui large inverted stackable menu" style="margin-bottom: -14px">
                     {{ sonata_block_render_event('sylius.shop.layout.before_currency_switcher') }}
 
                     {{ render(controller('sylius.controller.shop.currency_switch:renderAction')) }}
