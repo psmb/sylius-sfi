@@ -1,7 +1,16 @@
-<div class="ui basic segment sticky">
+<style>
+.sfi-logo {
+    width: 250px;
+}
+.fixed .sfi-logo {
+    width: 100px;
+}
+</style>
+
+<div class="ui basic segment sticky" style="background-color: white">
     <div class="ui three column stackable grid">
         <div class="column">
-<a href="{{ path('sylius_shop_homepage') }}" title="На главную"><img style="width: 250px" src="{{ asset('bundles/syliusshop/SiteLogoRu.svg') }}" alt="Книги СФИ" class="ui image"/></a>
+<a href="{{ path('sylius_shop_homepage') }}" title="На главную"><img src="{{ asset('bundles/syliusshop/SiteLogoRu.svg') }}" alt="Книги СФИ" class="ui image sfi-logo"/></a>
 
         </div>
         <div class="column">
