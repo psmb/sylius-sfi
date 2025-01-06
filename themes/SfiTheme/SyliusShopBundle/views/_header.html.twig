@@ -7,7 +7,7 @@
 }
 </style>
 
-<div class="ui basic segment sticky" style="background-color: white">
+<div class="ui container basic segment sticky" style="background-color: white">
     <div class="ui three column stackable grid">
         <div class="column">
 <a href="{{ path('sylius_shop_homepage') }}" title="На главную"><img src="{{ asset('bundles/syliusshop/SiteLogoRu.svg') }}" alt="Книги СФИ" class="ui image sfi-logo"/></a>
@@ -21,3 +21,7 @@
         </div>
     </div>
 </div>
+<script>
+$('.ui.sticky')
+  .sticky({setSize: false})
+</script>
