@@ -61,14 +61,16 @@
                             </div>
                         </header>
                     {% endblock %}
+                    <div id="context">
 
-                    {% include '@SyliusShop/_flashes.html.twig' %}
+                        {% include '@SyliusShop/_flashes.html.twig' %}
 
-                    {{ sonata_block_render_event('sylius.shop.layout.before_content') }}
+                        {{ sonata_block_render_event('sylius.shop.layout.before_content') }}
 
-                    {% block content %}{% endblock %}
+                        {% block content %}{% endblock %}
 
-                    {{ sonata_block_render_event('sylius.shop.layout.after_content') }}
+                        {{ sonata_block_render_event('sylius.shop.layout.after_content') }}
+                    </div>
                 </div>
 
                 {% block footer %}
