@@ -6,7 +6,7 @@
             <div class="ui dropdown item">
                 <span class="text">{{ taxon.name }}</span>
                 <i class="dropdown icon"></i>
-                <div class="menu">
+                <div class="menu" style="overflow: auto; height: calc(100vh-300px)">
                     {% for childTaxon in taxon.children|sortarrow((a, b) => a.name > b.name) %}
                         {{ macros.item(childTaxon) }}
                     {% endfor %}
