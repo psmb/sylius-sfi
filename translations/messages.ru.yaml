@@ -9,6 +9,7 @@ sylius:
         your_store: "Наш магазин"
         details: "Описание"
         fill_in_your_billing_and_shipping_addresses: "Заполните ваши данные для отправки книги"
+        privacy_policy: "Политика конфиденциальности"
     form:
         user:
             password:
