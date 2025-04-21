@@ -2,7 +2,7 @@
     {{ sonata_block_render_event('sylius.shop.product.show.tab_details', {'product': product}) }}
 
     {% if product.description is not empty %}
-         {{ product.description | raw }}
+         {{ product.description | raw | nl2br | raw }}
     {% else %}
         {{ 'sylius.ui.no_description'|trans }}.
     {% endif %}
