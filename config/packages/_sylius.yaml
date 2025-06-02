@@ -7,7 +7,7 @@ imports:
     - { resource: "@SyliusShopBundle/Resources/config/app/config.yml" }
 
 parameters:
-    sylius_core.public_dir: '%kernel.project_dir%/public'
+    sylius_core.public_dir: "%kernel.project_dir%/public"
 
 sylius_addressing:
     resources:
@@ -238,6 +238,7 @@ sylius_user:
             user:
                 classes:
                     model: App\Entity\User\ShopUser
+                    repository: App\Repository\UserRepository
         oauth:
             user:
                 classes:
