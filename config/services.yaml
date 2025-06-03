@@ -194,6 +194,14 @@ services:
                   method: handleUserVerification,
               }
 
+    # Override shop user repository to use our custom implementation
+    sylius.repository.shop_user:
+        class: App\Repository\UserRepository
+        parent: sylius.repository
+        arguments: ["%sylius.model.shop_user.class%"]
+        tags:
+            - { name: sylius.repository }
+
 google_tag_manager:
     enabled: true
     id: "GTM-KH44GQS"
