@@ -10,7 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class UserCheckController
 {
-    private UserRepository $userRepository;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
     public function __construct(UserRepository $userRepository)
     {
