@@ -194,6 +194,12 @@ services:
                   method: handleUserVerification,
               }
 
+    # Custom controller for AJAX user check
+    app.controller.shop.user_check:
+        class: App\Controller\Shop\UserCheckController
+        arguments: ["@sylius.repository.shop_user"]
+        tags: ["controller.service_arguments"]
+
 google_tag_manager:
     enabled: true
     id: "GTM-KH44GQS"

@@ -39,6 +39,16 @@ app_shop_cdek_template:
     defaults:
         _controller: app.controller.shop.cdek::templateAction
 
+# Override the AJAX user check to use our custom repository
+sylius_shop_ajax_user_check_action:
+    path: /{_locale}/check
+    methods: [GET]
+    defaults:
+        _controller: app.controller.shop.user_check::checkAction
+        _format: json
+    requirements:
+        _locale: ^[A-Za-z]{2,4}(_([A-Za-z]{4}|[0-9]{3}))?(_([A-Za-z]{2}|[0-9]{3}))?$
+
 app_taxon_title:
     path: /by-slug/{slug}
     methods: [GET]
