@@ -200,6 +200,9 @@ services:
         arguments: ["@sylius.repository.shop_user"]
         tags: ["controller.service_arguments"]
 
+    # Alias our custom UserRepository to the Sylius service
+    App\Repository\UserRepository: "@sylius.repository.shop_user"
+
 google_tag_manager:
     enabled: true
     id: "GTM-KH44GQS"
