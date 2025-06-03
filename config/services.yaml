@@ -198,6 +198,8 @@ services:
     sylius.repository.shop_user:
         class: App\Repository\UserRepository
         parent: sylius.repository
+        autowire: false
+        autoconfigure: false
         arguments: ["%sylius.model.shop_user.class%"]
         tags:
             - { name: sylius.repository }
