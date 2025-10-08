@@ -236,6 +236,7 @@ sylius_grid:
                                 translation.name,
                                 translation.shortDescription,
                                 translation.description,
+                                productTaxons.taxon.translation.name,
                             ]
                     form_options:
                         type: contains
