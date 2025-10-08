@@ -24,14 +24,17 @@ class ProductRepository extends BaseProductRepository
             ->addSelect('translation')
             ->addSelect('productTaxon')
             ->innerJoin('o.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->innerJoin('o.productTaxons', 'productTaxon')
-            ->innerJoin('productTaxon.taxon', 'taxon')
-            ->addSelect('taxon')
-            ->leftJoin('taxon.translations', 'taxonTranslation', 'WITH', 'taxonTranslation.locale = :locale')
-            ->addSelect('taxonTranslation');
+            ->innerJoin('o.productTaxons', 'productTaxon');
+
+        // Join ALL product taxons for searching (not just the filtered category)
+        $queryBuilder
+            ->leftJoin('o.productTaxons', 'allProductTaxons')
+            ->leftJoin('allProductTaxons.taxon', 'allTaxons')
+            ->leftJoin('allTaxons.translations', 'taxonTranslation', 'WITH', 'taxonTranslation.locale = :locale');
 
         if ($includeAllDescendants) {
             $queryBuilder
+                ->innerJoin('productTaxon.taxon', 'taxon')
                 ->andWhere('taxon.left >= :taxonLeft')
                 ->andWhere('taxon.right <= :taxonRight')
                 ->andWhere('taxon.root = :taxonRoot')
