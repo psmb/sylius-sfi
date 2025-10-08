@@ -1,7 +1,12 @@
 framework:
-    secret: '%env(APP_SECRET)%'
+    secret: "%env(APP_SECRET)%"
     form: true
     csrf_protection: true
     templating: { engines: ["twig"] }
     session:
         handler_id: ~
+        cookie_lifetime: 31536000
+        gc_maxlifetime: 31536000
+        cookie_secure: auto
+        cookie_samesite: lax
+        cookie_httponly: true

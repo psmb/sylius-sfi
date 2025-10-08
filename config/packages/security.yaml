@@ -73,7 +73,9 @@ security:
                 secret: "%env(APP_SECRET)%"
                 name: APP_SHOP_REMEMBER_ME
                 lifetime: 31536000
+                path: "/"
                 remember_me_parameter: _remember_me
+                always_remember_me: true
             logout:
                 path: sylius_shop_logout
                 target: sylius_shop_login
@@ -82,22 +84,54 @@ security:
             anonymous: true
 
         dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
     access_control:
-        - { path: "%sylius.security.admin_regex%/_partial", role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [127.0.0.1, ::1] }
-        - { path: "%sylius.security.admin_regex%/_partial", role: ROLE_NO_ACCESS }
-        - { path: "%sylius.security.shop_regex%/_partial", role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [127.0.0.1, ::1] }
-        - { path: "%sylius.security.shop_regex%/_partial", role: ROLE_NO_ACCESS }
+        - {
+              path: "%sylius.security.admin_regex%/_partial",
+              role: IS_AUTHENTICATED_ANONYMOUSLY,
+              ips: [127.0.0.1, ::1],
+          }
+        - {
+              path: "%sylius.security.admin_regex%/_partial",
+              role: ROLE_NO_ACCESS,
+          }
+        - {
+              path: "%sylius.security.shop_regex%/_partial",
+              role: IS_AUTHENTICATED_ANONYMOUSLY,
+              ips: [127.0.0.1, ::1],
+          }
+        - {
+              path: "%sylius.security.shop_regex%/_partial",
+              role: ROLE_NO_ACCESS,
+          }
 
-        - { path: "%sylius.security.admin_regex%/login", role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: "%sylius.security.api_regex%/login", role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: "%sylius.security.shop_regex%/login", role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - {
+              path: "%sylius.security.admin_regex%/login",
+              role: IS_AUTHENTICATED_ANONYMOUSLY,
+          }
+        - {
+              path: "%sylius.security.api_regex%/login",
+              role: IS_AUTHENTICATED_ANONYMOUSLY,
+          }
+        - {
+              path: "%sylius.security.shop_regex%/login",
+              role: IS_AUTHENTICATED_ANONYMOUSLY,
+          }
 
-        - { path: "%sylius.security.shop_regex%/register", role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: "%sylius.security.shop_regex%/verify", role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - {
+              path: "%sylius.security.shop_regex%/register",
+              role: IS_AUTHENTICATED_ANONYMOUSLY,
+          }
+        - {
+              path: "%sylius.security.shop_regex%/verify",
+              role: IS_AUTHENTICATED_ANONYMOUSLY,
+          }
 
-        - { path: "%sylius.security.admin_regex%", role: ROLE_ADMINISTRATION_ACCESS }
+        - {
+              path: "%sylius.security.admin_regex%",
+              role: ROLE_ADMINISTRATION_ACCESS,
+          }
         - { path: "%sylius.security.api_regex%/.*", role: ROLE_API_ACCESS }
         - { path: "%sylius.security.shop_regex%/account", role: ROLE_USER }
