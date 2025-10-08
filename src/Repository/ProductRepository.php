@@ -24,12 +24,13 @@ class ProductRepository extends BaseProductRepository
             ->addSelect('translation')
             ->addSelect('productTaxon')
             ->innerJoin('o.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->innerJoin('o.productTaxons', 'productTaxon');
+            ->innerJoin('o.productTaxons', 'productTaxon')
+            ->innerJoin('productTaxon.taxon', 'taxon')
+            ->leftJoin('taxon.translations', 'taxonTranslation', 'WITH', 'taxonTranslation.locale = :locale')
+            ->addSelect('taxonTranslation');
 
         if ($includeAllDescendants) {
             $queryBuilder
-                ->innerJoin('productTaxon.taxon', 'taxon')
-                ->leftJoin('taxon.translations', 'taxonTranslation', 'WITH', 'taxonTranslation.locale = :locale')
                 ->andWhere('taxon.left >= :taxonLeft')
                 ->andWhere('taxon.right <= :taxonRight')
                 ->andWhere('taxon.root = :taxonRoot')
@@ -39,8 +40,6 @@ class ProductRepository extends BaseProductRepository
             ;
         } else {
             $queryBuilder
-                ->innerJoin('productTaxon.taxon', 'taxon')
-                ->leftJoin('taxon.translations', 'taxonTranslation', 'WITH', 'taxonTranslation.locale = :locale')
                 ->andWhere('productTaxon.taxon = :taxon')
                 ->setParameter('taxon', $taxon)
             ;
