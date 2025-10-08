@@ -26,6 +26,7 @@ class ProductRepository extends BaseProductRepository
             ->innerJoin('o.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->innerJoin('o.productTaxons', 'productTaxon')
             ->innerJoin('productTaxon.taxon', 'taxon')
+            ->addSelect('taxon')
             ->leftJoin('taxon.translations', 'taxonTranslation', 'WITH', 'taxonTranslation.locale = :locale')
             ->addSelect('taxonTranslation');
 
