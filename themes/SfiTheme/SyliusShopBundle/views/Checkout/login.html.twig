@@ -8,30 +8,122 @@
     <div class="ui stackable grid">
         <div class="eleven wide column">
             <div class="ui segment">
-
-                {{ form_start(form, {'action': path('sylius_shop_checkout_login'), 'attr': {'class': 'ui loadable form', 'novalidate': 'novalidate'}}) }}
-                    {{ form_errors(form) }}
-                    <input type="hidden" name="_method" value="PUT" />
-
-                    <div id="sylius-shipping-login">
-                        {% if form.customer is defined %}
-                            {% include '@SyliusShop/Common/Form/_login.html.twig' with {'form': form.customer} %}
-                            {% else %}
-Оформляем покупку на адрес {{ order.customer.email }}...
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('next-step').click()
-})
-</script>
-                        {% endif %}
+                {% if form.customer is defined %}
+                    {# Show two-column layout for guest checkout #}
+                    <div class="ui stackable two column grid">
+                        <div class="column">
+                            <h4 class="ui dividing header">Уже зарегистрированы?</h4>
+                            <p>Если у вас уже есть учетная запись, войдите используя email и пароль.</p>
+                            
+                            {# Login form that submits via AJAX #}
+                            <div class="ui form" id="checkout-login-form">
+                                <div class="field">
+                                    <label>Email</label>
+                                    <input type="email" id="login-email" placeholder="Email">
+                                </div>
+                                <div class="field">
+                                    <label>Пароль</label>
+                                    <input type="password" id="login-password" placeholder="Пароль">
+                                </div>
+                                <div class="ui red fluid top pointing basic label hidden" id="login-error">
+                                </div>
+                                <input type="hidden" id="login-csrf" value="{{ csrf_token('shop_authenticate') }}">
+                                <div style="margin-top: 1em;">
+                                    <button type="button" class="ui blue button" id="login-submit-btn">Войти</button>
+                                    <a href="{{ path('sylius_shop_request_password_reset_token') }}" class="ui button">Забыли пароль?</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="column">
+                            <h4 class="ui dividing header">Новый покупатель?</h4>
+                            <p>Введите ваши данные для оформления заказа. Вы сможете создать учетную запись после оформления заказа.</p>
+                            
+                            {{ form_start(form, {'action': path('sylius_shop_checkout_login'), 'attr': {'class': 'ui loadable form', 'novalidate': 'novalidate'}}) }}
+                                {{ form_errors(form) }}
+                                <input type="hidden" name="_method" value="PUT" />
+                                
+                                {{ form_row(form.customer.email) }}
+                                {{ form_row(form.customer.phoneNumber) }}
+                                <div class="two fields">
+                                    {{ form_row(form.customer.firstName) }}
+                                    {{ form_row(form.customer.lastName) }}
+                                </div>
+                                
+                                <button type="submit" class="ui large green icon labeled button">
+                                    <i class="arrow right icon"></i>
+                                    Продолжить как гость
+                                </button>
+                                
+                                {{ form_row(form._token) }}
+                            {{ form_end(form, {'render_rest': false}) }}
+                        </div>
                     </div>
-
-                    <div class="ui hidden divider"></div>
-
-                    {% include '@SyliusShop/Checkout/Login/_navigation.html.twig' %}
-
-                    {{ form_row(form._token) }}
-                {{ form_end(form, {'render_rest': false}) }}
+                    
+                    <style>
+                        /* Add visual separator between columns on larger screens */
+                        @media only screen and (min-width: 768px) {
+                            .ui.two.column.grid > .column:first-child {
+                                border-right: 1px solid rgba(34, 36, 38, 0.15);
+                                padding-right: 2em !important;
+                            }
+                            .ui.two.column.grid > .column:last-child {
+                                padding-left: 2em !important;
+                            }
+                        }
+                    </style>
+                    
+                    <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Handle login via AJAX
+                        document.getElementById('login-submit-btn').addEventListener('click', function(e) {
+                            e.preventDefault();
+                            
+                            var email = document.getElementById('login-email').value;
+                            var password = document.getElementById('login-password').value;
+                            var csrf = document.getElementById('login-csrf').value;
+                            var errorDiv = document.getElementById('login-error');
+                            
+                            errorDiv.classList.add('hidden');
+                            
+                            fetch('{{ path('sylius_shop_login_check') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                },
+                                body: '_username=' + encodeURIComponent(email) + 
+                                      '&_password=' + encodeURIComponent(password) + 
+                                      '&_csrf_shop_security_token=' + encodeURIComponent(csrf)
+                            })
+                            .then(function(response) {
+                                return response.json();
+                            })
+                            .then(function(data) {
+                                if (data.success) {
+                                    window.location.reload();
+                                } else {
+                                    errorDiv.textContent = data.message || 'Неверный email или пароль';
+                                    errorDiv.classList.remove('hidden');
+                                }
+                            })
+                            .catch(function(error) {
+                                errorDiv.textContent = 'Произошла ошибка. Попробуйте еще раз.';
+                                errorDiv.classList.remove('hidden');
+                            });
+                        });
+                    });
+                    </script>
+                {% else %}
+                    {# User is already logged in, proceed automatically #}
+                    Оформляем покупку на адрес {{ order.customer.email }}...
+                    <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Auto-submit to proceed to next step
+                        window.location.href = '{{ path('sylius_shop_checkout_address') }}';
+                    });
+                    </script>
+                {% endif %}
             </div>
         </div>
         <div class="five wide column">
