@@ -115,14 +115,11 @@
                     });
                     </script>
                 {% else %}
-                    {# User is already logged in, proceed automatically #}
-                    Оформляем покупку на адрес {{ order.customer.email }}...
-                    <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // Auto-submit to proceed to next step
-                        window.location.href = '{{ path('sylius_shop_checkout_address') }}';
-                    });
-                    </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('next-step').click()
+})
+</script>
                 {% endif %}
             </div>
         </div>
