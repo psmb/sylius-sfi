@@ -115,11 +115,21 @@
                     });
                     </script>
                 {% else %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('next-step').click()
-})
-</script>
+                    {# User is already logged in, proceed automatically #}
+                    Оформляем покупку на адрес {{ order.customer.email }}...
+                    
+                    {# Create a hidden form to trigger the state machine transition #}
+                    {{ form_start(form, {'action': path('sylius_shop_checkout_login'), 'attr': {'id': 'auto-proceed-form', 'class': 'ui form'}}) }}
+                        <input type="hidden" name="_method" value="PUT" />
+                        {{ form_row(form._token) }}
+                    {{ form_end(form, {'render_rest': false}) }}
+                    
+                    <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Auto-submit form to trigger state machine transition and redirect to correct next step
+                        document.getElementById('auto-proceed-form').submit();
+                    });
+                    </script>
                 {% endif %}
             </div>
         </div>
