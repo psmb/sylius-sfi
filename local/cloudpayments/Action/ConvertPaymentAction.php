@@ -42,7 +42,8 @@ class ConvertPaymentAction implements ActionInterface
                 "amount" => $item->getTotal() / 100,
                 "method" => 4,
                 "object" => 1,
-                "measurementUnit" => "шт"
+                "measurementUnit" => "шт",
+                "vat" => 5
             ];
         }, $orderItems);
         if ($order->getAdjustmentsTotal() > 0) {
@@ -53,7 +54,8 @@ class ConvertPaymentAction implements ActionInterface
                 "amount" => $order->getAdjustmentsTotal() / 100,
                 "method" => 4,
                 "object" => 4,
-                "measurementUnit" => "шт"
+                "measurementUnit" => "шт",
+                "vat" => 5
             ];
         }
 
