@@ -21,8 +21,17 @@
     </div>
     <script>
     (function() {
-        const toggle = document.querySelector('.js-user-dropdown-toggle');
-        const menu = document.querySelector('.js-user-menu');
+        // Get the script element and find its parent dropdown
+        var scripts = document.querySelectorAll('script');
+        var currentScript = scripts[scripts.length - 1];
+        var dropdown = currentScript.previousElementSibling;
+        while (dropdown && !dropdown.classList.contains('site-header__user-dropdown')) {
+            dropdown = dropdown.previousElementSibling;
+        }
+        if (!dropdown) return;
+
+        var toggle = dropdown.querySelector('.js-user-dropdown-toggle');
+        var menu = dropdown.querySelector('.js-user-menu');
         if (toggle && menu) {
             toggle.addEventListener('click', function(e) {
                 e.preventDefault();
