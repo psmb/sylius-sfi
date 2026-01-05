@@ -1,0 +1,22 @@
+{% if taxons|length > 0 %}
+    <div class="mega-menu__content">
+        {% for taxon in taxons %}
+            {% if not (taxon.slug ends with '1') %}
+                <div class="mega-menu__section{% if taxon.children|length > 30 %} mega-menu__section--wide{% endif %}{% if taxon.code == 'top' %} show-for-medium-down{% endif %}">
+                    <div class="mega-menu__section-title">{{ taxon.name }}</div>
+                    {% if taxon.children|length > 0 %}
+                        <div class="mega-menu__items{% if taxon.children|length > 30 %} mega-menu__items--columns{% endif %}">
+                            {% for child in taxon.children|sortarrow((a, b) => a.name > b.name) %}
+                                {% if not (child.slug ends with '1') %}
+                                    <a href="{{ path('sylius_shop_product_index', {'slug': child.slug, '_locale': child.translation.locale}) }}" class="mega-menu__item">
+                                        {{ child.name }}
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}

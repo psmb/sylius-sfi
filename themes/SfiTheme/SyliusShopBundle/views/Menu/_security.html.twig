@@ -1,10 +1,54 @@
-<div class="ui right stackable inverted menu">
-    {% if is_granted('ROLE_USER') %}
-        <a href="{{ path('sylius_shop_account_dashboard') }}" class="item">{{ 'sylius.ui.my_account'|trans }}</a>
-        <a href="/download" class="item sylius-logout-button">Мои электронные товары</a>
-        <a href="{{ path('sylius_shop_logout') }}" class="item sylius-logout-button">{{ 'sylius.ui.logout'|trans }}</a>
-    {% else %}
-        <a href="{{ path('sylius_shop_login') }}" class="item">{{ 'sylius.ui.login'|trans }}</a>
-        <a href="{{ path('sylius_shop_register') }}" class="item">{{ 'sylius.ui.register'|trans }}</a>
-    {% endif %}
-</div>
+{% if is_granted('ROLE_USER') %}
+    <div class="site-header__user-dropdown">
+        <button class="site-header__icon-btn js-user-dropdown-toggle" type="button" aria-label="Аккаунт">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_user)">
+                    <path d="M3.59961 19.2513C3.59961 21.5721 5.44049 23.4518 7.71192 23.4518C9.57485 23.4518 11.1479 22.1864 11.6541 20.4516H16.0542C16.4973 20.4516 16.5246 20.4789 16.5246 20.9315V22.2515C16.5246 22.8175 16.5246 23.1 16.6958 23.2765C16.868 23.4518 17.1452 23.4518 17.6987 23.4518H18.4978C18.9599 23.4518 19.1898 23.4518 19.3526 23.3153C19.5143 23.1798 19.5595 22.9488 19.6509 22.4868L19.9732 20.838C20.0457 20.4684 20.0657 20.4516 20.4342 20.4516H21.2239C21.7774 20.4516 22.0546 20.4516 22.2268 20.2752C22.6122 19.8824 22.5755 17.9827 22.2268 17.6268C22.0546 17.4514 21.7774 17.4514 21.2239 17.4514H11.4283C10.7688 16.0316 9.35222 15.0508 7.71192 15.0508C5.44049 15.0508 3.59961 16.9305 3.59961 19.2513Z" stroke="currentColor" stroke-width="1.05013" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M19.3503 14.5231V9.84766C19.3503 6.87789 19.3503 5.39195 18.4272 4.46994C17.5052 3.54687 16.0192 3.54688 13.0495 3.54688H7.79883C4.82906 3.54688 3.34313 3.54687 2.42111 4.46994C1.49805 5.39195 1.49805 6.87789 1.49805 9.84766V16.0983" stroke="currentColor" stroke-width="1.05013" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+                <defs>
+                    <clipPath id="clip0_user">
+                        <rect width="24" height="24" fill="white"/>
+                    </clipPath>
+                </defs>
+            </svg>
+        </button>
+        <div class="site-header__user-menu js-user-menu">
+            <a href="{{ path('sylius_shop_account_dashboard') }}" class="site-header__user-menu-item">{{ 'sylius.ui.my_account'|trans }}</a>
+            <a href="/download" class="site-header__user-menu-item">Мои электронные товары</a>
+            <a href="{{ path('sylius_shop_logout') }}" class="site-header__user-menu-item sylius-logout-button">{{ 'sylius.ui.logout'|trans }}</a>
+        </div>
+    </div>
+    <script>
+    (function() {
+        const toggle = document.querySelector('.js-user-dropdown-toggle');
+        const menu = document.querySelector('.js-user-menu');
+        if (toggle && menu) {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                menu.classList.toggle('is-open');
+            });
+            document.addEventListener('click', function(e) {
+                if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+                    menu.classList.remove('is-open');
+                }
+            });
+        }
+    })();
+    </script>
+{% else %}
+    <a href="{{ path('sylius_shop_login') }}" class="site-header__icon-btn" aria-label="Войти">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_user_guest)">
+                <path d="M3.59961 19.2513C3.59961 21.5721 5.44049 23.4518 7.71192 23.4518C9.57485 23.4518 11.1479 22.1864 11.6541 20.4516H16.0542C16.4973 20.4516 16.5246 20.4789 16.5246 20.9315V22.2515C16.5246 22.8175 16.5246 23.1 16.6958 23.2765C16.868 23.4518 17.1452 23.4518 17.6987 23.4518H18.4978C18.9599 23.4518 19.1898 23.4518 19.3526 23.3153C19.5143 23.1798 19.5595 22.9488 19.6509 22.4868L19.9732 20.838C20.0457 20.4684 20.0657 20.4516 20.4342 20.4516H21.2239C21.7774 20.4516 22.0546 20.4516 22.2268 20.2752C22.6122 19.8824 22.5755 17.9827 22.2268 17.6268C22.0546 17.4514 21.7774 17.4514 21.2239 17.4514H11.4283C10.7688 16.0316 9.35222 15.0508 7.71192 15.0508C5.44049 15.0508 3.59961 16.9305 3.59961 19.2513Z" stroke="currentColor" stroke-width="1.05013" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M19.3503 14.5231V9.84766C19.3503 6.87789 19.3503 5.39195 18.4272 4.46994C17.5052 3.54687 16.0192 3.54688 13.0495 3.54688H7.79883C4.82906 3.54688 3.34313 3.54687 2.42111 4.46994C1.49805 5.39195 1.49805 6.87789 1.49805 9.84766V16.0983" stroke="currentColor" stroke-width="1.05013" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <defs>
+                <clipPath id="clip0_user_guest">
+                    <rect width="24" height="24" fill="white"/>
+                </clipPath>
+            </defs>
+        </svg>
+    </a>
+{% endif %}

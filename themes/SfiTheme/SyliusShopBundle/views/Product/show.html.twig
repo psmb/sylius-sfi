@@ -18,7 +18,7 @@
     {% include '@SyliusShop/Product/Show/_breadcrumb.html.twig' %}
     <div class="ui hidden divider"></div>
 
-    <div class="ui column stackable grid">
+    <div class="ui column stackable grid product-detail">
         <div class="six wide column">
             {{ sonata_block_render_event('sylius.shop.product.show.before_images', {'product': product}) }}
 
@@ -27,13 +27,18 @@
             {{ sonata_block_render_event('sylius.shop.product.show.after_images', {'product': product}) }}
         </div>
         <div class="ten wide column">
+            {# Title #}
             {% include '@SyliusShop/Product/Show/_header.html.twig' %}
 
-            <p style="font-size: 24px; line-height: 1.2; margin-bottom: 30px;">{{ product.shortDescription }}</p>
+            {# Subtitle / Short Description #}
+            {% if product.shortDescription %}
+                <p style="font-size: 18px; line-height: 1.4; margin-bottom: 20px; color: #555;">{{ product.shortDescription }}</p>
+            {% endif %}
 
+            {# Author #}
             {% for taxon in product.taxons %}
                 {% if taxon.parent.code == 'authors' %}
-                    <a style="font-size: 21px" href="{{ path('sylius_shop_product_index', {'slug': taxon.slug, '_locale': taxon.translation.locale}) }}">
+                    <a style="font-size: 18px; color: #00a0c6; margin-bottom: 15px; display: inline-block;" href="{{ path('sylius_shop_product_index', {'slug': taxon.slug, '_locale': taxon.translation.locale}) }}">
                         {{ taxon.name }}
                     </a>
                 {% endif %}
@@ -41,47 +46,80 @@
 
             {{ sonata_block_render_event('sylius.shop.product.show.after_product_header', {'product': product}) }}
 
-            {% for taxon in product.taxons %}
-                {% if taxon.parent.code == 'publishers' %}
-                    <div style="margin-top: 40px">
-                        Издательство:
-                        <a href="{{ path('sylius_shop_product_index', {'slug': taxon.slug, '_locale': taxon.translation.locale}) }}">
-                            {{ taxon.name }}
-                        </a>
-                    </div>
-                {% endif %}
-            {% endfor %}
-
-            {% include '@SyliusShop/Product/Show/_reviews.html.twig' %}
-
-            {{ sonata_block_render_event('sylius.shop.product.show.after_reviews', {'product': product}) }}
-
-            <div class="ui stackable grid">
-                <div class="four wide column">
-                    {% if not product.variants.empty() %}
-                        {% include '@SyliusShop/Product/Show/_price.html.twig' %}
-                    {% endif %}
+            {# Price #}
+            {% if not product.variants.empty() %}
+                <div style="margin: 25px 0;">
+                    {% include '@SyliusShop/Product/Show/_price.html.twig' %}
                 </div>
-                <div
-                    class="twelve wide right aligned column">{# <span class="ui sub header">{{ product.code }}</span> #}
-                </div>
-            </div>
+            {% endif %}
 
             {{ sonata_block_render_event('sylius.shop.product.show.after_price', {'product': product}) }}
 
-            {{ sonata_block_render_event('sylius.shop.product.show.after_description', {'product': product}) }}
+            {# Variant Selector #}
+            <div style="margin-top: 20px;">
+                {% if product.isConfigurable() and product.getVariantSelectionMethod() == 'match' and not product.variants.empty() %}
+                    {% include '@SyliusShop/Product/Show/_variantsPricing.html.twig' with {'pricing': sylius_product_variant_prices(product, sylius.channel)} %}
+                {% endif %}
+                {% include '@SyliusShop/Product/Show/_inventory.html.twig' %}
+            </div>
 
-            {% if product.isConfigurable() and product.getVariantSelectionMethod() == 'match' and not product.variants.empty() %}
-                {% include '@SyliusShop/Product/Show/_variantsPricing.html.twig' with {'pricing': sylius_product_variant_prices(product, sylius.channel)} %}
-            {% endif %}
-            {% include '@SyliusShop/Product/Show/_inventory.html.twig' %}
-            <div class="ui hidden divider"></div>
+            {{ sonata_block_render_event('sylius.shop.product.show.after_description', {'product': product}) }}
 
             {{ sonata_block_render_event('sylius.shop.product.show.after_add_to_cart', {'product': product}) }}
 
-            {{ sonata_block_render_event('sylius.shop.product.show.before_tabs', {'product': product}) }}
+            {{ sonata_block_render_event('sylius.shop.product.show.after_reviews', {'product': product}) }}
 
-            {% include '@SyliusShop/Product/Show/_tabs.html.twig' %}
+            {# Book Specifications - horizontal layout #}
+            <div class="book-specs">
+                {# Publisher #}
+                {% for taxon in product.taxons %}
+                    {% if taxon.parent.code == 'publishers' %}
+                        <div class="book-specs__item">
+                            <span class="book-specs__label">Издательство</span>
+                            <a class="book-specs__value book-specs__value--link" href="{{ path('sylius_shop_product_index', {'slug': taxon.slug, '_locale': taxon.translation.locale}) }}">
+                                {{ taxon.name }}
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                {# Attributes: Pages, Cover type, ISBN #}
+                {% for attribute in product.getAttributesByLocale(app.request.locale, app.request.defaultLocale)|sort_by('attribute.position') %}
+                    {% if attribute.attribute.code != "publish_date" %}
+                        <div class="book-specs__item">
+                            <span class="book-specs__label">{{ attribute.name }}</span>
+                            <span class="book-specs__value">{{ attribute.value }}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                {# Dimensions #}
+                {% if product.variants[0].width %}
+                    <div class="book-specs__item">
+                        <span class="book-specs__label">Размеры</span>
+                        <span class="book-specs__value">{{ product.variants[0].width }}×{{ product.variants[0].height }}×{{ product.variants[0].depth }} см</span>
+                    </div>
+                {% endif %}
+
+                {# Weight #}
+                {% if product.variants[0].weight %}
+                    <div class="book-specs__item">
+                        <span class="book-specs__label">Вес</span>
+                        <span class="book-specs__value">{{ product.variants[0].weight }} г</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            {# Description - shown directly instead of in tabs #}
+            {% if product.description is not empty %}
+                <div style="margin-top: 30px;">
+                    <div style="font-size: 15px; line-height: 1.7; color: #333;">
+                        {{ product.description | raw }}
+                    </div>
+                </div>
+            {% endif %}
+
+            {{ sonata_block_render_event('sylius.shop.product.show.before_tabs', {'product': product}) }}
 
             {{ sonata_block_render_event('sylius.shop.product.show.before_associations', {'product': product}) }}
         </div>
@@ -96,5 +134,13 @@
 
     <script type="text/javascript">
         lightbox.option({'albumLabel': '{{ 'sylius.lightbox.image_album_label'|trans|escape('js') }}'});
+
+        // Custom variant price handler for non-table layout
+        $(function() {
+            $('[name="sylius_add_to_cart[cartItem][variant]"]').on('change', function() {
+                var price = $(this).closest('.variant-selector__item').find('.sylius-product-variant-price').text();
+                $('#product-price').text(price);
+            });
+        });
     </script>
 {% endblock %}

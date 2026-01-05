@@ -1,30 +1,102 @@
-<style>
-.sfi-logo {
-    width: 250px;
-}
-.fixed .sfi-logo {
-    width: 100px;
-}
-@media screen and (max-width: 768px) {
-    .top-header {
-        left: 0 !important;
-        right: 0 !important;
-        width: 100%;
-    }
-}
-</style>
+<div class="site-header">
+    <div class="site-header__left">
+        <button class="site-header__menu-toggle js-mega-menu-toggle" type="button" aria-label="Menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <nav class="site-header__nav hide-for-medium-down">
+            {{ render(url('sylius_shop_partial_taxon_index_by_code', {'code': 'top', 'template': '@SyliusShop/Taxon/_headerNav.html.twig'})) }}
+        </nav>
+    </div>
 
-<div class="ui container basic segment sticky top-header" style="background-color: white">
-    <div class="ui two column grid">
-        <div class="column">
-<a href="{{ path('sylius_shop_homepage') }}" title="На главную"><img src="{{ asset('bundles/syliusshop/SiteLogoRu.svg') }}" alt="Книги СФИ" class="ui image sfi-logo"/></a>
+    <div class="site-header__center">
+        <a href="{{ path('sylius_shop_homepage') }}" class="site-header__logo" title="На главную">
+            <img src="{{ asset('bundles/syliusshop/SiteLogoRu.svg') }}" alt="Книги СФИ">
+        </a>
+    </div>
 
-        </div>
-        {# <div class="column">
-            {{ sonata_block_render_event('sylius.shop.layout.header') }}
-        </div> #}
-        <div class="right aligned column">
-            {{ render(url('sylius_shop_partial_cart_summary', {'template': '@SyliusShop/Cart/_widget.html.twig'})) }}
-        </div>
+    <div class="site-header__right">
+        <button class="site-header__icon-btn js-search-toggle" type="button" aria-label="Поиск">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">
+                <path fill="currentColor" d="M10.427 2c4.376 0 7.926 3.5 7.926 7.817 0 2.285-.995 4.34-2.58 5.769l5.567 5.49a.537.537 0 0 1 0 .766.555.555 0 0 1-.776 0l-5.656-5.58a7.96 7.96 0 0 1-4.481 1.373c-4.377 0-7.925-3.5-7.925-7.818C2.502 5.501 6.05 2 10.427 2m0 1.083c-3.77 0-6.826 3.016-6.826 6.734 0 3.72 3.056 6.734 6.826 6.734s6.827-3.015 6.827-6.734-3.057-6.734-6.827-6.734"/>
+            </svg>
+        </button>
+        {{ render(url('sylius_shop_partial_cart_summary', {'template': '@SyliusShop/Cart/_widget.html.twig'})) }}
+        {{ render(controller('sylius.controller.shop.security_widget:renderAction')) }}
     </div>
 </div>
+
+<div class="mega-menu js-mega-menu">
+    <div class="mega-menu__container">
+        {{ render(url('sylius_shop_partial_taxon_index_by_code', {'code': 'category', 'template': '@SyliusShop/Taxon/_megaMenu.html.twig'})) }}
+    </div>
+</div>
+
+<div class="site-header__search-overlay js-search-overlay">
+    <form action="/ru_RU/taxons/category/books" class="site-header__search-form" method="get">
+        <input type="text" name="criteria[search][value]" placeholder="Поиск..." class="site-header__search-input" />
+        <button type="submit" class="site-header__search-submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path fill="currentColor" d="M10.427 2c4.376 0 7.926 3.5 7.926 7.817 0 2.285-.995 4.34-2.58 5.769l5.567 5.49a.537.537 0 0 1 0 .766.555.555 0 0 1-.776 0l-5.656-5.58a7.96 7.96 0 0 1-4.481 1.373c-4.377 0-7.925-3.5-7.925-7.818C2.502 5.501 6.05 2 10.427 2m0 1.083c-3.77 0-6.826 3.016-6.826 6.734 0 3.72 3.056 6.734 6.826 6.734s6.827-3.015 6.827-6.734-3.057-6.734-6.827-6.734"/>
+            </svg>
+        </button>
+        <button type="button" class="site-header__search-close js-search-close" aria-label="Закрыть">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </form>
+</div>
+
+<script>
+(function() {
+    // Search toggle
+    var searchToggle = document.querySelector('.js-search-toggle');
+    var searchOverlay = document.querySelector('.js-search-overlay');
+    var searchCloseBtn = document.querySelector('.js-search-close');
+    var searchInput = searchOverlay ? searchOverlay.querySelector('.site-header__search-input') : null;
+
+    if (searchToggle && searchOverlay) {
+        searchToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            searchOverlay.classList.add('is-open');
+            searchOverlay.style.display = 'block';
+            if (searchInput) searchInput.focus();
+        });
+    }
+
+    if (searchCloseBtn && searchOverlay) {
+        searchCloseBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            searchOverlay.classList.remove('is-open');
+            searchOverlay.style.display = 'none';
+        });
+    }
+
+    // Mega menu toggle
+    var megaMenuToggle = document.querySelector('.js-mega-menu-toggle');
+    var megaMenu = document.querySelector('.js-mega-menu');
+
+    if (megaMenuToggle && megaMenu) {
+        megaMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var isOpen = megaMenu.classList.contains('is-open');
+            megaMenu.classList.toggle('is-open', !isOpen);
+            megaMenuToggle.classList.toggle('is-active', !isOpen);
+        });
+
+        // Close mega menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!megaMenu.contains(e.target) && !megaMenuToggle.contains(e.target)) {
+                megaMenu.classList.remove('is-open');
+                megaMenuToggle.classList.remove('is-active');
+            }
+        });
+    }
+})();
+</script>

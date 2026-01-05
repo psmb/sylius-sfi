@@ -9,11 +9,9 @@
 	<div class="content" style="border: 0">
 		<a href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': product.translation.locale}) }}">
 			{% for taxon in product.taxons %}
-				<div style="margin-bottom: 10px; font-size: 18px; color: initial !important">
-					{% if taxon.parent.code == 'authors' %}
-						{{ taxon.name }}
-					{% endif %}
-				</div>
+				{% if taxon.parent.code == 'authors' %}
+					<div class="product-card__author">{{ taxon.name }}</div>
+				{% endif %}
 			{% endfor %}
 		</a>
 		<a class="header sylius-product-name" href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': product.translation.locale}) }}">

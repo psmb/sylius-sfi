@@ -1,0 +1,12 @@
+{% if taxons|length > 0 %}
+    {% for taxon in taxons %}
+        {% if not (taxon.slug ends with '1') %}
+            <a href="{{ path('sylius_shop_product_index', {'slug': taxon.slug, '_locale': taxon.translation.locale}) }}" class="site-header__nav-link">
+                {{ taxon.name }}
+            </a>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+
