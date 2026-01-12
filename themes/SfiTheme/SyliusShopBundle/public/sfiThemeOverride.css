@@ -493,9 +493,11 @@ header::after {
     }
 
     .site-header__center {
-        position: static;
+        position: absolute;
+        left: 70px;
+        top: 0;
         transform: none;
-        margin-left: 48px;
+        margin-left: 0;
         display: flex;
         align-items: center;
         height: 100%;
@@ -521,9 +523,27 @@ header::after {
     }
 }
 
-@media (max-width: 389px) {
+@media (min-width: 348px) and (max-width: 390px) {
     .site-header__logo {
-        max-width: 106px;
+        overflow: hidden;
+    }
+
+    .site-header__logo img {
+        max-width: 104px;
+        object-fit: cover;
+        object-position: left center;
+    }
+}
+
+@media (max-width: 347px) {
+    .site-header__logo {
+        overflow: hidden;
+    }
+
+    .site-header__logo img {
+        max-width: 28px;
+        object-fit: cover;
+        object-position: left center;
     }
 }
 
