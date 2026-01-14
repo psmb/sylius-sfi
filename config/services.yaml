@@ -204,6 +204,9 @@ services:
     App\Repository\UserRepository: "@sylius.repository.shop_user"
     Sylius\Component\User\Repository\UserRepositoryInterface: "@sylius.repository.shop_user"
 
+    # Alias our custom ProductRepository to the Sylius service
+    App\Repository\ProductRepository: "@sylius.repository.product"
+
 google_tag_manager:
     enabled: true
     id: "GTM-KH44GQS"

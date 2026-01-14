@@ -68,16 +68,8 @@ sylius_shop_partial_product_index_latest_by_taxon:
     path: /{_locale}/partial/products/latest-by-taxon/{taxonSlug}/{count}
     methods: [GET]
     defaults:
-        _controller: sylius.controller.product:indexAction
-        _sylius:
-            template: $template
-            repository:
-                method: findLatestByTaxonSlug
-                arguments:
-                    - "expr:service('sylius.context.channel').getChannel()"
-                    - "expr:service('sylius.context.locale').getLocaleCode()"
-                    - $taxonSlug
-                    - '!!int $count'
+        _controller: App\Controller\Shop\ProductsByTaxonController::latestAction
+        template: '@SyliusShop/Product/_horizontalList.html.twig'
     requirements:
         _locale: ^[A-Za-z]{2,4}(_([A-Za-z]{4}|[0-9]{3}))?(_([A-Za-z]{2}|[0-9]{3}))?$
         taxonSlug: .+
