@@ -36,8 +36,7 @@
 
 	{{ sonata_block_render_event('sylius.shop.product.show.add_to_cart_form', {'product': product, 'order_item': order_item}) }}
 
-	<button type="submit" class="ui huge primary icon labeled button add-to-cart-btn">
-		<i class="cart icon"></i>
+	<button type="submit" class="ui huge primary button add-to-cart-btn">
 		{{ 'sylius.ui.add_to_cart'|trans }}
 	</button>
 	{{ form_row(form._token) }}

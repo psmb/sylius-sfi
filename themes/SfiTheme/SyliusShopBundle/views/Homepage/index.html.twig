@@ -1,9 +1,119 @@
 {% extends '@SyliusShop/layout.html.twig' %}
 
 {% block content %}
-    {% include '@SyliusShop/Homepage/_carousel.html.twig' %}
+    <style>
+        @media(max-width: 519.99px) {
+            .carouselItem {
+                position: relative;
+                padding-bottom: 141%;
+                background-size: cover;
+            }
+        }
+        @media(min-width: 520px) {
+            .carouselItem {
+                position: relative;
+                background-size: cover;
+                background-position-x: 60%;
+                height: 264px;
+            }
+        }
+        .carouselItem-inner {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            max-width: 600px;
+            margin: 24px 46px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        @media(min-width: 520px) {
+            .carouselItem-inner {
+                justify-content: center;
+            }
+        }
+        .carouselItem-title {
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+            margin: 0 0 12px;
+            font-family: Franklin, sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            color: #fff;
+            line-height: 1;
+            text-shadow: 0 2px 2px rgba(0, 0, 0, 0.75);
+        }
+        @media(min-width: 430px) {
+            .carouselItem-title {
+                font-size: 3rem;
+            }
+        }
+        .carouselItem-subTitle {
+            font-family: SchoolBook, Georgia, serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+            font-size: 1.5rem;
+            color: #fff;
+            line-height: 1.2;
+            text-shadow: 0 2px 2px rgba(0, 0, 0, 0.75);
+            margin-top: 6px;
+        }
+    </style>
+
+    {# Banner 1 #}
     <div style="margin-top: 30px">
-        {{ render(url('sylius_shop_partial_product_index_latest', {'count': 12, 'template': '@SyliusShop/Product/_horizontalList.html.twig'})) }}
-        <a href="/ru_RU/taxons/category/books" class="ui primary button">Все книги</a>
+        {% include '@SyliusShop/Homepage/_carouselItem.html.twig' with {slug: 'triodcvet', title: 'Цветная триодь', subTitle: 'Новинка в серии «православное богослужение на русском языке»'} %}
+    </div>
+
+    {# Section: Latest news across the site #}
+    <div class="homepage-section">
+        <h2>Новинки</h2>
+        {{ render(url('sylius_shop_partial_product_index_latest', {'count': 4, 'template': '@SyliusShop/Product/_horizontalList.html.twig'})) }}
+    </div>
+
+    {# Banner 2 #}
+    <div style="margin-top: 30px">
+        {% include '@SyliusShop/Homepage/_carouselItem.html.twig' with {slug: 'sermonchurch1', title: 'Церковь, её свойства и границы', subTitle: 'Вышел сборник экклезиологических проповедей священника Георгия Кочеткова'} %}
+    </div>
+
+    {# Section: Православное богослужение #}
+    <div class="homepage-section">
+        <h2>Православное богослужение</h2>
+        {{ render(url('sylius_shop_partial_product_index_latest_by_taxon', {'taxonSlug': 'category/books/pravoslavnoe-bogosluzhenie', 'count': 4, 'template': '@SyliusShop/Product/_horizontalList.html.twig'})) }}
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="/ru_RU/taxons/category/books/pravoslavnoe-bogosluzhenie" class="ui small primary button">Больше книг по этой теме</a>
+        </div>
+    </div>
+
+    {# Banner 3 #}
+    <div style="margin-top: 30px">
+        {% include '@SyliusShop/Homepage/_carouselItem.html.twig' with {slug: 'audio', link: '/ru_RU/taxons/category/audio', title: 'Для тех, кто любит ушами', subTitle: 'В нашем интернет-магазине появились аудио-книги'} %}
+    </div>
+
+    {# Section: Миссия и катехизация #}
+    <div class="homepage-section">
+        <h2>Миссия и катехизация</h2>
+        {{ render(url('sylius_shop_partial_product_index_latest_by_taxon', {'taxonSlug': 'category/books/missiia-i-katekhizatsiia', 'count': 4, 'template': '@SyliusShop/Product/_horizontalList.html.twig'})) }}
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="/ru_RU/taxons/category/books/missiia-i-katekhizatsiia" class="ui small primary button">Больше книг по этой теме</a>
+        </div>
+    </div>
+
+    {# Banner 4 #}
+    <div style="margin-top: 30px">
+        {% include '@SyliusShop/Homepage/_carouselItem.html.twig' with {slug: 'time', title: 'Сборник статей священника Георгия Кочеткова', subTitle: 'Какие перемены нужны Православной церкви, если она хочет иметь будущее'} %}
+    </div>
+
+    {# Section: О вере и смысле жизни #}
+    <div class="homepage-section">
+        <h2>О вере и смысле жизни</h2>
+        {{ render(url('sylius_shop_partial_product_index_latest_by_taxon', {'taxonSlug': 'category/books/o-vere-i-smysle-zhizni', 'count': 4, 'template': '@SyliusShop/Product/_horizontalList.html.twig'})) }}
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="/ru_RU/taxons/category/books/o-vere-i-smysle-zhizni" class="ui small primary button">Больше книг по этой теме</a>
+        </div>
     </div>
 {% endblock %}

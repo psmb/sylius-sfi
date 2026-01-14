@@ -67,7 +67,18 @@ body.pushable .pusher {
 }
 
 .ui.breadcrumb {
-    margin-top: 10px;
+    margin-top: 30px !important;
+}
+
+/* Page headers (taxon, etc.) */
+h1.ui.header {
+    font-family: SchoolBook, Georgia, serif;
+    font-size: 37px !important;
+    font-weight: 400;
+}
+
+.ui.small.header {
+    font-weight: 500;
 }
 
 .ui.large.menu {
@@ -290,6 +301,12 @@ header::after {
     border-left: 1px solid #e5e5e5;
 }
 
+@media (min-width: 768px) {
+    .site-header__icon-btn {
+        width: 70px;
+    }
+}
+
 .site-header__icon-btn:hover {
     color: #666;
 }
@@ -317,6 +334,12 @@ header::after {
 
 .site-header__nav-link:hover {
     color: #666;
+}
+
+@media (min-width: 1200px) {
+    .site-header__nav-link {
+        padding: 0 1.5rem;
+    }
 }
 
 /* Logo */
@@ -807,4 +830,28 @@ header::after {
     font-size: 16px;
     color: #757575;
     margin-bottom: 6px;
+}
+
+/* Wider container */
+@media only screen and (min-width: 1440px) {
+    .ui.container {
+        width: 1400px;
+    }
+}
+
+/* Button style overrides */
+.ui.button {
+    font-weight: 400;
+}
+
+/* Homepage sections */
+.homepage-section {
+    margin: 45px 0;
+}
+
+.homepage-section h2 {
+    font-family: Franklin, sans-serif;
+    font-size: 37px;
+    font-weight: 500;
+    margin-bottom: 20px;
 }

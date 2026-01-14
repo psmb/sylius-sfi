@@ -104,4 +104,32 @@ class ProductRepository extends BaseProductRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Find latest products by taxon slug (includes products from child taxons)
+     */
+    public function findLatestByTaxonSlug(ChannelInterface $channel, string $locale, string $taxonSlug, int $count): array
+    {
+        return $this->createQueryBuilder('o')
+            ->addSelect('translation')
+            ->innerJoin('o.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->innerJoin('o.productTaxons', 'productTaxon')
+            ->innerJoin('productTaxon.taxon', 'taxon')
+            ->innerJoin('taxon.translations', 'taxonTranslation', 'WITH', 'taxonTranslation.locale = :locale')
+            ->leftJoin('taxon.parent', 'parentTaxon')
+            ->leftJoin('parentTaxon.translations', 'parentTaxonTranslation', 'WITH', 'parentTaxonTranslation.locale = :locale')
+            ->leftJoin('o.attributes', 'attributeValue', 'WITH', 'attributeValue.localeCode = :locale')
+            ->leftJoin('attributeValue.attribute', 'attribute', 'WITH', 'attribute.code = :attributeCode')
+            ->andWhere('taxonTranslation.slug = :taxonSlug OR parentTaxonTranslation.slug = :taxonSlug')
+            ->andWhere(':channel MEMBER OF o.channels')
+            ->andWhere('o.enabled = true')
+            ->addOrderBy('attributeValue.integer', 'DESC')
+            ->setParameter('channel', $channel)
+            ->setParameter('locale', $locale)
+            ->setParameter('taxonSlug', $taxonSlug)
+            ->setParameter('attributeCode', 'publish_date')
+            ->setMaxResults($count)
+            ->getQuery()
+            ->getResult();
+    }
 }
