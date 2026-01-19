@@ -8,9 +8,9 @@
             </svg>
         </button>
         <nav class="site-header__nav hide-for-medium-down">
-            {{ render(url('sylius_shop_partial_taxon_show_by_slug', {'slug': 'ebooks', 'template': '@SyliusShop/Taxon/_headerNavItem.html.twig'})) }}
-            {{ render(url('sylius_shop_partial_taxon_show_by_slug', {'slug': 'audio', 'template': '@SyliusShop/Taxon/_headerNavItem.html.twig'})) }}
-            {{ render(url('sylius_shop_partial_taxon_show_by_slug', {'slug': 'merch', 'template': '@SyliusShop/Taxon/_headerNavItem.html.twig'})) }}
+            {{ render(url('sylius_shop_partial_taxon_show_by_slug', {'slug': 'category/ebooks', 'template': '@SyliusShop/Taxon/_headerNavItem.html.twig'})) }}
+            {{ render(url('sylius_shop_partial_taxon_show_by_slug', {'slug': 'category/audio', 'template': '@SyliusShop/Taxon/_headerNavItem.html.twig'})) }}
+            {{ render(url('sylius_shop_partial_taxon_show_by_slug', {'slug': 'category/merch', 'template': '@SyliusShop/Taxon/_headerNavItem.html.twig'})) }}
         </nav>
     </div>
 
