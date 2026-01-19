@@ -1,7 +1,7 @@
 {% if taxons|length > 0 %}
     <div class="mega-menu__content">
         {% for taxon in taxons %}
-            {% if not (taxon.slug ends with '1') %}
+            {% if not (taxon.slug ends with '1') and taxon.code not in ['ebooks', 'audio', 'merch'] %}
                 <div class="mega-menu__section{% if taxon.children|length > 30 %} mega-menu__section--wide{% endif %}{% if taxon.code == 'top' %} show-for-medium-down{% endif %}">
                     <div class="mega-menu__section-title">{{ taxon.name }}</div>
                     {% if taxon.children|length > 0 %}
