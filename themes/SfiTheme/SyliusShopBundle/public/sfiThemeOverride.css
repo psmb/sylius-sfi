@@ -67,7 +67,7 @@ body.pushable .pusher {
 }
 
 .ui.breadcrumb {
-    margin-top: 30px !important;
+    margin-top: 40px !important;
 }
 
 /* Page headers (taxon, etc.) */
@@ -87,8 +87,7 @@ h1.ui.header {
 }
 
 .ui.breadcrumb a.section {
-    font-size: 12px;
-    color: #666;
+    color: rgba(0, 0, 0, 0.8);
 }
 
 .ui.breadcrumb a.section:hover {
@@ -853,5 +852,5 @@ header::after {
     font-family: Franklin, sans-serif;
     font-size: 37px;
     font-weight: 500;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
