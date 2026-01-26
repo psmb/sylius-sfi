@@ -13,12 +13,6 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
 use Psr\Log\LoggerInterface;
 
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
-
-define('CDEK_ACCOUNT', \getenv('CDEK_ACCOUNT'));
-define('CDEK_KEY', \getenv('CDEK_KEY'));
-
 final class CdekController extends Controller
 {
     /**
@@ -52,28 +46,72 @@ final class CdekController extends Controller
 
     public function serviceAction(Request $request): Response
     {
-        $service = new ISDEKservice(
-            CDEK_ACCOUNT,
-            CDEK_KEY
-        );
+        try {
+            // Get credentials from environment
+            $cdekAccount = \getenv('CDEK_ACCOUNT');
+            $cdekKey = \getenv('CDEK_KEY');
 
-        $this->logger->info("Service: " . $_GET['action']);
-        if (isset($_GET['action']) && $_GET['action'] === 'offices') {
-            $cacheKey = 'get_offices_' . md5(json_encode($_GET));
-            $this->logger->info("Checking cache for key: $cacheKey");
+            // Check if credentials are configured
+            if (!$cdekAccount || !$cdekKey) {
+                $this->logger->error("CDEK credentials not configured");
+                return new Response(
+                    json_encode(['error' => 'CDEK service not configured']),
+                    500,
+                    [
+                        'Content-Type' => 'application/json',
+                        'Access-Control-Allow-Origin' => '*'
+                    ]
+                );
+            }
 
-            $responseContent = $this->cache->get($cacheKey, function (ItemInterface $item) use ($service) {
-                $this->logger->info("Cache miss for key: " . $item->getKey());
-                $item->expiresAfter(4 * 604800);
-                return $service->process($_GET, file_get_contents('php://input'));
-            });
+            $service = new ISDEKservice($cdekAccount, $cdekKey);
 
-            $this->logger->info("Returning response from cache or fresh content for key: $cacheKey");
-            return new Response($responseContent['result'], 200, ['Content-Type' => 'application/json']);
+            $this->logger->info("Service: " . ($request->query->get('action') ?? 'unknown'));
+
+            if ($request->query->get('action') === 'offices') {
+                $cacheKey = 'get_offices_' . md5(json_encode($request->query->all()));
+                $this->logger->info("Checking cache for key: $cacheKey");
+
+                $responseContent = $this->cache->get($cacheKey, function (ItemInterface $item) use ($service, $request) {
+                    $this->logger->info("Cache miss for key: " . $item->getKey());
+                    $item->expiresAfter(4 * 604800);
+                    return $service->process($request->query->all(), $request->getContent());
+                });
+
+                $this->logger->info("Returning response from cache or fresh content for key: $cacheKey");
+                return new Response(
+                    $responseContent['result'],
+                    200,
+                    [
+                        'Content-Type' => 'application/json',
+                        'Access-Control-Allow-Origin' => '*'
+                    ]
+                );
+            }
+
+            $responseContent = $service->process($request->query->all(), $request->getContent());
+            return new Response(
+                $responseContent['result'],
+                200,
+                [
+                    'Content-Type' => 'application/json',
+                    'Access-Control-Allow-Origin' => '*'
+                ]
+            );
+        } catch (\Exception $e) {
+            $this->logger->error("CDEK service error: " . $e->getMessage(), [
+                'exception' => $e,
+                'request' => $request->query->all()
+            ]);
+            return new Response(
+                json_encode(['error' => 'CDEK service error: ' . $e->getMessage()]),
+                500,
+                [
+                    'Content-Type' => 'application/json',
+                    'Access-Control-Allow-Origin' => '*'
+                ]
+            );
         }
-
-        $responseContent = $service->process($_GET, file_get_contents('php://input'));
-        return new Response($responseContent['result'], 200, ['Content-Type' => 'application/json']);
     }
 
     public function templateAction(Request $request): Response
