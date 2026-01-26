@@ -5,7 +5,7 @@
 {% block body %}
     {% set url = order.channel.hostname is not null ? 'http://' ~ order.channel.hostname ~ path('sylius_shop_order_show', {'tokenValue': order.tokenValue, '_locale': order.localeCode}) : url('sylius_shop_order_show', {'tokenValue': order.tokenValue, '_locale': order.localeCode}) %}
     {% autoescape %}
-        Благодарим вас за оформление покупку в нашем магазине!
+        Благодарим вас за оформление покупки в нашем магазине!
         <br/><br/>
         Ваш заказ под номером {{ order.number }} был принят в исполнение.
         <br/>
