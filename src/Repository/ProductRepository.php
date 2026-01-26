@@ -44,6 +44,7 @@ class ProductRepository extends BaseProductRepository
             ;
         } else {
             $queryBuilder
+                ->innerJoin('productTaxon.taxon', 'taxon')
                 ->andWhere('productTaxon.taxon = :taxon')
                 ->setParameter('taxon', $taxon)
             ;
