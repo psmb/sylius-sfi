@@ -83,6 +83,15 @@
         {% include '@SyliusShop/Homepage/_carouselItem.html.twig' with {slug: 'sermonchurch1', title: 'Церковь, её свойства и границы', subTitle: 'Вышел сборник экклезиологических проповедей священника Георгия Кочеткова'} %}
     </div>
 
+    {# Section: Учебная литература #}
+    <div class="homepage-section">
+        <h2>Учебная литература</h2>
+        {{ render(url('sylius_shop_partial_product_index_latest_by_taxon', {'taxonSlug': 'category/books/uchebnaia-literatura', 'count': 6})) }}
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="/ru_RU/taxons/category/books/uchebnaia-literatura" class="ui primary button">Больше книг по этой теме</a>
+        </div>
+    </div>
+
     {# Section: Православное богослужение #}
     <div class="homepage-section">
         <h2>Православное богослужение</h2>
