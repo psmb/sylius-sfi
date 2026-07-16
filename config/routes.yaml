@@ -39,6 +39,15 @@ app_shop_cdek_template:
     defaults:
         _controller: app.controller.shop.cdek::templateAction
 
+app_cloudpayments_notify:
+    path: /payment/cloudpayments/notify/{type}
+    methods: [GET, POST]
+    defaults:
+        _controller: App\Controller\Payment\CloudpaymentsNotificationController::handleAction
+        type: ''
+    requirements:
+        type: check|pay|fail
+
 # Override the AJAX user check to use our custom repository
 sylius_shop_ajax_user_check_action:
     path: /{_locale}/ajax/users/check

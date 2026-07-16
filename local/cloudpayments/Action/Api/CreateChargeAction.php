@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psmb\Cloudpayments\Action\Api;
 
+use CloudPayments\Manager;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -13,9 +16,8 @@ use Payum\Core\GatewayAwareTrait;
 use Psmb\Cloudpayments\Keys;
 use Psmb\Cloudpayments\Request\Api\CreateCharge;
 use Psmb\Cloudpayments\Request\Api\Obtain3ds;
-use CloudPayments\Manager;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
 {
@@ -35,28 +37,31 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
      */
     private $requestStack;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, ?Manager $client = null)
     {
         $this->requestStack = $requestStack;
+        $this->client = $client;
         $this->apiClass = Keys::class;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setApi($api)
     {
         $this->_setApi($api);
 
-        $this->client = new \CloudPayments\Manager(
-            $this->api->getPublishableKey(),
-            $this->api->getSecretKey()
-        );
-        $this->client->setLocale('ru');
+        if (!$this->client) {
+            $this->client = new Manager(
+                $this->api->getPublishableKey(),
+                $this->api->getSecretKey()
+            );
+            $this->client->setLocale('ru');
+        }
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function execute($request)
     {
@@ -74,13 +79,15 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
         $amount = $model['amount'];
         $currency = $model['currency'];
         $cryptogram = $model['cryptogram'];
-        $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'] ?: "0.0.0.0";
-        $cardHolderName = "";
+        $currentRequest = $this->requestStack->getCurrentRequest();
+        $ipAddress = $currentRequest ? ($currentRequest->getClientIp() ?: '0.0.0.0') : '0.0.0.0';
+        $cardHolderName = '';
 
         if ($model['PaRes']) {
             if (!$model['MD']) {
                 throw new LogicException('Something went wrong, MD got lost :-(');
             }
+
             try {
                 $transaction = $this->client->confirm3DS($model['MD'], $model['PaRes']);
                 if ($transaction->getStatus() === 'completed') {
@@ -92,7 +99,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
                 $model['status'] = 'rejected';
 
                 if ($e instanceof \CloudPayments\Exception\PaymentException) {
-                    $message = $e->getCardHolderMessage() . " Код ошибки: " . $e->getReasonCode();
+                    $message = $e->getCardHolderMessage() . ' Код ошибки: ' . $e->getReasonCode();
                     /** @var FlashBagInterface $flashBag */
                     $flashBag = $this->requestStack->getCurrentRequest()->getSession()->getBag('flashes');
                     $flashBag->add('error', $message);
@@ -105,12 +112,16 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
         }
 
         $params = [
-            'JsonData' => $model['jsonData']
+            'InvoiceId' => $model['cloudpaymentsInvoiceId'],
+            'AccountId' => $model['accountId'],
+            'Email' => $model['email'],
+            'Description' => $model['description'],
+            'JsonData' => $model['jsonData'],
         ];
 
         try {
             $transaction = $this->client->chargeCard($amount, $currency, $ipAddress, $cardHolderName, $cryptogram, $params);
-            if ($transaction->getUrl()) {
+            if ($transaction instanceof \CloudPayments\Model\Required3DS) {
                 $model['AcsUrl'] = $transaction->getUrl();
                 $model['MD'] = $transaction->getTransactionId();
                 $model['PaReq'] = $transaction->getToken();
@@ -118,7 +129,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
                 $obtain3ds = new Obtain3ds($request->getToken());
                 $obtain3ds->setModel($model);
                 $this->gateway->execute($obtain3ds);
-            } else if ($transaction->getStatus() === 'completed') {
+            } elseif ($transaction->getStatus() === 'completed') {
                 $model['status'] = 'captured';
             } else {
                 $model['status'] = 'rejected';
@@ -127,7 +138,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
             $model['status'] = 'rejected';
 
             if ($e instanceof \CloudPayments\Exception\PaymentException) {
-                $message = $e->getCardHolderMessage() . " Код ошибки: " . $e->getReasonCode();
+                $message = $e->getCardHolderMessage() . ' Код ошибки: ' . $e->getReasonCode();
                 /** @var FlashBagInterface $flashBag */
                 $flashBag = $this->requestStack->getCurrentRequest()->getSession()->getBag('flashes');
                 $flashBag->add('error', $message);
@@ -136,8 +147,9 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface, GatewayA
             }
         }
     }
+
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($request)
     {

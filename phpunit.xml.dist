@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php" colors="true" convertDeprecationsToExceptions="false">
+    <php>
+        <ini name="error_reporting" value="8191"/>
+    </php>
+    <testsuites>
+        <testsuite name="Application test suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

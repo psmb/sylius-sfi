@@ -41,6 +41,11 @@
             <tag name="payum.action" factory="cloudpayments" alias="payum.action.create_charge" />
             <argument type="service" id="request_stack" />
         </service>
+        <service id="Psmb\Cloudpayments\Action\Api\CreateSbpPaymentLinkAction" public="true">
+            <tag name="payum.action" factory="cloudpayments" alias="payum.action.create_sbp_payment_link" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="logger" />
+        </service>
 
         <service id="request_stack" class="Symfony\Component\HttpFoundation\RequestStack" public="true" />
         <service id="Symfony\Component\HttpFoundation\RequestStack" alias="request_stack" />

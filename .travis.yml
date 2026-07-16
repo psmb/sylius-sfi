@@ -84,6 +84,8 @@ jobs:
 
                 - vendor/bin/ecs check src
 
+                - vendor/bin/phpunit --configuration phpunit.xml.dist
+
                 - vendor/bin/phpspec run --no-interaction -f dot
 
                 - bin/console sylius:fixtures:load --no-interaction -vvv

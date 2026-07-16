@@ -37,6 +37,16 @@ services:
         resource: "../src/Controller"
         tags: ["controller.service_arguments"]
 
+    App\Controller\Payment\CloudpaymentsNotificationController:
+        arguments:
+            $paymentRepository: "@sylius.repository.payment"
+            $gatewayConfigRepository: "@sylius.repository.gateway_config"
+            $entityManager: "@doctrine.orm.entity_manager"
+            $stateMachineFactory: "@sm.factory"
+            $logger: "@logger"
+            $gatewayConfigCypher: "@?payum.dynamic_gateways.cypher"
+        tags: ["controller.service_arguments"]
+
     psmb.cloudpayments.form.type.gateway_configuration:
         class: Psmb\Cloudpayments\Form\Type\CloudpaymentsGatewayConfigurationType
         tags:
