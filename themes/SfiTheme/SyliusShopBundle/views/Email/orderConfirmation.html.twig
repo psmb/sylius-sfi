@@ -3,12 +3,25 @@
 {% endblock %}
 
 {% block body %}
-    {% set url = order.channel.hostname is not null ? 'http://' ~ order.channel.hostname ~ path('sylius_shop_order_show', {'tokenValue': order.tokenValue, '_locale': order.localeCode}) : url('sylius_shop_order_show', {'tokenValue': order.tokenValue, '_locale': order.localeCode}) %}
     {% autoescape %}
-        Благодарим вас за оформление покупки в нашем магазине!
+        Благодарим за оформление покупки в нашем магазине «Книги СФИ»!
         <br/><br/>
         Ваш заказ под номером {{ order.number }} был принят в исполнение.
-        <br/>
-        Если вы покупали электронные товары, то они уже доступны в вашей учетной записи в разделе «Электронные товары» или по ссылке <a href="https://books.sfi.ru/download">https://books.sfi.ru/download</a>
+        <br/><br/>
+        После успешной оплаты:
+        <br/><br/>
+        - <strong>если Вы оформили заказ с самовывозом</strong>, он будет собран и готов к выдаче в течение 1-2 рабочих дней.
+        <br/><br/>
+        Адрес магазина - Москва, ул. Спартаковская, д. 10/2 (м. Бауманская).
+        <br/><br/>
+        - <strong>если Вы оформили заказ с доставкой СДЭК</strong>, он будет передан в курьерскую службу в течение 1-2 рабочих дней.
+        <br/><br/>
+        - <strong>если Вы покупали электронные товары</strong>, то они будут доступны в Вашем Личном кабинете в разделе «Электронные товары» или по ссылке <a href="https://books.sfi.ru/download">https://books.sfi.ru/download</a>
+        <br/><br/>
+        Для уточнения деталей Вы можете связаться с нами по телефону <a href="tel:+79652809663">+79652809663</a>.
+        <br/><br/><br/>
+        Всегда Ваш,<br/>
+        Книжный магазин<br/>
+        «Книги СФИ»
     {% endautoescape %}
 {% endblock %}
