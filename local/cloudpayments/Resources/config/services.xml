@@ -40,6 +40,7 @@
         <service id="Psmb\Cloudpayments\Action\Api\CreateChargeAction" public="true">
             <tag name="payum.action" factory="cloudpayments" alias="payum.action.create_charge" />
             <argument type="service" id="request_stack" />
+            <argument type="service" id="logger" />
         </service>
         <service id="Psmb\Cloudpayments\Action\Api\CreateSbpPaymentLinkAction" public="true">
             <tag name="payum.action" factory="cloudpayments" alias="payum.action.create_sbp_payment_link" />

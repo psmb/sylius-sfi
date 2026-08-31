@@ -46,6 +46,16 @@ class CloudpaymentsApiClient
         return $this->sendRequest('/payments/qr/sbp/link', $payload, $requestId);
     }
 
+    public function chargeCard(array $payload, $requestId): array
+    {
+        return $this->sendRequest('/payments/cards/charge', $payload, $requestId);
+    }
+
+    public function confirm3ds(array $payload, $requestId): array
+    {
+        return $this->sendRequest('/payments/cards/post3ds', $payload, $requestId);
+    }
+
     private function sendRequest($endpoint, array $payload, $requestId = null): array
     {
         $payload['CultureName'] = $this->cultureName;
@@ -80,7 +90,7 @@ class CloudpaymentsApiClient
             throw new \RuntimeException('CloudPayments request failed: ' . $curlError);
         }
         if ($statusCode < 200 || $statusCode >= 300) {
-            throw new \RuntimeException(sprintf('CloudPayments request failed with HTTP %s: %s', $statusCode, $result));
+            throw new \RuntimeException(sprintf('CloudPayments request failed with HTTP %s.', $statusCode));
         }
 
         $response = json_decode($result, true);
