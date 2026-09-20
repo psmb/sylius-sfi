@@ -5,6 +5,6 @@
   "license": "MIT",
   "dependencies": {
     "gulp-cli": "^2.2.0",
-    "semantic-ui": "^2.4.2"
+    "semantic-ui": "^2.5.0"
   }
 }
