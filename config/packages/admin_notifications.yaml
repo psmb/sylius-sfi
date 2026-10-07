@@ -1,0 +1,19 @@
+sylius_admin:
+    notifications:
+        enabled: false
+
+services:
+    app.admin_notification_http_client:
+        class: GuzzleHttp\Client
+        arguments:
+            - { timeout: 2, connect_timeout: 1 }
+
+    # Bound requests from admin tabs opened before notifications were disabled.
+    sylius.controller.admin.notification:
+        class: Sylius\Bundle\AdminBundle\Controller\NotificationController
+        public: true
+        arguments:
+            - "@app.admin_notification_http_client"
+            - "@sylius.http_message_factory"
+            - "%sylius.admin.notification.uri%"
+            - "%kernel.environment%"
